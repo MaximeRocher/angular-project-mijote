@@ -1,0 +1,54 @@
+<main class="page">
+  <section class="card" aria-labelledby="login-title">
+    <img class="brand" ngSrc="images/cooking-pot.svg" width="48" height="48" alt="" />
+    <h1 id="login-title">Mijote</h1>
+    <p class="subtitle">Connecte-toi pour retrouver tes recettes</p>
+
+    <form [formRoot]="loginForm" class="form">
+      <div class="field">
+        <label for="login">Login</label>
+        <input
+          id="login"
+          type="text"
+          autocomplete="username"
+          [formField]="loginForm.login"
+          [attr.aria-invalid]="loginForm.login().touched() && loginForm.login().invalid()"
+          aria-describedby="login-errors"
+        />
+        <div id="login-errors" class="errors">
+          @if (loginForm.login().touched()) {
+            @for (error of loginForm.login().errors(); track error.kind) {
+              <p>{{ error.message }}</p>
+            }
+          }
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="password">Mot de passe</label>
+        <input
+          id="password"
+          type="password"
+          autocomplete="current-password"
+          [formField]="loginForm.password"
+          [attr.aria-invalid]="loginForm.password().touched() && loginForm.password().invalid()"
+          aria-describedby="password-errors"
+        />
+        <div id="password-errors" class="errors">
+          @if (loginForm.password().touched()) {
+            @for (error of loginForm.password().errors(); track error.kind) {
+              <p>{{ error.message }}</p>
+            }
+          }
+        </div>
+      </div>
+
+      <p class="hint">
+        Login et mot de passe identiques : 5 caractères minimum, un chiffre et un caractère
+        spécial parmi <code>./*-+</code>
+      </p>
+
+      <button type="submit">Se connecter</button>
+    </form>
+  </section>
+</main>
