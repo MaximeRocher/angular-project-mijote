@@ -45,7 +45,7 @@ export class Login {
           if (error) {
             return { kind: 'login', message: error };
           }
-          await this.router.navigate(['/']);
+          await this.router.navigate(['/home']);
           return undefined;
         },
       },
