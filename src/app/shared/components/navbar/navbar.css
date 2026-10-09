@@ -1,9 +1,8 @@
 :host {
   display: block;
-  background: #fff;
-  border-bottom: 1px solid #e8d5bc;
-  color: #3b2a1e;
-  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border-soft);
+  color: var(--ink);
 }
 
 .bar {
@@ -42,18 +41,18 @@ nav a {
   display: inline-block;
   padding: 0.4rem 0.75rem;
   border-radius: 0.5rem;
-  color: #3b2a1e;
+  color: var(--ink);
   font-weight: 500;
   text-decoration: none;
 }
 
 nav a:hover {
-  background: #fff7ec;
+  background: var(--cream);
 }
 
 nav a.active {
-  background: #fff7ec;
-  color: #8f330b;
+  background: var(--cream);
+  color: var(--accent-dark);
   font-weight: 700;
   text-decoration: underline;
   text-underline-offset: 0.3em;
@@ -69,7 +68,7 @@ button {
   padding: 0.5rem 1rem;
   border: 0;
   border-radius: 0.6rem;
-  background: #b4410f;
+  background: var(--accent);
   color: #fff;
   font: inherit;
   font-weight: 600;
@@ -77,11 +76,11 @@ button {
 }
 
 button:hover {
-  background: #8f330b;
+  background: var(--accent-dark);
 }
 
 a:focus-visible,
 button:focus-visible {
-  outline: 3px solid #3b2a1e;
+  outline: 3px solid var(--ink);
   outline-offset: 2px;
 }

@@ -1,12 +1,4 @@
 :host {
-  --cream: #fff7ec;
-  --ink: #3b2a1e;
-  --muted: #6b5545;
-  --accent: #b4410f;
-  --accent-dark: #8f330b;
-  --border: #d9c2a8;
-  --error: #b00020;
-
   display: block;
 }
 
@@ -15,18 +7,16 @@
   display: grid;
   place-items: center;
   padding: 1rem;
-  background: var(--cream);
   color: var(--ink);
-  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 }
 
 .card {
   width: 100%;
   max-width: 24rem;
   padding: 2rem 1.75rem;
-  background: #fff;
+  background: var(--surface);
   border-radius: 1.25rem;
-  box-shadow: 0 10px 30px rgb(120 60 20 / 18%);
+  box-shadow: var(--shadow-card);
   text-align: center;
 }
 
@@ -70,7 +60,7 @@ input {
   border-radius: 0.6rem;
   font: inherit;
   color: var(--ink);
-  background: #fffdf9;
+  background: var(--surface-input);
   transition:
     border-color 0.15s,
     box-shadow 0.15s;
@@ -79,7 +69,7 @@ input {
 input:focus-visible {
   outline: none;
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgb(180 65 15 / 25%);
+  box-shadow: 0 0 0 3px var(--accent-ring);
 }
 
 input[aria-invalid='true'] {
@@ -104,7 +94,7 @@ input[aria-invalid='true'] {
 
 code {
   padding: 0.05rem 0.3rem;
-  background: #f6e7d3;
+  background: var(--surface-code);
   border-radius: 0.25rem;
 }
 
