@@ -1,11 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { AuthService } from '../../core/services/auth.service';
 import { RecipeService } from '../../core/services/recipe.service';
-
-const DESCRIPTION_LENGTH = 15;
+import { HighlightDirective } from '../../shared/directives/highlight.directive';
+import { TruncatePipe } from '../../shared/pipes/truncate.pipe';
 
 @Component({
   selector: 'app-home',
+  imports: [HighlightDirective, TruncatePipe],
   styleUrl: './home.css',
   template: `
     <div class="page">
@@ -20,9 +21,9 @@ const DESCRIPTION_LENGTH = 15;
         } @else {
           <ul class="recipes">
             @for (recipe of recipes.latestRecipes(); track recipe.id) {
-              <li>
+              <li appHighlight>
                 <h3>{{ recipe.name }}</h3>
-                <p>{{ preview(recipe.description) }}</p>
+                <p>{{ recipe.description | truncate }}</p>
               </li>
             } @empty {
               <li>Aucune recette pour le moment.</li>
@@ -39,11 +40,5 @@ export class Home {
 
   constructor() {
     this.recipes.loadLatest().subscribe({ error: () => undefined });
-  }
-
-  protected preview(description: string): string {
-    return description.length > DESCRIPTION_LENGTH
-      ? `${description.slice(0, DESCRIPTION_LENGTH)}…`
-      : description;
   }
 }
