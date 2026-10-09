@@ -39,7 +39,7 @@ interface FeatureCard {
 
       <div #gridContainer class="bento-grid" role="list">
         @for (card of cards; track card.id) {
-          <article
+          <div
             class="bento-card {{ card.colorClass }} {{ card.gridClass }}"
             [class.expanded]="expandedId() === card.id"
             (click)="toggleCard(card.id)"
@@ -78,7 +78,7 @@ interface FeatureCard {
                 </span>
               </div>
             </div>
-          </article>
+          </div>
         }
       </div>
     </section>
