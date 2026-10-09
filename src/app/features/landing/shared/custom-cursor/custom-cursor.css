@@ -1,0 +1,40 @@
+:host {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+}
+
+.cursor-outer,
+.cursor-inner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  will-change: transform;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.cursor-outer {
+  width: 38px;
+  height: 38px;
+  border: 1.5px solid var(--accent);
+  background: rgb(180 65 15 / 8%);
+  mix-blend-mode: multiply;
+}
+
+.cursor-inner {
+  width: 8px;
+  height: 8px;
+  background: var(--accent);
+}
+
+/* Hide on touch devices */
+@media (pointer: coarse) {
+  :host {
+    display: none;
+  }
+}
