@@ -1,0 +1,139 @@
+:host {
+  display: block;
+  position: sticky;
+  bottom: 0;
+  z-index: 0;
+}
+
+.sticky-footer {
+  background: var(--ink);
+  color: var(--cream);
+  padding: clamp(4.5rem, 8vw, 7.5rem) clamp(1.5rem, 6vw, 7rem) clamp(2rem, 4vw, 3.5rem);
+}
+
+.footer-inner {
+  max-width: 68rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  will-change: transform, opacity;
+}
+
+.footer-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  max-width: 42rem;
+}
+
+.footer-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.footer-logo {
+  font-size: 2.75rem;
+  filter: drop-shadow(0 4px 12px rgb(0 0 0 / 30%));
+}
+
+.footer-name {
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--cream);
+}
+
+.footer-tagline {
+  margin: 0;
+  font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+  color: rgb(255 247 236 / 75%);
+  line-height: 1.6;
+}
+
+.footer-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+  padding: 0.95rem 2.25rem;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: var(--radius-xl);
+  text-decoration: none;
+  box-shadow: 0 10px 25px rgb(0 0 0 / 25%);
+  transition: background 0.2s ease, transform 0.2s ease;
+  will-change: transform;
+}
+
+.footer-cta:hover {
+  background: var(--accent-dark);
+}
+
+.cta-arrow {
+  width: 1.1rem;
+  height: 1.1rem;
+  transition: transform 0.2s ease;
+}
+
+.footer-cta:hover .cta-arrow {
+  transform: translateX(4px);
+}
+
+.footer-divider {
+  width: 100%;
+  height: 1px;
+  background: rgb(255 247 236 / 12%);
+  margin: clamp(3rem, 5vw, 4.5rem) 0 2rem;
+}
+
+.footer-bottom {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.footer-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+  flex-wrap: wrap;
+}
+
+.footer-nav a {
+  color: rgb(255 247 236 / 70%);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.footer-nav a:hover {
+  color: var(--cream);
+}
+
+.footer-nav a:focus-visible {
+  outline: 2px solid var(--cream);
+  outline-offset: 4px;
+}
+
+.footer-copy {
+  margin: 0;
+  font-size: 0.82rem;
+  color: rgb(255 247 236 / 45%);
+}
+
+@media (min-width: 768px) {
+  .footer-bottom {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
