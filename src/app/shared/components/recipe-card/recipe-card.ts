@@ -1,10 +1,12 @@
 import { Component, input, output, computed, inject } from "@angular/core";
 import { Recipe } from "@/core/models/recipe.model";
 import { IngredientService } from "@/core/services/ingredient.service";
+import { Tilt3dDirective } from "@/shared/directives/tilt-3d.directive";
+import { CulinaryIconComponent } from "@/shared/components/culinary-art/culinary-icon.component";
 
 @Component({
   selector: "app-recipe-card",
-  imports: [],
+  imports: [Tilt3dDirective, CulinaryIconComponent],
   templateUrl: "./recipe-card.html",
   styleUrl: "./recipe-card.css",
 })

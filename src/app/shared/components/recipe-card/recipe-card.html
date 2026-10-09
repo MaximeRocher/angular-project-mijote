@@ -1,17 +1,23 @@
 <article
-  class="bg-white rounded-xl shadow-sm hover:shadow-md border border-gray-100 p-5 transition-shadow flex flex-col justify-between h-full"
+  appTilt3d
+  [maxTilt]="7"
+  [scale]="1.015"
+  class="recipe-card-surface p-5 flex flex-col justify-between h-full"
   [attr.aria-label]="recipe().name"
 >
   <div>
-    <div class="flex items-start justify-between gap-3 mb-2">
-      <h3 class="text-lg font-semibold text-gray-900 leading-snug">
-        {{ recipe().name }}
-      </h3>
+    <div class="flex items-start justify-between gap-3 mb-2.5">
+      <div class="flex items-center gap-2">
+        <app-culinary-icon name="flame" [size]="18" />
+        <h3 class="text-lg font-bold text-[color:var(--ink)] leading-snug tracking-tight">
+          {{ recipe().name }}
+        </h3>
+      </div>
       @if (showActions()) {
         <button
           type="button"
           (click)="delete.emit(recipe().id)"
-          class="text-gray-400 hover:text-red-600 transition-colors p-1 rounded focus:outline-none focus:ring-2 focus:ring-red-400"
+          class="text-gray-400 hover:text-red-600 transition-colors p-1.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400 cursor-pointer"
           [attr.aria-label]="'Supprimer la recette ' + recipe().name"
         >
           <svg
@@ -31,20 +37,21 @@
       }
     </div>
 
-    <p class="text-gray-600 text-sm leading-relaxed mb-4">
+    <p class="text-[color:var(--muted)] text-sm leading-relaxed mb-4">
       {{ displayedDescription() }}
     </p>
   </div>
 
   @if (showIngredients() && recipe().composition.length > 0) {
-    <div class="pt-3 border-t border-gray-100 mt-auto">
-      <h4 class="text-xs font-medium uppercase tracking-wider text-gray-400 mb-2">
+    <div class="pt-3.5 border-t border-[color:var(--border-soft)] mt-auto">
+      <h4 class="text-xs font-semibold uppercase tracking-wider text-[color:var(--muted)] mb-2 flex items-center gap-1.5">
+        <app-culinary-icon name="rosemary" [size]="14" />
         Ingrédients ({{ recipe().composition.length }})
       </h4>
       <ul class="flex flex-wrap gap-1.5" aria-label="Ingrédients">
         @for (item of recipe().composition; track item.idIngredient) {
           <li
-            class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-[var(--cream)] text-[color:var(--accent-dark)] border border-[color:var(--border-soft)]"
+            class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-[var(--cream)] text-[color:var(--accent-dark)] border border-[color:var(--border-soft)] shadow-2xs"
           >
             {{ getIngredientName(item.idIngredient) }}
             <span class="ml-1 text-[color:var(--accent)] font-bold">×{{ item.quantity }}</span>
