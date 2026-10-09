@@ -1,59 +1,43 @@
 # Mijote
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.1.8.
+Application Angular 22 de gestion de recettes de cuisine (composants standalone, signals, Signal Forms, lazy loading).
 
-## Development server
-
-To start a local development server, run:
+## Démarrage
 
 ```bash
-ng serve
+npm install
+npm start        # http://localhost:4200
+npm run build    # build de production dans dist/
+npm test         # tests unitaires (Vitest)
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Fonctionnalités
 
-## Code scaffolding
+- **Connexion** (`/login`) : le login et le mot de passe doivent être identiques et respecter
+  `^(?=.*[0-9])(?=.*[./*\-+]).{5,}$` (5 caractères minimum, un chiffre, un caractère parmi `. / * - +`).
+  La session est stockée dans le `localStorage`.
+- **Accueil** (`/home`) : les 5 dernières recettes, description tronquée à 15 caractères.
+- **Recettes** (`/recipes`) : liste paginée avec recherche, puis création d'une recette (`/recipes/create`).
+- Toutes les routes sauf `/login` sont protégées par `authGuard` ; `guestGuard` renvoie un utilisateur déjà connecté vers `/home`.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Architecture
 
-```bash
-ng generate component component-name
+```
+src/app/
+├── core/        modèles, services (auth, recipe, ingredient), guards, interceptor, validateurs
+├── shared/      navbar, loader, recipe-card, pagination, directive highlight, pipe truncate
+└── features/    login, home, layout (navbar + router-outlet), recipes
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+L'API (mockapi) est configurée dans `src/environments/`.
 
-```bash
-ng generate --help
-```
+## Accessibilité
 
-## Building
+Les composants visent WCAG AA : lien d'évitement, `aria-current` sur la navigation, focus visible global,
+animations réduites si demandé. Des tests `axe-core` (`*.a11y.spec.ts`) vérifient la page de connexion et la navbar
+(le contraste n'est pas testable sous jsdom).
 
-To build the project run:
+## Répartition
 
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- **Personne A** : authentification, accueil, layout et navbar, styles globaux.
+- **Personne B** : recettes (liste, formulaire), services de données, interceptor d'erreurs, loader, recipe-card, pagination.
