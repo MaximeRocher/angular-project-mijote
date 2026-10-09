@@ -162,21 +162,17 @@ h1 {
   align-items: center;
   justify-content: center;
   will-change: transform;
+  z-index: 3;
 }
 
 .pot-glow {
   position: absolute;
-  width: 220px;
-  height: 220px;
+  width: 280px;
+  height: 280px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgb(255 200 120 / 60%) 0%, transparent 75%);
-  filter: blur(25px);
-}
-
-.pot-asset {
-  font-size: clamp(6.5rem, 11vw, 9.5rem);
-  filter: drop-shadow(0 25px 35px rgb(120 60 20 / 25%));
-  user-select: none;
+  background: radial-gradient(circle, rgb(255 180 80 / 40%) 0%, rgb(180 65 15 / 15%) 40%, transparent 70%);
+  filter: blur(35px);
+  z-index: -1;
 }
 
 /* Floating badges */

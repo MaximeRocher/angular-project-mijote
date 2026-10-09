@@ -13,6 +13,7 @@ import { MarqueeSection } from './sections/marquee/marquee';
 import { StickyFooterSection } from './sections/sticky-footer/sticky-footer';
 import { CustomCursor } from './shared/custom-cursor/custom-cursor';
 import { MagneticButtonDirective } from './shared/magnetic-button.directive';
+import { CocottePotComponent } from '@/shared/components/culinary-art/cocotte-pot.component';
 
 @Component({
   selector: 'app-landing',
@@ -24,6 +25,7 @@ import { MagneticButtonDirective } from './shared/magnetic-button.directive';
     StickyFooterSection,
     CustomCursor,
     MagneticButtonDirective,
+    CocottePotComponent,
   ],
   styleUrl: './landing.css',
   template: `
@@ -32,7 +34,7 @@ import { MagneticButtonDirective } from './shared/magnetic-button.directive';
     <div class="page-wrapper">
       <header class="landing-header" role="banner">
         <a routerLink="/landing" class="brand-link" aria-label="Mijote — Accueil">
-          <span class="brand-icon" aria-hidden="true">🍲</span>
+          <app-cocotte-pot [size]="34" [showSteam]="false" />
           <span class="brand-text">Mijote</span>
         </a>
 

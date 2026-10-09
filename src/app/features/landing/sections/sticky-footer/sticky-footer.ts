@@ -9,17 +9,18 @@ import { RouterLink } from '@angular/router';
 import { gsap } from 'gsap';
 import { GsapService } from '@/core/services/gsap.service';
 import { MagneticButtonDirective } from '../../shared/magnetic-button.directive';
+import { CocottePotComponent } from '@/shared/components/culinary-art/cocotte-pot.component';
 
 @Component({
   selector: 'app-sticky-footer',
-  imports: [RouterLink, MagneticButtonDirective],
+  imports: [RouterLink, MagneticButtonDirective, CocottePotComponent],
   styleUrl: './sticky-footer.css',
   template: `
     <footer class="sticky-footer" role="contentinfo" aria-label="Pied de page">
       <div class="footer-inner">
         <div class="footer-top">
           <div class="footer-brand">
-            <span class="footer-logo" aria-hidden="true">🍲</span>
+            <app-cocotte-pot [size]="'sm'" [showSteam]="false" />
             <span class="footer-name">Mijote</span>
           </div>
 

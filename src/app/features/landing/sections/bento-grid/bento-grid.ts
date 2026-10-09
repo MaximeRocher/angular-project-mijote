@@ -9,10 +9,12 @@ import { gsap } from 'gsap';
 import { Flip } from 'gsap/Flip';
 import { GsapService } from '@/core/services/gsap.service';
 import { ScrollRevealDirective } from '../../shared/scroll-reveal.directive';
+import { Tilt3dDirective } from '@/shared/directives/tilt-3d.directive';
+import { CulinaryIconComponent } from '@/shared/components/culinary-art/culinary-icon.component';
 
 interface FeatureCard {
   id: string;
-  icon: string;
+  iconName: string;
   tag: string;
   title: string;
   preview: string;
@@ -25,7 +27,7 @@ interface FeatureCard {
 
 @Component({
   selector: 'app-bento-grid-section',
-  imports: [ScrollRevealDirective],
+  imports: [ScrollRevealDirective, Tilt3dDirective, CulinaryIconComponent],
   styleUrl: './bento-grid.css',
   template: `
     <section id="features" class="bento-section" aria-label="Fonctionnalités de Mijote">
@@ -40,6 +42,9 @@ interface FeatureCard {
       <div #gridContainer class="bento-grid" role="list">
         @for (card of cards; track card.id) {
           <div
+            appTilt3d
+            [maxTilt]="expandedId() === card.id ? 0 : 6"
+            [scale]="expandedId() === card.id ? 1 : 1.015"
             class="bento-card {{ card.colorClass }} {{ card.gridClass }}"
             [class.expanded]="expandedId() === card.id"
             (click)="toggleCard(card.id)"
@@ -51,7 +56,9 @@ interface FeatureCard {
           >
             <div class="card-inner">
               <div class="card-top">
-                <span class="card-icon" aria-hidden="true">{{ card.icon }}</span>
+                <div class="card-icon-wrap">
+                  <app-culinary-icon [name]="card.iconName" [size]="28" />
+                </div>
                 <span class="card-tag">{{ card.tag }}</span>
               </div>
 
@@ -74,7 +81,7 @@ interface FeatureCard {
 
               <div class="card-footer">
                 <span class="card-hint">
-                  {{ expandedId() === card.id ? 'Cliquer pour fermer' : 'En savoir plus →' }}
+                  {{ expandedId() === card.id ? 'Cliquer pour refermer ↑' : 'En savoir plus →' }}
                 </span>
               </div>
             </div>
@@ -93,7 +100,7 @@ export class BentoGridSection {
   protected readonly cards: FeatureCard[] = [
     {
       id: 'organize',
-      icon: '📚',
+      iconName: 'book',
       tag: 'ORGANISATION',
       title: 'Votre carnet de recettes interactif',
       preview: 'Centralisez toutes vos recettes de famille et découvertes culinaires dans un espace ordonné.',
@@ -105,7 +112,7 @@ export class BentoGridSection {
     },
     {
       id: 'create',
-      icon: '✍️',
+      iconName: 'knife',
       tag: 'CRÉATION',
       title: 'Éditeur fluide & précis',
       preview: 'Créez de nouvelles recettes avec calcul automatique des proportions et ingrédients.',
@@ -117,7 +124,7 @@ export class BentoGridSection {
     },
     {
       id: 'pantry',
-      icon: '🥕',
+      iconName: 'carrot',
       tag: 'INGRÉDIENTS',
       title: 'Gestion intelligente des stocks',
       preview: 'Visualisez vos ingrédients et trouvez des idées de plats à cuisiner avec ce que vous avez.',
@@ -129,7 +136,7 @@ export class BentoGridSection {
     },
     {
       id: 'step-by-step',
-      icon: '🍳',
+      iconName: 'flame',
       tag: 'EN CUISINE',
       title: 'Mode guidé pas-à-pas',
       preview: 'Cuisinez l\'esprit libre avec une vue épurée des étapes et minuteurs intégrés.',

@@ -11,10 +11,18 @@ import { gsap } from 'gsap';
 import { GsapService } from '@/core/services/gsap.service';
 import { TextRevealDirective } from '../../shared/text-reveal.directive';
 import { MagneticButtonDirective } from '../../shared/magnetic-button.directive';
+import { CocottePotComponent } from '@/shared/components/culinary-art/cocotte-pot.component';
+import { CulinaryIconComponent } from '@/shared/components/culinary-art/culinary-icon.component';
 
 @Component({
   selector: 'app-hero-section',
-  imports: [RouterLink, TextRevealDirective, MagneticButtonDirective],
+  imports: [
+    RouterLink,
+    TextRevealDirective,
+    MagneticButtonDirective,
+    CocottePotComponent,
+    CulinaryIconComponent,
+  ],
   styleUrl: './hero.css',
   template: `
     <section #heroSection class="hero" aria-label="Présentation de Mijote">
@@ -61,24 +69,32 @@ import { MagneticButtonDirective } from '../../shared/magnetic-button.directive'
 
         <div #layerMid class="parallax-layer layer-mid">
           <div class="floating-badge badge-1">
-            <span class="badge-emoji">🌿</span>
+            <app-culinary-icon name="rosemary" [size]="20" />
             <span class="badge-text">100% Fait Maison</span>
           </div>
           <div class="floating-badge badge-2">
-            <span class="badge-emoji">⏱️</span>
+            <app-culinary-icon name="clock" [size]="20" />
             <span class="badge-text">Prêt en 25 min</span>
           </div>
-          <div class="floating-item item-tomato">🍅</div>
-          <div class="floating-item item-garlic">🧄</div>
+          <div class="floating-item item-tomato">
+            <app-culinary-icon name="tomato" [size]="46" />
+          </div>
+          <div class="floating-item item-garlic">
+            <app-culinary-icon name="garlic" [size]="42" />
+          </div>
         </div>
 
         <div #layerFg class="parallax-layer layer-fg">
           <div #pot class="cooking-pot-container">
             <div class="pot-glow"></div>
-            <div class="pot-asset">🍲</div>
+            <app-cocotte-pot [size]="'xl'" />
           </div>
-          <div class="floating-item item-spoon">🥄</div>
-          <div class="floating-item item-pepper">🌶️</div>
+          <div class="floating-item item-spoon">
+            <app-culinary-icon name="spoon" [size]="48" />
+          </div>
+          <div class="floating-item item-pepper">
+            <app-culinary-icon name="pepper" [size]="44" />
+          </div>
         </div>
       </div>
     </section>
