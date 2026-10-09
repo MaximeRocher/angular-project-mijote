@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouteTransition } from './shared/components/route-transition/route-transition';
 
 @Component({
-  imports: [RouterOutlet],
+  imports: [RouteTransition],
   selector: 'app-root',
   templateUrl: './app.html',
 })
