@@ -21,6 +21,11 @@ import { AuthService } from '../../../core/services/auth.service';
               Accueil
             </a>
           </li>
+          <li>
+            <a routerLink="/recipes" routerLinkActive="active" ariaCurrentWhenActive="page">
+              Recettes
+            </a>
+          </li>
         </ul>
       </nav>
 

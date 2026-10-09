@@ -13,13 +13,13 @@ const DESCRIPTION_LENGTH = 15;
 
       <section aria-labelledby="latest-title">
         <h2 id="latest-title">Dernières recettes</h2>
-        @if (recipes.isLoading()) {
+        @if (recipes.loading()) {
           <p role="status">Chargement…</p>
         } @else if (recipes.error()) {
           <p role="alert">Impossible de charger les recettes.</p>
         } @else {
           <ul class="recipes">
-            @for (recipe of recipes.latest(); track recipe.id) {
+            @for (recipe of recipes.latestRecipes(); track recipe.id) {
               <li>
                 <h3>{{ recipe.name }}</h3>
                 <p>{{ preview(recipe.description) }}</p>
@@ -36,6 +36,10 @@ const DESCRIPTION_LENGTH = 15;
 export class Home {
   protected readonly auth = inject(AuthService);
   protected readonly recipes = inject(RecipeService);
+
+  constructor() {
+    this.recipes.loadLatest().subscribe({ error: () => undefined });
+  }
 
   protected preview(description: string): string {
     return description.length > DESCRIPTION_LENGTH

@@ -1,0 +1,248 @@
+<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <!-- Back navigation -->
+  <div class="mb-6">
+    <a
+      routerLink="/recipes"
+      class="inline-flex items-center gap-1.5 text-sm font-medium text-emerald-600 hover:text-emerald-700 transition-colors"
+    >
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+      </svg>
+      <span>Retour aux recettes</span>
+    </a>
+  </div>
+
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 sm:p-8">
+    <header class="mb-8 border-b border-gray-100 pb-5">
+      <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">
+        Créer une nouvelle recette
+      </h1>
+      <p class="mt-1 text-sm text-gray-500">
+        Une recette doit avoir un nom, une description d'au moins 30 caractères et être composée d'au moins 2 ingrédients.
+      </p>
+    </header>
+
+    <!-- Error message alert -->
+    @if (errorMessage()) {
+      <div
+        class="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 flex items-start gap-3"
+        role="alert"
+      >
+        <svg class="w-5 h-5 text-red-500 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+          <path
+            fill-rule="evenodd"
+            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+            clip-rule="evenodd"
+          />
+        </svg>
+        <span class="text-sm font-medium">{{ errorMessage() }}</span>
+      </div>
+    }
+
+    <!-- Success message alert -->
+    @if (successMessage()) {
+      <div
+        class="mb-6 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 flex items-start gap-3"
+        role="status"
+        aria-live="polite"
+      >
+        <svg class="w-5 h-5 text-emerald-600 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+          <path
+            fill-rule="evenodd"
+            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+            clip-rule="evenodd"
+          />
+        </svg>
+        <span class="text-sm font-medium">{{ successMessage() }}</span>
+      </div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-6" novalidate>
+      <!-- Recipe Name -->
+      <div>
+        <label for="recipe-name" class="block text-sm font-semibold text-gray-800 mb-1.5">
+          Nom de la recette <span class="text-red-500">*</span>
+        </label>
+        <input
+          type="text"
+          id="recipe-name"
+          formControlName="name"
+          placeholder="Ex: Tarte tatin caramélisée"
+          class="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-sm transition-colors"
+          [class.border-red-400]="form.get('name')?.touched && form.get('name')?.invalid"
+        />
+        @if (form.get('name')?.touched && form.get('name')?.invalid) {
+          <p class="mt-1.5 text-xs text-red-600 font-medium" role="alert">
+            Le nom de la recette est obligatoire.
+          </p>
+        }
+      </div>
+
+      <!-- Recipe Description -->
+      <div>
+        <div class="flex items-center justify-between mb-1.5">
+          <label for="recipe-description" class="block text-sm font-semibold text-gray-800">
+            Description de la recette <span class="text-red-500">*</span>
+          </label>
+          <span
+            class="text-xs font-medium"
+            [class]="
+              (form.get('description')?.value?.length || 0) >= 30
+                ? 'text-emerald-600'
+                : 'text-gray-400'
+            "
+          >
+            {{ form.get('description')?.value?.length || 0 }} / 30 caractères minimum
+          </span>
+        </div>
+        <textarea
+          id="recipe-description"
+          rows="4"
+          formControlName="description"
+          placeholder="Décrivez les étapes, les saveurs et les secrets de votre recette (30 caractères minimum)..."
+          class="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-sm transition-colors"
+          [class.border-red-400]="form.get('description')?.touched && form.get('description')?.invalid"
+        ></textarea>
+        @if (form.get('description')?.touched && form.get('description')?.invalid) {
+          <p class="mt-1.5 text-xs text-red-600 font-medium" role="alert">
+            La description doit comporter au moins 30 caractères.
+          </p>
+        }
+      </div>
+
+      <!-- Recipe Composition (Ingredients) -->
+      <fieldset class="pt-4 border-t border-gray-100">
+        <div class="flex items-center justify-between mb-3">
+          <legend class="text-base font-semibold text-gray-900">
+            Ingrédients de la recette <span class="text-red-500">*</span>
+          </legend>
+          <span class="text-xs font-medium text-gray-500">
+            Au moins 2 ingrédients requis ({{ composition.length }} actuellement)
+          </span>
+        </div>
+
+        <div formArrayName="composition" class="space-y-3">
+          @for (group of composition.controls; track $index) {
+            <div
+              [formGroupName]="$index"
+              class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 p-3.5 rounded-xl bg-gray-50 border border-gray-200"
+            >
+              <!-- Ingredient Select -->
+              <div class="flex-1">
+                <label [for]="'ingredient-' + $index" class="sr-only">
+                  Ingrédient {{ $index + 1 }}
+                </label>
+                <select
+                  [id]="'ingredient-' + $index"
+                  formControlName="idIngredient"
+                  class="w-full px-3 py-2 rounded-lg border border-gray-300 bg-white text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                >
+                  <option value="" disabled selected>Choisir un ingrédient...</option>
+                  @for (ing of ingredientService.ingredients(); track ing.id) {
+                    <option [value]="ing.id">{{ ing.name }}</option>
+                  }
+                </select>
+                @if (group.get('idIngredient')?.touched && group.get('idIngredient')?.invalid) {
+                  <p class="mt-1 text-xs text-red-600" role="alert">
+                    Veuillez choisir un ingrédient.
+                  </p>
+                }
+              </div>
+
+              <!-- Quantity Input -->
+              <div class="w-full sm:w-36">
+                <label [for]="'quantity-' + $index" class="sr-only">
+                  Quantité pour ingrédient {{ $index + 1 }}
+                </label>
+                <div class="relative">
+                  <input
+                    type="number"
+                    min="1"
+                    step="1"
+                    [id]="'quantity-' + $index"
+                    formControlName="quantity"
+                    placeholder="Qté"
+                    class="w-full px-3 py-2 rounded-lg border border-gray-300 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                  />
+                  <span class="absolute inset-y-0 right-0 pr-3 flex items-center text-xs text-gray-400 pointer-events-none">
+                    qté
+                  </span>
+                </div>
+                @if (group.get('quantity')?.touched && group.get('quantity')?.invalid) {
+                  <p class="mt-1 text-xs text-red-600" role="alert">
+                    Quantité minimum : 1.
+                  </p>
+                }
+              </div>
+
+              <!-- Remove Button -->
+              <div>
+                <button
+                  type="button"
+                  (click)="removeIngredient($index)"
+                  [disabled]="composition.length <= 2"
+                  [class]="
+                    'p-2 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-red-400 ' +
+                    (composition.length <= 2
+                      ? 'text-gray-300 cursor-not-allowed'
+                      : 'text-gray-400 hover:text-red-600 hover:bg-red-50')
+                  "
+                  [attr.aria-label]="'Supprimer l\'ingrédient ' + ($index + 1)"
+                  [title]="
+                    composition.length <= 2
+                      ? 'Une recette doit comporter au moins 2 ingrédients'
+                      : 'Supprimer cet ingrédient'
+                  "
+                >
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+
+        <div class="mt-3">
+          <button
+            type="button"
+            (click)="addIngredient()"
+            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-dashed border-emerald-500 text-xs font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            <span>Ajouter un autre ingrédient</span>
+          </button>
+        </div>
+      </fieldset>
+
+      <!-- Form Actions -->
+      <div class="pt-6 border-t border-gray-100 flex items-center justify-end gap-3">
+        <a
+          routerLink="/recipes"
+          class="px-5 py-2.5 rounded-lg border border-gray-300 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400"
+        >
+          Annuler
+        </a>
+        <button
+          type="submit"
+          [disabled]="submitting()"
+          class="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white text-sm font-semibold shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+        >
+          @if (submitting()) {
+            <div class="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+            <span>Enregistrement...</span>
+          } @else {
+            <span>Créer la recette</span>
+          }
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

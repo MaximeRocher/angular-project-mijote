@@ -1,0 +1,99 @@
+@if (!hideOnSinglePage() || totalPages() > 1) {
+  <nav
+    class="flex flex-col sm:flex-row items-center justify-between gap-4 py-3"
+    aria-label="Navigation de pagination"
+  >
+    <div class="text-sm text-gray-600">
+      Page <span class="font-semibold text-gray-900">{{ currentPage() }}</span> sur
+      <span class="font-semibold text-gray-900">{{ totalPages() }}</span>
+      @if (totalItems() > 0) {
+        <span>({{ totalItems() }} éléments au total)</span>
+      }
+    </div>
+
+    <ul class="inline-flex items-center -space-x-px text-sm">
+      <li>
+        <button
+          type="button"
+          (click)="previous()"
+          [disabled]="!hasPrevious()"
+          [class]="
+            'flex items-center justify-center px-3 h-9 leading-tight border rounded-s-lg transition-colors ' +
+            (!hasPrevious()
+              ? 'text-gray-300 bg-gray-50 border-gray-200 cursor-not-allowed'
+              : 'text-gray-600 bg-white border-gray-300 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-500')
+          "
+          aria-label="Page précédente"
+        >
+          <svg
+            class="w-3.5 h-3.5"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 6 10"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M5 1 1 5l4 4"
+            />
+          </svg>
+          <span class="sr-only">Page précédente</span>
+        </button>
+      </li>
+
+      @for (page of pages(); track page) {
+        <li>
+          <button
+            type="button"
+            (click)="goToPage(page)"
+            [attr.aria-current]="page === currentPage() ? 'page' : null"
+            [attr.aria-label]="'Aller à la page ' + page"
+            [class]="
+              'flex items-center justify-center px-3.5 h-9 leading-tight border transition-colors ' +
+              (page === currentPage()
+                ? 'z-10 text-white bg-emerald-600 border-emerald-600 font-semibold shadow-sm'
+                : 'text-gray-600 bg-white border-gray-300 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-500')
+            "
+          >
+            {{ page }}
+          </button>
+        </li>
+      }
+
+      <li>
+        <button
+          type="button"
+          (click)="next()"
+          [disabled]="!hasNext()"
+          [class]="
+            'flex items-center justify-center px-3 h-9 leading-tight border rounded-e-lg transition-colors ' +
+            (!hasNext()
+              ? 'text-gray-300 bg-gray-50 border-gray-200 cursor-not-allowed'
+              : 'text-gray-600 bg-white border-gray-300 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-500')
+          "
+          aria-label="Page suivante"
+        >
+          <span class="sr-only">Page suivante</span>
+          <svg
+            class="w-3.5 h-3.5"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 6 10"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="m1 9 4-4-4-4"
+            />
+          </svg>
+        </button>
+      </li>
+    </ul>
+  </nav>
+}

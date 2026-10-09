@@ -11,3 +11,22 @@ export interface Recipe {
 }
 
 export type CreateRecipeDto = Omit<Recipe, "id">;
+
+export interface RecipeQueryOptions {
+  page?: number;
+  limit?: number;
+  sortBy?: string;
+  order?: "asc" | "desc";
+  name?: string;
+  search?: string;
+}
+
+export interface RecipeValidationError {
+  field: "name" | "description" | "composition";
+  message: string;
+}
+
+export interface RecipeValidationResult {
+  valid: boolean;
+  errors: RecipeValidationError[];
+}

@@ -16,6 +16,10 @@ export const routes: Routes = [
         path: 'home',
         loadComponent: () => import('./features/home/home').then((m) => m.Home),
       },
+      {
+        path: 'recipes',
+        loadChildren: () => import('./features/recipes/recipes.routes'),
+      },
       { path: '', pathMatch: 'full', redirectTo: 'home' },
     ],
   },
