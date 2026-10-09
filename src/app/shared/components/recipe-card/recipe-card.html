@@ -44,10 +44,10 @@
       <ul class="flex flex-wrap gap-1.5" aria-label="Ingrédients">
         @for (item of recipe().composition; track item.idIngredient) {
           <li
-            class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-800 border border-emerald-200"
+            class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-[var(--cream)] text-[color:var(--accent-dark)] border border-[color:var(--border-soft)]"
           >
             {{ getIngredientName(item.idIngredient) }}
-            <span class="ml-1 text-emerald-600 font-bold">×{{ item.quantity }}</span>
+            <span class="ml-1 text-[color:var(--accent)] font-bold">×{{ item.quantity }}</span>
           </li>
         }
       </ul>

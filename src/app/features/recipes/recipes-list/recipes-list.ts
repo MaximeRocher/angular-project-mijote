@@ -1,16 +1,17 @@
-import { Component, inject, signal, OnInit } from "@angular/core";
+import { Component, computed, inject, signal, OnInit } from "@angular/core";
 import { RouterLink } from "@angular/router";
 import { Recipe } from "@/core/models/recipe.model";
 import { RecipeService } from "@/core/services/recipe.service";
 import { IngredientService } from "@/core/services/ingredient.service";
 import { RecipeCard } from "@/shared/components/recipe-card/recipe-card";
 import { Pagination } from "@/shared/components/pagination/pagination";
+import { ConfirmDialog } from "@/shared/components/confirm-dialog/confirm-dialog";
 import { AppHttpError } from "@/core/interceptors/error.interceptor";
 import { environment } from "@/environments/environment";
 
 @Component({
   selector: "app-recipes-list",
-  imports: [RouterLink, RecipeCard, Pagination],
+  imports: [RouterLink, RecipeCard, Pagination, ConfirmDialog],
   templateUrl: "./recipes-list.html",
   styleUrl: "./recipes-list.css",
 })
@@ -25,6 +26,12 @@ export class RecipesList implements OnInit {
   readonly totalItems = signal<number>(0);
   readonly loading = signal<boolean>(false);
   readonly error = signal<string | null>(null);
+  readonly recipeToDelete = signal<Recipe | null>(null);
+  readonly deleteMessage = computed(() => {
+    const target = this.recipeToDelete();
+    const name = target ? `"${target.name}"` : "cette recette";
+    return `Voulez-vous vraiment supprimer ${name} ? Cette action est irréversible.`;
+  });
 
   ngOnInit(): void {
     // Preload ingredient names for composition badges
@@ -80,25 +87,32 @@ export class RecipesList implements OnInit {
   }
 
   onDeleteRecipe(id: string): void {
-    const target = this.recipes().find((r) => r.id === id);
-    const name = target ? `"${target.name}"` : "cette recette";
+    this.recipeToDelete.set(this.recipes().find((r) => r.id === id) ?? null);
+  }
 
-    if (confirm(`Voulez-vous vraiment supprimer ${name} ?`)) {
-      this.recipeService.delete(id).subscribe({
-        next: () => {
-          // If we deleted the last item of a page, adjust current page
-          if (this.recipes().length === 1 && this.currentPage() > 1) {
-            this.currentPage.set(this.currentPage() - 1);
-          }
-          this.loadRecipes();
-        },
-        error: (err: unknown) => {
-          this.error.set(
-            err instanceof Error ? err.message : "Erreur lors de la suppression de la recette."
-          );
-        },
-      });
-    }
+  cancelDelete(): void {
+    this.recipeToDelete.set(null);
+  }
+
+  confirmDelete(): void {
+    const target = this.recipeToDelete();
+    this.recipeToDelete.set(null);
+    if (!target) return;
+
+    this.recipeService.delete(target.id).subscribe({
+      next: () => {
+        // If we deleted the last item of a page, adjust current page
+        if (this.recipes().length === 1 && this.currentPage() > 1) {
+          this.currentPage.set(this.currentPage() - 1);
+        }
+        this.loadRecipes();
+      },
+      error: (err: unknown) => {
+        this.error.set(
+          err instanceof Error ? err.message : "Erreur lors de la suppression de la recette."
+        );
+      },
+    });
   }
 
   clearSearch(): void {

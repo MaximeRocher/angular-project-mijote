@@ -3,7 +3,7 @@
   <div class="mb-6">
     <a
       routerLink="/recipes"
-      class="inline-flex items-center gap-1.5 text-sm font-medium text-emerald-600 hover:text-emerald-700 transition-colors"
+      class="inline-flex items-center gap-1.5 text-sm font-medium text-[color:var(--accent)] hover:text-[color:var(--accent-dark)] transition-colors"
     >
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -42,11 +42,11 @@
     <!-- Success message alert -->
     @if (successMessage()) {
       <div
-        class="mb-6 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 flex items-start gap-3"
+        class="mb-6 p-4 rounded-xl bg-[var(--cream)] border border-[color:var(--border-soft)] text-[color:var(--accent-dark)] flex items-start gap-3"
         role="status"
         aria-live="polite"
       >
-        <svg class="w-5 h-5 text-emerald-600 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+        <svg class="w-5 h-5 text-[color:var(--accent)] mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
           <path
             fill-rule="evenodd"
             d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
@@ -68,7 +68,7 @@
           id="recipe-name"
           formControlName="name"
           placeholder="Ex: Tarte tatin caramélisée"
-          class="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-sm transition-colors"
+          class="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)] focus:border-[color:var(--accent)] text-sm transition-colors"
           [class.border-red-400]="form.get('name')?.touched && form.get('name')?.invalid"
         />
         @if (form.get('name')?.touched && form.get('name')?.invalid) {
@@ -88,7 +88,7 @@
             class="text-xs font-medium"
             [class]="
               (form.get('description')?.value?.length || 0) >= 30
-                ? 'text-emerald-600'
+                ? 'text-[color:var(--accent)]'
                 : 'text-gray-400'
             "
           >
@@ -100,7 +100,7 @@
           rows="4"
           formControlName="description"
           placeholder="Décrivez les étapes, les saveurs et les secrets de votre recette (30 caractères minimum)..."
-          class="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-sm transition-colors"
+          class="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)] focus:border-[color:var(--accent)] text-sm transition-colors"
           [class.border-red-400]="form.get('description')?.touched && form.get('description')?.invalid"
         ></textarea>
         @if (form.get('description')?.touched && form.get('description')?.invalid) {
@@ -135,7 +135,7 @@
                 <select
                   [id]="'ingredient-' + $index"
                   formControlName="idIngredient"
-                  class="w-full px-3 py-2 rounded-lg border border-gray-300 bg-white text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                  class="w-full px-3 py-2 rounded-lg border border-gray-300 bg-white text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)] focus:border-[color:var(--accent)]"
                 >
                   <option value="" disabled selected>Choisir un ingrédient...</option>
                   @for (ing of ingredientService.ingredients(); track ing.id) {
@@ -162,7 +162,7 @@
                     [id]="'quantity-' + $index"
                     formControlName="quantity"
                     placeholder="Qté"
-                    class="w-full px-3 py-2 rounded-lg border border-gray-300 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                    class="w-full px-3 py-2 rounded-lg border border-gray-300 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)] focus:border-[color:var(--accent)]"
                   />
                   <span class="absolute inset-y-0 right-0 pr-3 flex items-center text-xs text-gray-400 pointer-events-none">
                     qté
@@ -212,7 +212,7 @@
           <button
             type="button"
             (click)="addIngredient()"
-            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-dashed border-emerald-500 text-xs font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-dashed border-[color:var(--accent)] text-xs font-semibold text-[color:var(--accent-dark)] bg-[var(--cream)] hover:bg-[var(--surface-code)] transition-colors focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)]"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -233,7 +233,7 @@
         <button
           type="submit"
           [disabled]="submitting()"
-          class="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white text-sm font-semibold shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+          class="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg bg-[var(--accent)] hover:bg-[var(--accent-dark)] disabled:opacity-50 text-white text-sm font-semibold shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)] focus:ring-offset-2"
         >
           @if (submitting()) {
             <div class="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>

@@ -139,13 +139,14 @@ describe('RecipesList', () => {
     expect(compiled.textContent).toContain('Connexion perdue');
   });
 
-  it('should delete a recipe when confirmed', async () => {
+  it('should delete a recipe only after dialog confirmation', async () => {
     fixture.detectChanges();
     await fixture.whenStable();
 
-    vi.spyOn(window, 'confirm').mockReturnValue(true);
-
     component.onDeleteRecipe('1');
+    expect(mockRecipeService.delete).not.toHaveBeenCalled();
+
+    component.confirmDelete();
 
     expect(mockRecipeService.delete).toHaveBeenCalledWith('1');
   });

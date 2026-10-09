@@ -13,7 +13,7 @@
     <div>
       <a
         routerLink="/recipes/create"
-        class="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-medium shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+        class="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--accent)] hover:bg-[var(--accent-dark)] text-white font-medium shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)] focus:ring-offset-2"
         aria-label="Créer une nouvelle recette"
       >
         <svg
@@ -52,7 +52,7 @@
         [value]="searchTerm()"
         (input)="onSearch($any($event.target).value)"
         placeholder="Rechercher une recette par son nom..."
-        class="block w-full pl-10 pr-10 py-2.5 border border-gray-300 rounded-lg leading-5 bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm"
+        class="block w-full pl-10 pr-10 py-2.5 border border-gray-300 rounded-lg leading-5 bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)] focus:border-[color:var(--accent)] sm:text-sm"
       />
       @if (searchTerm()) {
         <button
@@ -78,7 +78,7 @@
       aria-label="Chargement des recettes en cours"
     >
       <div
-        class="animate-spin rounded-full h-12 w-12 border-4 border-gray-200 border-t-emerald-600"
+        class="animate-spin rounded-full h-12 w-12 border-4 border-gray-200 border-t-[color:var(--accent)]"
       ></div>
       <p class="mt-4 text-sm font-medium text-gray-600">Chargement des recettes...</p>
     </div>
@@ -143,14 +143,14 @@
             <button
               type="button"
               (click)="clearSearch()"
-              class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)]"
             >
               Réinitialiser la recherche
             </button>
           }
           <a
             routerLink="/recipes/create"
-            class="inline-flex items-center px-4 py-2 border border-transparent rounded-lg text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            class="inline-flex items-center px-4 py-2 border border-transparent rounded-lg text-sm font-medium text-white bg-[var(--accent)] hover:bg-[var(--accent-dark)] focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)]"
           >
             Créer une recette
           </a>
@@ -182,3 +182,12 @@
     }
   }
 </div>
+
+<app-confirm-dialog
+  [open]="recipeToDelete() !== null"
+  title="Supprimer la recette"
+  [message]="deleteMessage()"
+  confirmLabel="Supprimer"
+  (confirmed)="confirmDelete()"
+  (cancelled)="cancelDelete()"
+/>
