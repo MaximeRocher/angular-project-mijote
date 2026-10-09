@@ -43,4 +43,15 @@ describe('appRoutes', () => {
     await router.navigateByUrl('/some/unknown/route');
     expect(router.url).toBe('/login');
   });
+
+  it('should expose a public landing route without auth guard', async () => {
+    const landingRoute = routes.find((r) => r.path === 'landing');
+    expect(landingRoute).toBeDefined();
+    expect(landingRoute?.canActivate).toBeUndefined();
+    expect(landingRoute?.title).toBe('Mijote — Cuisinez, Partagez, Savourez');
+    expect(landingRoute?.loadComponent).toBeDefined();
+
+    const loaded = await (landingRoute!.loadComponent as () => Promise<unknown>)();
+    expect(loaded).toBeDefined();
+  });
 });

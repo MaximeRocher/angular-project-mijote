@@ -3,6 +3,11 @@ import { authGuard, guestGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   {
+    path: 'landing',
+    loadComponent: () => import('./features/landing/landing').then((m) => m.Landing),
+    title: 'Mijote — Cuisinez, Partagez, Savourez',
+  },
+  {
     path: 'login',
     canActivate: [guestGuard],
     loadComponent: () => import('./features/login/login').then((m) => m.Login),

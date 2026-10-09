@@ -1,0 +1,9 @@
+:host {
+  display: block;
+}
+
+.landing {
+  min-height: 100dvh;
+  background: var(--cream);
+  color: var(--ink);
+}
