@@ -21,7 +21,7 @@
             'flex items-center justify-center px-3 h-9 leading-tight border rounded-s-lg transition-colors ' +
             (!hasPrevious()
               ? 'text-gray-300 bg-gray-50 border-gray-200 cursor-not-allowed'
-              : 'text-gray-600 bg-white border-gray-300 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-500')
+              : 'text-gray-600 bg-white border-gray-300 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)]')
           "
           aria-label="Page précédente"
         >
@@ -54,8 +54,8 @@
             [class]="
               'flex items-center justify-center px-3.5 h-9 leading-tight border transition-colors ' +
               (page === currentPage()
-                ? 'z-10 text-white bg-emerald-600 border-emerald-600 font-semibold shadow-sm'
-                : 'text-gray-600 bg-white border-gray-300 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-500')
+                ? 'z-10 text-white bg-[var(--accent)] border-[color:var(--accent)] font-semibold shadow-sm'
+                : 'text-gray-600 bg-white border-gray-300 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)]')
             "
           >
             {{ page }}
@@ -72,7 +72,7 @@
             'flex items-center justify-center px-3 h-9 leading-tight border rounded-e-lg transition-colors ' +
             (!hasNext()
               ? 'text-gray-300 bg-gray-50 border-gray-200 cursor-not-allowed'
-              : 'text-gray-600 bg-white border-gray-300 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-500')
+              : 'text-gray-600 bg-white border-gray-300 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)]')
           "
           aria-label="Page suivante"
         >

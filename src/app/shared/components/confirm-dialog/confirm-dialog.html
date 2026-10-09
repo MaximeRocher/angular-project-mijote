@@ -1,0 +1,21 @@
+<dialog
+  #dialog
+  class="confirm-dialog"
+  aria-labelledby="confirm-dialog-title"
+  aria-describedby="confirm-dialog-message"
+  (cancel)="onCancel($event)"
+  (click)="onBackdropClick($event)"
+>
+  <div class="confirm-dialog__body">
+    <h2 id="confirm-dialog-title" class="confirm-dialog__title">{{ title() }}</h2>
+    <p id="confirm-dialog-message" class="confirm-dialog__message">{{ message() }}</p>
+    <div class="confirm-dialog__actions">
+      <button type="button" class="confirm-dialog__btn confirm-dialog__btn--secondary" (click)="cancelled.emit()">
+        {{ cancelLabel() }}
+      </button>
+      <button type="button" class="confirm-dialog__btn confirm-dialog__btn--primary" (click)="confirmed.emit()">
+        {{ confirmLabel() }}
+      </button>
+    </div>
+  </div>
+</dialog>
