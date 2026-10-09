@@ -10,7 +10,7 @@ import { AuthService } from '../../../core/services/auth.service';
   template: `
     <header class="bar">
       <a class="brand" routerLink="/home">
-        <img ngSrc="images/cooking-pot.svg" width="32" height="32" alt="" />
+        <img ngSrc="images/cooking-pot.svg" width="55" height="56" alt="" />
         <span>Mijote</span>
       </a>
 
