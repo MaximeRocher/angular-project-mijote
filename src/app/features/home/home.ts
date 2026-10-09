@@ -8,11 +8,8 @@ const DESCRIPTION_LENGTH = 15;
   selector: 'app-home',
   styleUrl: './home.css',
   template: `
-    <main class="page">
-      <header class="top">
-        <h1>Bienvenue {{ auth.user()?.login }}</h1>
-        <button type="button" (click)="auth.logout()">Se déconnecter</button>
-      </header>
+    <div class="page">
+      <h1>Bienvenue {{ auth.user()?.login }}</h1>
 
       <section aria-labelledby="latest-title">
         <h2 id="latest-title">Dernières recettes</h2>
@@ -33,7 +30,7 @@ const DESCRIPTION_LENGTH = 15;
           </ul>
         }
       </section>
-    </main>
+    </div>
   `,
 })
 export class Home {

@@ -1,0 +1,24 @@
+:host {
+  display: block;
+  min-height: 100dvh;
+  background: #fff7ec;
+}
+
+.skip {
+  position: absolute;
+  left: 0.5rem;
+  top: -4rem;
+  padding: 0.5rem 1rem;
+  background: #3b2a1e;
+  color: #fff;
+  border-radius: 0.5rem;
+  z-index: 10;
+}
+
+.skip:focus {
+  top: 0.5rem;
+}
+
+main {
+  outline: none;
+}

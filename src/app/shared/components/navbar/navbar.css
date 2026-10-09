@@ -1,0 +1,87 @@
+:host {
+  display: block;
+  background: #fff;
+  border-bottom: 1px solid #e8d5bc;
+  color: #3b2a1e;
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.5rem;
+  max-width: 60rem;
+  margin: 0 auto;
+  padding: 0.75rem 1rem;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: inherit;
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+nav {
+  flex: 1;
+}
+
+ul {
+  display: flex;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+nav a {
+  display: inline-block;
+  padding: 0.4rem 0.75rem;
+  border-radius: 0.5rem;
+  color: #3b2a1e;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+nav a:hover {
+  background: #fff7ec;
+}
+
+nav a.active {
+  background: #fff7ec;
+  color: #8f330b;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  border: 0;
+  border-radius: 0.6rem;
+  background: #b4410f;
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #8f330b;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid #3b2a1e;
+  outline-offset: 2px;
+}
