@@ -246,7 +246,7 @@ export class RecipeDetails implements OnInit {
       const lastCard = reviewCards[reviewCards.length - 1];
       gsap.from(lastCard, {
         scale: 0.95,
-        backgroundColor: '#fef3c7',
+        backgroundColor: '#e6f0c8',
         duration: 0.8,
         ease: 'power2.out',
       });

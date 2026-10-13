@@ -60,7 +60,7 @@
 }
 
 .bento-card:hover {
-  box-shadow: 0 16px 36px rgb(60 30 10 / 12%);
+  box-shadow: 0 16px 36px rgb(40 60 20 / 12%);
 }
 
 .bento-card:focus-visible {
@@ -84,18 +84,18 @@
 }
 
 .card-accent {
-  background: #fdf5ef;
-  border: 1px solid rgb(180 65 15 / 25%);
+  background: #eef5df;
+  border: 1px solid rgb(79 112 34 / 25%);
 }
 
 .card-light {
-  background: #fefcf9;
+  background: #fbfdf5;
   border: 1px solid var(--border-soft);
 }
 
 .card-terracotta {
-  background: rgb(180 65 15 / 8%);
-  border: 1px solid rgb(180 65 15 / 20%);
+  background: rgb(79 112 34 / 8%);
+  border: 1px solid rgb(79 112 34 / 20%);
 }
 
 /* Card content */
@@ -115,7 +115,7 @@
   border-radius: var(--radius-lg);
   background: rgb(255 255 255 / 80%);
   border: 1px solid var(--border-soft);
-  box-shadow: 0 4px 12px rgb(60 30 10 / 5%);
+  box-shadow: 0 4px 12px rgb(40 60 20 / 5%);
 }
 
 .card-tag {
@@ -124,7 +124,7 @@
   letter-spacing: 0.08em;
   padding: 0.25rem 0.65rem;
   border-radius: 9999px;
-  background: rgb(60 40 20 / 6%);
+  background: rgb(40 60 25 / 6%);
   color: var(--muted);
 }
 
@@ -147,7 +147,7 @@
 .card-expanded-content {
   margin-top: 1.25rem;
   padding-top: 1.25rem;
-  border-top: 1px solid rgb(60 40 20 / 10%);
+  border-top: 1px solid rgb(40 60 25 / 10%);
 }
 
 .card-detail {
@@ -197,7 +197,7 @@
 /* Expanded state overrides */
 .bento-card.expanded {
   grid-column: 1 / -1 !important;
-  box-shadow: 0 20px 48px rgb(60 30 10 / 18%);
+  box-shadow: 0 20px 48px rgb(40 60 20 / 18%);
   border-color: var(--accent);
   z-index: 5;
 }

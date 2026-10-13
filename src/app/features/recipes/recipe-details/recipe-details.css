@@ -7,11 +7,11 @@
   background: var(--surface);
   border: 1px solid var(--border-soft);
   border-radius: var(--radius-xl);
-  box-shadow: 0 4px 20px rgb(120 60 20 / 6%);
+  box-shadow: 0 4px 20px rgb(60 90 30 / 6%);
 }
 
 .details-surface-subtle {
-  background: #fdfbf7;
+  background: #f9fcf1;
   border: 1px solid var(--border-soft);
   border-radius: var(--radius-lg);
 }
@@ -58,5 +58,5 @@
 
 .ingredient-pill:hover {
   transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgb(120 60 20 / 8%);
+  box-shadow: 0 2px 8px rgb(60 90 30 / 8%);
 }
