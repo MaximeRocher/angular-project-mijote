@@ -5,6 +5,7 @@ import { RecipeForm } from './recipe-form';
 import { RecipeService } from '@/core/services/recipe.service';
 import { IngredientService } from '@/core/services/ingredient.service';
 import { Recipe } from '@/core/models/recipe.model';
+import { provideAppIcons } from '@/core/icons';
 
 describe('RecipeForm', () => {
   let component: RecipeForm;
@@ -42,6 +43,7 @@ describe('RecipeForm', () => {
       imports: [RecipeForm],
       providers: [
         provideRouter([]),
+        provideAppIcons(),
         { provide: RecipeService, useValue: mockRecipeService },
         { provide: IngredientService, useValue: mockIngredientService },
       ],

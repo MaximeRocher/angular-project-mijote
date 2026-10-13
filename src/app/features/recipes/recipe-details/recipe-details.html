@@ -6,15 +6,12 @@
       class="inline-flex items-center gap-2 text-stone-600 hover:text-[color:var(--accent)] font-medium text-sm transition-colors py-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)] rounded-lg"
       aria-label="Retour à la liste des recettes"
     >
-      <svg
-        class="w-5 h-5 transition-transform group-hover:-translate-x-1"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
+      <tabler-icon
+        icon="arrow-left"
+        [size]="20"
+        class="transition-transform group-hover:-translate-x-1"
         aria-hidden="true"
-      >
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-      </svg>
+      />
       <span>Retour aux recettes</span>
     </a>
   </nav>
@@ -39,14 +36,7 @@
       role="alert"
     >
       <div class="flex flex-col items-center gap-3">
-        <svg class="h-10 w-10 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-          />
-        </svg>
+        <tabler-icon icon="alert-circle" [size]="40" class="text-red-500" aria-hidden="true" />
         <h2 class="text-lg font-bold text-red-800">Recette introuvable</h2>
         <p class="text-sm text-red-700">{{ error() }}</p>
         <div class="mt-4 flex gap-4">
@@ -75,7 +65,7 @@
       <header class="recipe-hero details-surface p-6 sm:p-10 relative overflow-hidden">
         <div class="relative z-10 max-w-3xl">
           <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-200/80 text-xs font-semibold text-amber-800 uppercase tracking-wider mb-4">
-            <app-culinary-icon name="flame" [size]="16" />
+            <tabler-icon icon="flame" [size]="16" aria-hidden="true" />
             <span>Fiche Recette Mijotée</span>
           </div>
 
@@ -90,9 +80,7 @@
                 class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-amber-50 border border-amber-200/70 text-amber-900 font-bold"
               >
                 <span class="sr-only">{{ info.ariaLabel }}</span>
-                <svg class="w-4 h-4 text-amber-500 fill-current" viewBox="0 0 20 20" aria-hidden="true">
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
+                <tabler-icon icon="star-filled" [size]="16" class="text-amber-500" aria-hidden="true" />
                 <span aria-hidden="true">{{ info.average }} / 5</span>
               </div>
               <span class="text-stone-600 font-medium">
@@ -119,7 +107,7 @@
           <!-- Description Card -->
           <section class="recipe-description details-surface p-6 sm:p-8" aria-labelledby="desc-heading">
             <h2 id="desc-heading" class="text-xl font-bold text-[color:var(--ink)] flex items-center gap-2.5 mb-4">
-              <app-culinary-icon name="spoon" [size]="20" />
+              <tabler-icon icon="tools-kitchen-2" [size]="20" aria-hidden="true" />
               <span>Description & Préparation</span>
             </h2>
             <p class="text-base leading-relaxed text-stone-700 whitespace-pre-line">
@@ -131,7 +119,7 @@
           <section class="recipe-ingredients details-surface p-6 sm:p-8" aria-labelledby="ingredients-heading">
             <div class="flex items-center justify-between gap-4 mb-6">
               <h2 id="ingredients-heading" class="text-xl font-bold text-[color:var(--ink)] flex items-center gap-2.5">
-                <app-culinary-icon name="rosemary" [size]="20" />
+                <tabler-icon icon="leaf" [size]="20" aria-hidden="true" />
                 <span>Ingrédients nécessaires</span>
               </h2>
               <span class="text-xs font-semibold px-2.5 py-1 bg-amber-100/70 text-amber-900 rounded-full border border-amber-200">
@@ -162,7 +150,7 @@
           <!-- Add Review Form Card -->
           <section class="recipe-add-review details-surface p-6 sm:p-8" aria-labelledby="add-review-heading">
             <div class="flex items-center gap-2.5 mb-2">
-              <app-culinary-icon name="book" [size]="20" />
+              <tabler-icon icon="book" [size]="20" aria-hidden="true" />
               <h2 id="add-review-heading" class="text-xl font-bold text-[color:var(--ink)]">
                 Donner votre avis
               </h2>
@@ -244,9 +232,7 @@
                   role="status"
                   aria-live="polite"
                 >
-                  <svg class="w-5 h-5 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                  </svg>
+                  <tabler-icon icon="check" [size]="20" class="text-emerald-600 shrink-0" aria-hidden="true" />
                   <span>{{ reviewSuccess() }}</span>
                 </div>
               }
@@ -257,9 +243,7 @@
                   class="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-800 text-sm flex items-center gap-2.5"
                   role="alert"
                 >
-                  <svg class="w-5 h-5 text-red-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
+                  <tabler-icon icon="alert-circle" [size]="20" class="text-red-600 shrink-0" aria-hidden="true" />
                   <span>{{ reviewError() }}</span>
                 </div>
               }
@@ -274,7 +258,7 @@
                   <div class="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
                   <span>Envoi en cours...</span>
                 } @else {
-                  <app-culinary-icon name="flame" [size]="16" />
+                  <tabler-icon icon="flame" [size]="16" aria-hidden="true" />
                   <span>Publier mon avis</span>
                 }
               </button>
@@ -304,14 +288,11 @@
                   </div>
                   <div class="flex items-center justify-end gap-0.5 text-amber-500 text-xs" aria-hidden="true">
                     @for (s of [1, 2, 3, 4, 5]; track s) {
-                      <svg
-                        class="w-3.5 h-3.5"
-                        [class.fill-current]="s <= Math.round(info.average)"
-                        [class.text-stone-300]="s > Math.round(info.average)"
-                        viewBox="0 0 20 20"
-                      >
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
+                      @if (s <= Math.round(info.average)) {
+                        <tabler-icon icon="star-filled" [size]="14" />
+                      } @else {
+                        <tabler-icon icon="star" [size]="14" class="text-stone-300" />
+                      }
                     }
                   </div>
                 </div>
@@ -337,14 +318,11 @@
                       <!-- Star rating display -->
                       <div class="flex items-center gap-0.5 text-amber-500" aria-hidden="true">
                         @for (star of [1, 2, 3, 4, 5]; track star) {
-                          <svg
-                            class="w-3.5 h-3.5"
-                            [class.fill-current]="star <= rate.rate"
-                            [class.text-stone-300]="star > rate.rate"
-                            viewBox="0 0 20 20"
-                          >
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                          </svg>
+                          @if (star <= rate.rate) {
+                            <tabler-icon icon="star-filled" [size]="14" />
+                          } @else {
+                            <tabler-icon icon="star" [size]="14" class="text-stone-300" />
+                          }
                         }
                       </div>
                       <span class="sr-only">Note : {{ rate.rate }} sur 5 étoiles</span>
@@ -365,7 +343,7 @@
             } @else {
               <div class="text-center py-8 px-4 bg-amber-50/50 rounded-xl border border-dashed border-amber-200">
                 <div class="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center mx-auto mb-2 text-amber-800">
-                  <app-culinary-icon name="rosemary" [size]="20" />
+                  <tabler-icon icon="leaf" [size]="20" aria-hidden="true" />
                 </div>
                 <h3 class="text-sm font-semibold text-stone-800">Aucun avis pour l'instant</h3>
                 <p class="text-xs text-stone-600 mt-1">

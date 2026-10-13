@@ -1,10 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
+import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 import { Home } from './home';
 import { AuthService } from '../../core/services/auth.service';
 import { RecipeService } from '../../core/services/recipe.service';
 import { Recipe } from '../../core/models/recipe.model';
+import { provideAppIcons } from '@/core/icons';
 import { axeViolations } from '@/testing-a11y';
 
 describe('Home Component', () => {
@@ -56,6 +58,8 @@ describe('Home Component', () => {
     await TestBed.configureTestingModule({
       imports: [Home],
       providers: [
+        provideRouter([]),
+        provideAppIcons(),
         { provide: RecipeService, useValue: mockRecipeService },
         { provide: AuthService, useValue: mockAuthService },
       ],

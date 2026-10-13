@@ -5,6 +5,7 @@ import { RecipesList } from './recipes-list';
 import { RecipeService } from '@/core/services/recipe.service';
 import { IngredientService } from '@/core/services/ingredient.service';
 import { Recipe } from '@/core/models/recipe.model';
+import { provideAppIcons } from '@/core/icons';
 import { axeViolations } from '@/testing-a11y';
 
 describe('RecipesList', () => {
@@ -54,6 +55,7 @@ describe('RecipesList', () => {
       imports: [RecipesList],
       providers: [
         provideRouter([]),
+        provideAppIcons(),
         { provide: RecipeService, useValue: mockRecipeService },
         { provide: IngredientService, useValue: mockIngredientService },
       ],

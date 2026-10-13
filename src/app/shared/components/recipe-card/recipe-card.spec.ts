@@ -5,6 +5,7 @@ import { Recipe } from '@/core/models/recipe.model';
 import { IngredientService } from '@/core/services/ingredient.service';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideAppIcons } from '@/core/icons';
 
 describe('RecipeCard', () => {
   let component: RecipeCard;
@@ -27,6 +28,7 @@ describe('RecipeCard', () => {
         provideRouter([]),
         provideHttpClient(),
         provideHttpClientTesting(),
+        provideAppIcons(),
         {
           provide: IngredientService,
           useValue: {

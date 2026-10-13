@@ -5,9 +5,7 @@
       routerLink="/recipes"
       class="inline-flex items-center gap-1.5 text-sm font-medium text-[color:var(--accent)] hover:text-[color:var(--accent-dark)] transition-colors"
     >
-      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-      </svg>
+      <tabler-icon icon="arrow-left" [size]="16" />
       <span>Retour aux recettes</span>
     </a>
   </div>
@@ -28,13 +26,7 @@
         class="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 flex items-start gap-3"
         role="alert"
       >
-        <svg class="w-5 h-5 text-red-500 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-          <path
-            fill-rule="evenodd"
-            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-            clip-rule="evenodd"
-          />
-        </svg>
+        <tabler-icon icon="alert-circle" [size]="20" class="text-red-500 mt-0.5 shrink-0" />
         <span class="text-sm font-medium">{{ errorMessage() }}</span>
       </div>
     }
@@ -46,13 +38,7 @@
         role="status"
         aria-live="polite"
       >
-        <svg class="w-5 h-5 text-[color:var(--accent)] mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-          <path
-            fill-rule="evenodd"
-            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-            clip-rule="evenodd"
-          />
-        </svg>
+        <tabler-icon icon="check" [size]="20" class="text-[color:var(--accent)] mt-0.5 shrink-0" />
         <span class="text-sm font-medium">{{ successMessage() }}</span>
       </div>
     }
@@ -191,14 +177,7 @@
                       : 'Supprimer cet ingrédient'
                   "
                 >
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                    />
-                  </svg>
+                  <tabler-icon icon="trash" [size]="20" />
                 </button>
               </div>
             </div>
@@ -211,9 +190,7 @@
             (click)="addIngredient()"
             class="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg border-2 border-dashed border-[color:var(--accent)] text-sm font-semibold text-[color:var(--accent-dark)] bg-[var(--cream)] hover:bg-[var(--surface-code)] transition-all focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)] cursor-pointer"
           >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-            </svg>
+            <tabler-icon icon="plus" [size]="20" />
             <span>Ajouter un autre ingrédient</span>
           </button>
         </div>

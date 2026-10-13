@@ -1,5 +1,6 @@
 import { Component, inject, signal, OnInit } from "@angular/core";
 import { Router, RouterLink } from "@angular/router";
+import { TablerIconComponent } from "@tabler/icons-angular";
 import {
   ReactiveFormsModule,
   FormBuilder,
@@ -21,7 +22,7 @@ export type IngredientFormGroup = FormGroup<{
 
 @Component({
   selector: "app-recipe-form",
-  imports: [RouterLink, ReactiveFormsModule],
+  imports: [RouterLink, ReactiveFormsModule, TablerIconComponent],
   templateUrl: "./recipe-form.html",
   styleUrl: "./recipe-form.css",
 })

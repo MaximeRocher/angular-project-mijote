@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Pagination } from './pagination';
+import { provideAppIcons } from '@/core/icons';
 
 describe('Pagination', () => {
   let component: Pagination;
@@ -8,6 +9,7 @@ describe('Pagination', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Pagination],
+      providers: [provideAppIcons()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Pagination);

@@ -7,6 +7,7 @@ import { IngredientService } from '@/core/services/ingredient.service';
 import { AuthService } from '@/core/services/auth.service';
 import { GsapService } from '@/core/services/gsap.service';
 import { Recipe, RecipeRate } from '@/core/models/recipe.model';
+import { provideAppIcons } from '@/core/icons';
 import { axeViolations } from '@/testing-a11y';
 
 describe('RecipeDetails', () => {
@@ -66,6 +67,7 @@ describe('RecipeDetails', () => {
       imports: [RecipeDetails],
       providers: [
         provideRouter([]),
+        provideAppIcons(),
         {
           provide: ActivatedRoute,
           useValue: {
@@ -241,6 +243,7 @@ describe('RecipeDetails', () => {
       imports: [RecipeDetails],
       providers: [
         provideRouter([]),
+        provideAppIcons(),
         { provide: ActivatedRoute, useValue: { snapshot: { paramMap: { get: () => null } } } },
         { provide: RecipeService, useValue: mockRecipeService },
         { provide: IngredientService, useValue: mockIngredientService },

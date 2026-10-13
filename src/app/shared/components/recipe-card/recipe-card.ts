@@ -1,13 +1,13 @@
 import { Component, input, output, computed, inject } from "@angular/core";
 import { RouterLink } from "@angular/router";
+import { TablerIconComponent } from "@tabler/icons-angular";
 import { Recipe } from "@/core/models/recipe.model";
 import { IngredientService } from "@/core/services/ingredient.service";
 import { Tilt3dDirective } from "@/shared/directives/tilt-3d.directive";
-import { CulinaryIconComponent } from "@/shared/components/culinary-art/culinary-icon.component";
 
 @Component({
   selector: "app-recipe-card",
-  imports: [RouterLink, Tilt3dDirective, CulinaryIconComponent],
+  imports: [RouterLink, TablerIconComponent, Tilt3dDirective],
   templateUrl: "./recipe-card.html",
   styleUrl: "./recipe-card.css",
 })

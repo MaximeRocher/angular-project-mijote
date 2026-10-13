@@ -1,8 +1,9 @@
 import { Component, input, model, computed } from "@angular/core";
+import { TablerIconComponent } from "@tabler/icons-angular";
 
 @Component({
   selector: "app-pagination",
-  imports: [],
+  imports: [TablerIconComponent],
   templateUrl: "./pagination.html",
   styleUrl: "./pagination.css",
 })

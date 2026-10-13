@@ -1,5 +1,6 @@
 import { Component, computed, inject, signal, OnInit } from "@angular/core";
 import { RouterLink } from "@angular/router";
+import { TablerIconComponent } from "@tabler/icons-angular";
 import { Recipe } from "@/core/models/recipe.model";
 import { RecipeService } from "@/core/services/recipe.service";
 import { IngredientService } from "@/core/services/ingredient.service";
@@ -7,7 +8,6 @@ import { RecipeCard } from "@/shared/components/recipe-card/recipe-card";
 import { Pagination } from "@/shared/components/pagination/pagination";
 import { ConfirmDialog } from "@/shared/components/confirm-dialog/confirm-dialog";
 import { StaggerListDirective } from "@/shared/directives/stagger-list.directive";
-import { CulinaryIconComponent } from "@/shared/components/culinary-art/culinary-icon.component";
 import { AppHttpError } from "@/core/interceptors/error.interceptor";
 import { environment } from "@/environments/environment";
 
@@ -19,7 +19,7 @@ import { environment } from "@/environments/environment";
     Pagination,
     ConfirmDialog,
     StaggerListDirective,
-    CulinaryIconComponent,
+    TablerIconComponent,
   ],
   templateUrl: "./recipes-list.html",
   styleUrl: "./recipes-list.css",

@@ -17,11 +17,11 @@ import { RecipeService } from '@/core/services/recipe.service';
 import { IngredientService } from '@/core/services/ingredient.service';
 import { AuthService } from '@/core/services/auth.service';
 import { GsapService } from '@/core/services/gsap.service';
-import { CulinaryIconComponent } from '@/shared/components/culinary-art/culinary-icon.component';
+import { TablerIconComponent } from '@tabler/icons-angular';
 
 @Component({
   selector: 'app-recipe-details',
-  imports: [RouterLink, ReactiveFormsModule, CulinaryIconComponent],
+  imports: [RouterLink, ReactiveFormsModule, TablerIconComponent],
   templateUrl: './recipe-details.html',
   styleUrl: './recipe-details.css',
 })
