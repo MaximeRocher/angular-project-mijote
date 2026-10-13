@@ -3,11 +3,18 @@ export interface RecipeIngredient {
   quantity: number;
 }
 
+export interface RecipeRate {
+  login: string;
+  rate: number;
+  review?: string;
+}
+
 export interface Recipe {
   id: string;
   name: string;
   description: string;
   composition: RecipeIngredient[];
+  rates?: RecipeRate[];
 }
 
 export type CreateRecipeDto = Omit<Recipe, "id">;

@@ -18,6 +18,12 @@ export const recipesRoutes: Routes = [
     redirectTo: "create",
     pathMatch: "full",
   },
+  {
+    path: ":id",
+    loadComponent: () =>
+      import("./recipe-details/recipe-details").then((m) => m.RecipeDetails),
+    title: "Détail de la recette - Mijoté",
+  },
 ];
 
 export const routes: Routes = recipesRoutes;

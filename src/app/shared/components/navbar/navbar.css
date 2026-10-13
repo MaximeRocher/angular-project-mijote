@@ -27,6 +27,21 @@
 
 nav {
   flex: 1;
+  position: relative;
+}
+
+.nav-indicator {
+  position: absolute;
+  top: 0.2rem;
+  bottom: 0.2rem;
+  left: 0;
+  border-radius: 0.5rem;
+  background: var(--cream);
+  border: 1px solid var(--border-soft);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1;
+  will-change: transform, width;
 }
 
 ul {
@@ -35,6 +50,8 @@ ul {
   margin: 0;
   padding: 0;
   list-style: none;
+  position: relative;
+  z-index: 2;
 }
 
 nav a {
@@ -44,14 +61,14 @@ nav a {
   color: var(--ink);
   font-weight: 500;
   text-decoration: none;
+  transition: color 0.2s ease;
 }
 
 nav a:hover {
-  background: var(--cream);
+  color: var(--accent);
 }
 
 nav a.active {
-  background: var(--cream);
   color: var(--accent-dark);
   font-weight: 700;
   text-decoration: underline;
@@ -73,6 +90,7 @@ button {
   font: inherit;
   font-weight: 600;
   cursor: pointer;
+  transition: background 0.2s ease;
 }
 
 button:hover {

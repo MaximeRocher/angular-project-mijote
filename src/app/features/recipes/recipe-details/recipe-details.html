@@ -1,0 +1,381 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <!-- Back navigation button -->
+  <nav aria-label="Fil d'ariane" class="mb-6">
+    <a
+      routerLink="/recipes"
+      class="inline-flex items-center gap-2 text-stone-600 hover:text-[color:var(--accent)] font-medium text-sm transition-colors py-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)] rounded-lg"
+      aria-label="Retour à la liste des recettes"
+    >
+      <svg
+        class="w-5 h-5 transition-transform group-hover:-translate-x-1"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+      </svg>
+      <span>Retour aux recettes</span>
+    </a>
+  </nav>
+
+  <!-- Loading State -->
+  @if (loading()) {
+    <div
+      class="flex flex-col items-center justify-center py-24"
+      role="status"
+      aria-live="polite"
+    >
+      <span class="sr-only">Chargement du détail de la recette en cours</span>
+      <div class="animate-spin rounded-full h-14 w-14 border-4 border-amber-100 border-t-[color:var(--accent)]" aria-hidden="true"></div>
+      <p class="mt-4 text-base font-medium text-stone-600">Préparation de la recette...</p>
+    </div>
+  }
+
+  <!-- Error State -->
+  @if (error() && !loading()) {
+    <div
+      class="rounded-2xl bg-red-50 border border-red-200 p-8 text-center max-w-xl mx-auto my-12"
+      role="alert"
+    >
+      <div class="flex flex-col items-center gap-3">
+        <svg class="h-10 w-10 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+          />
+        </svg>
+        <h2 class="text-lg font-bold text-red-800">Recette introuvable</h2>
+        <p class="text-sm text-red-700">{{ error() }}</p>
+        <div class="mt-4 flex gap-4">
+          <button
+            type="button"
+            (click)="reloadRecipe()"
+            class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-xl text-sm font-medium transition-colors"
+          >
+            Réessayer
+          </button>
+          <a
+            routerLink="/recipes"
+            class="px-4 py-2 bg-white border border-stone-300 hover:bg-stone-50 text-stone-700 rounded-xl text-sm font-medium transition-colors"
+          >
+            Retour au catalogue
+          </a>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Main Content When Loaded -->
+  @if (recipe(); as currentRecipe) {
+    <article class="space-y-8">
+      <!-- Recipe Hero Banner -->
+      <header class="recipe-hero details-surface p-6 sm:p-10 relative overflow-hidden">
+        <div class="relative z-10 max-w-3xl">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-200/80 text-xs font-semibold text-amber-800 uppercase tracking-wider mb-4">
+            <app-culinary-icon name="flame" [size]="16" />
+            <span>Fiche Recette Mijotée</span>
+          </div>
+
+          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[color:var(--ink)] tracking-tight leading-tight">
+            {{ currentRecipe.name }}
+          </h1>
+
+          <!-- Rating summary row -->
+          <div class="flex flex-wrap items-center gap-4 mt-4 text-sm">
+            @if (ratingInfo(); as info) {
+              <div
+                class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-amber-50 border border-amber-200/70 text-amber-900 font-bold"
+              >
+                <span class="sr-only">{{ info.ariaLabel }}</span>
+                <svg class="w-4 h-4 text-amber-500 fill-current" viewBox="0 0 20 20" aria-hidden="true">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+                <span aria-hidden="true">{{ info.average }} / 5</span>
+              </div>
+              <span class="text-stone-600 font-medium">
+                {{ info.count }} {{ info.count > 1 ? 'avis de la communauté' : 'avis de la communauté' }}
+              </span>
+            } @else {
+              <span class="text-stone-500 italic bg-stone-100 px-3 py-1 rounded-lg text-xs border border-stone-200/60">
+                Aucun avis pour l'instant
+              </span>
+            }
+
+            <span class="text-stone-300" aria-hidden="true">•</span>
+            <span class="text-stone-600">
+              {{ currentRecipe.composition.length }} {{ currentRecipe.composition.length > 1 ? 'ingrédients' : 'ingrédient' }}
+            </span>
+          </div>
+        </div>
+      </header>
+
+      <!-- 2-Column Responsive Layout -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <!-- Left Column: Description & Ingredients -->
+        <div class="lg:col-span-7 space-y-8">
+          <!-- Description Card -->
+          <section class="recipe-description details-surface p-6 sm:p-8" aria-labelledby="desc-heading">
+            <h2 id="desc-heading" class="text-xl font-bold text-[color:var(--ink)] flex items-center gap-2.5 mb-4">
+              <app-culinary-icon name="spoon" [size]="20" />
+              <span>Description & Préparation</span>
+            </h2>
+            <p class="text-base leading-relaxed text-stone-700 whitespace-pre-line">
+              {{ currentRecipe.description }}
+            </p>
+          </section>
+
+          <!-- Ingredients Card -->
+          <section class="recipe-ingredients details-surface p-6 sm:p-8" aria-labelledby="ingredients-heading">
+            <div class="flex items-center justify-between gap-4 mb-6">
+              <h2 id="ingredients-heading" class="text-xl font-bold text-[color:var(--ink)] flex items-center gap-2.5">
+                <app-culinary-icon name="rosemary" [size]="20" />
+                <span>Ingrédients nécessaires</span>
+              </h2>
+              <span class="text-xs font-semibold px-2.5 py-1 bg-amber-100/70 text-amber-900 rounded-full border border-amber-200">
+                {{ currentRecipe.composition.length }} au total
+              </span>
+            </div>
+
+            <ul class="grid grid-cols-1 sm:grid-cols-2 gap-3" aria-label="Liste des ingrédients">
+              @for (item of currentRecipe.composition; track item.idIngredient) {
+                <li class="ingredient-pill p-3.5 flex items-center justify-between gap-3">
+                  <div class="flex items-center gap-2.5 min-w-0">
+                    <span class="w-2 h-2 rounded-full bg-[color:var(--accent)] shrink-0" aria-hidden="true"></span>
+                    <span class="font-medium text-sm text-[color:var(--ink)] truncate">
+                      {{ getIngredientName(item.idIngredient) }}
+                    </span>
+                  </div>
+                  <span class="shrink-0 px-2 py-0.5 rounded-md text-xs font-bold bg-white text-[color:var(--accent)] border border-[color:var(--border-soft)] shadow-2xs">
+                    Qté : {{ item.quantity }}
+                  </span>
+                </li>
+              }
+            </ul>
+          </section>
+        </div>
+
+        <!-- Right Column: Add Review Form & Reviews List -->
+        <div class="lg:col-span-5 space-y-8">
+          <!-- Add Review Form Card -->
+          <section class="recipe-add-review details-surface p-6 sm:p-8" aria-labelledby="add-review-heading">
+            <div class="flex items-center gap-2.5 mb-2">
+              <app-culinary-icon name="book" [size]="20" />
+              <h2 id="add-review-heading" class="text-xl font-bold text-[color:var(--ink)]">
+                Donner votre avis
+              </h2>
+            </div>
+            <p class="text-xs text-stone-600 mb-6">
+              Partagez votre retour d'expérience avec les autres cuisiniers.
+            </p>
+
+            <!-- Current Author Badge -->
+            <div class="mb-5 p-3 rounded-xl bg-amber-50/70 border border-amber-200/60 flex items-center gap-3">
+              <div class="w-8 h-8 rounded-full bg-[var(--accent)] text-white font-bold text-xs flex items-center justify-center shrink-0">
+                {{ currentAuthor().slice(0, 2).toUpperCase() }}
+              </div>
+              <div class="min-w-0">
+                <span class="text-2xs uppercase tracking-wider text-amber-800 font-semibold block">Auteur connecté</span>
+                <span class="text-sm font-semibold text-[color:var(--ink)] truncate block">{{ currentAuthor() }}</span>
+              </div>
+            </div>
+
+            <!-- Review Form -->
+            <form [formGroup]="reviewForm" (ngSubmit)="onSubmitReview()" class="space-y-5" novalidate>
+              <!-- Star rating fieldset -->
+              <fieldset>
+                <legend class="text-xs font-semibold uppercase tracking-wider text-stone-600 mb-2">
+                  Votre note <span class="text-red-500">*</span>
+                </legend>
+                <div class="flex items-center gap-1" role="radiogroup" aria-label="Sélectionnez une note entre 1 et 5 étoiles">
+                  @for (star of [1, 2, 3, 4, 5]; track star) {
+                    <button
+                      type="button"
+                      (click)="setRating(star)"
+                      (mouseenter)="hoverRating(star)"
+                      (mouseleave)="clearHoverRating()"
+                      class="star-btn focus:outline-none"
+                      [attr.aria-label]="star + ' sur 5 étoiles'"
+                      [attr.aria-checked]="reviewForm.controls.rate.value === star"
+                      role="radio"
+                    >
+                      <svg
+                        class="w-8 h-8 transition-colors duration-150"
+                        [class.text-amber-400]="isStarActive(star)"
+                        [class.text-stone-300]="!isStarActive(star)"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        aria-hidden="true"
+                      >
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                    </button>
+                  }
+                  <span class="ml-2 text-sm font-bold text-amber-900" aria-live="polite">
+                    {{ reviewForm.controls.rate.value }} / 5
+                  </span>
+                </div>
+              </fieldset>
+
+              <!-- Review comment textarea -->
+              <div>
+                <label for="review-comment" class="block text-xs font-semibold uppercase tracking-wider text-stone-600 mb-1.5">
+                  Commentaire <span class="text-stone-500 font-normal lowercase">(facultatif)</span>
+                </label>
+                <textarea
+                  id="review-comment"
+                  formControlName="review"
+                  rows="3"
+                  placeholder="Qu'avez-vous pensé de cette recette ? (astuces, saveurs, cuisson...)"
+                  class="review-input w-full p-3 text-sm placeholder-stone-400 focus:outline-none"
+                  maxlength="500"
+                ></textarea>
+                <div class="flex justify-end mt-1 text-2xs text-stone-600">
+                  <span>{{ reviewForm.controls.review.value.length }} / 500 caractères</span>
+                </div>
+              </div>
+
+              <!-- Success Notification -->
+              @if (reviewSuccess()) {
+                <div
+                  class="review-success-banner p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm flex items-center gap-2.5"
+                  role="status"
+                  aria-live="polite"
+                >
+                  <svg class="w-5 h-5 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>{{ reviewSuccess() }}</span>
+                </div>
+              }
+
+              <!-- Error Notification -->
+              @if (reviewError()) {
+                <div
+                  class="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-800 text-sm flex items-center gap-2.5"
+                  role="alert"
+                >
+                  <svg class="w-5 h-5 text-red-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span>{{ reviewError() }}</span>
+                </div>
+              }
+
+              <!-- Submit Button -->
+              <button
+                type="submit"
+                [disabled]="submittingReview() || reviewForm.invalid"
+                class="w-full py-3 px-4 rounded-xl bg-[var(--accent)] hover:bg-[var(--accent-dark)] disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold text-sm shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)] focus:ring-offset-2 flex items-center justify-center gap-2 cursor-pointer"
+              >
+                @if (submittingReview()) {
+                  <div class="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+                  <span>Envoi en cours...</span>
+                } @else {
+                  <app-culinary-icon name="flame" [size]="16" />
+                  <span>Publier mon avis</span>
+                }
+              </button>
+            </form>
+          </section>
+
+          <!-- Reviews List Card ("Tous les avis") -->
+          <section class="recipe-reviews-list details-surface p-6 sm:p-8" aria-labelledby="all-reviews-heading">
+            <div class="flex items-center justify-between gap-4 mb-6 pb-4 border-b border-[color:var(--border-soft)]">
+              <div>
+                <h2 id="all-reviews-heading" class="text-xl font-bold text-[color:var(--ink)]">
+                  Tous les avis
+                </h2>
+                <p class="text-xs text-stone-600 mt-0.5">
+                  @if (currentRecipe.rates && currentRecipe.rates.length > 0) {
+                    {{ currentRecipe.rates.length }} {{ currentRecipe.rates.length > 1 ? 'retours partagés' : 'retour partagé' }}
+                  } @else {
+                    Aucun retour pour l'instant
+                  }
+                </p>
+              </div>
+
+              @if (ratingInfo(); as info) {
+                <div class="text-right">
+                  <div class="text-2xl font-black text-amber-900 leading-tight">
+                    {{ info.average }}<span class="text-sm font-normal text-stone-600"> / 5</span>
+                  </div>
+                  <div class="flex items-center justify-end gap-0.5 text-amber-500 text-xs" aria-hidden="true">
+                    @for (s of [1, 2, 3, 4, 5]; track s) {
+                      <svg
+                        class="w-3.5 h-3.5"
+                        [class.fill-current]="s <= Math.round(info.average)"
+                        [class.text-stone-300]="s > Math.round(info.average)"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+
+            <!-- List of reviews -->
+            @if (currentRecipe.rates && currentRecipe.rates.length > 0) {
+              <div class="space-y-4" role="feed" aria-label="Avis des utilisateurs">
+                @for (rate of currentRecipe.rates; track $index) {
+                  <article class="review-card details-surface-subtle p-4 sm:p-5 relative">
+                    <div class="flex items-start justify-between gap-3 mb-2">
+                      <div class="flex items-center gap-2.5">
+                        <div class="w-7 h-7 rounded-full bg-amber-100 text-amber-900 border border-amber-300 font-bold text-xs flex items-center justify-center shrink-0" aria-hidden="true">
+                          {{ rate.login.slice(0, 1).toUpperCase() }}
+                        </div>
+                        <div>
+                          <h3 class="text-sm font-bold text-[color:var(--ink)] leading-tight">{{ rate.login }}</h3>
+                          <span class="text-2xs text-stone-600">Gourmet mijoteur</span>
+                        </div>
+                      </div>
+
+                      <!-- Star rating display -->
+                      <div class="flex items-center gap-0.5 text-amber-500" aria-hidden="true">
+                        @for (star of [1, 2, 3, 4, 5]; track star) {
+                          <svg
+                            class="w-3.5 h-3.5"
+                            [class.fill-current]="star <= rate.rate"
+                            [class.text-stone-300]="star > rate.rate"
+                            viewBox="0 0 20 20"
+                          >
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                          </svg>
+                        }
+                      </div>
+                      <span class="sr-only">Note : {{ rate.rate }} sur 5 étoiles</span>
+                    </div>
+
+                    @if (rate.review && rate.review.trim().length > 0) {
+                      <p class="text-sm text-stone-700 leading-relaxed mt-2 pl-9">
+                        « {{ rate.review }} »
+                      </p>
+                    } @else {
+                      <p class="text-xs text-stone-500 italic mt-1 pl-9">
+                        A attribué une note sans commentaire.
+                      </p>
+                    }
+                  </article>
+                }
+              </div>
+            } @else {
+              <div class="text-center py-8 px-4 bg-amber-50/50 rounded-xl border border-dashed border-amber-200">
+                <div class="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center mx-auto mb-2 text-amber-800">
+                  <app-culinary-icon name="rosemary" [size]="20" />
+                </div>
+                <h3 class="text-sm font-semibold text-stone-800">Aucun avis pour l'instant</h3>
+                <p class="text-xs text-stone-600 mt-1">
+                  Soyez le tout premier à tester cette recette et à donner votre avis !
+                </p>
+              </div>
+            }
+          </section>
+        </div>
+      </div>
+    </article>
+  }
+</div>

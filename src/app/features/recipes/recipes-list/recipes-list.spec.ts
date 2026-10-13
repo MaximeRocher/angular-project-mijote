@@ -5,6 +5,7 @@ import { RecipesList } from './recipes-list';
 import { RecipeService } from '@/core/services/recipe.service';
 import { IngredientService } from '@/core/services/ingredient.service';
 import { Recipe } from '@/core/models/recipe.model';
+import { axeViolations } from '@/testing-a11y';
 
 describe('RecipesList', () => {
   let component: RecipesList;
@@ -20,6 +21,10 @@ describe('RecipesList', () => {
       composition: [
         { idIngredient: '1', quantity: 2 },
         { idIngredient: '2', quantity: 1 },
+      ],
+      rates: [
+        { login: 'Alex', rate: 5, review: 'Super' },
+        { login: 'Mathieu', rate: 5, review: 'Top' },
       ],
     },
     {
@@ -71,13 +76,24 @@ describe('RecipesList', () => {
     expect(component.loading()).toBe(false);
   });
 
-  it('should render recipe cards when recipes are loaded', async () => {
+  it('should render recipe cards when recipes are loaded with ratings and truncated descriptions', async () => {
     fixture.detectChanges();
     await fixture.whenStable();
 
     const compiled = fixture.nativeElement as HTMLElement;
     const cards = compiled.querySelectorAll('app-recipe-card');
     expect(cards.length).toBe(2);
+
+    // Card 1: has rating (5/5) and truncated description
+    expect(cards[0].querySelector('h3')?.textContent).toContain('Cheese burger');
+    expect(cards[0].querySelector('p')?.textContent?.trim()).toBe('Un délicieux bu…');
+    expect(cards[0].textContent).toContain('5 / 5');
+    expect(cards[0].textContent).toContain('(2 avis)');
+
+    // Card 2: unrated recipe
+    expect(cards[1].querySelector('h3')?.textContent).toContain('Salade César');
+    expect(cards[1].querySelector('p')?.textContent?.trim()).toBe('Une salade clas…');
+    expect(cards[1].textContent).toContain('Non noté');
   });
 
   it('should filter recipes when searching', async () => {
@@ -149,5 +165,11 @@ describe('RecipesList', () => {
     component.confirmDelete();
 
     expect(mockRecipeService.delete).toHaveBeenCalledWith('1');
+  });
+
+  it('has no axe violations', async () => {
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(await axeViolations(fixture)).toEqual([]);
   });
 });

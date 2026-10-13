@@ -6,12 +6,21 @@ import { IngredientService } from "@/core/services/ingredient.service";
 import { RecipeCard } from "@/shared/components/recipe-card/recipe-card";
 import { Pagination } from "@/shared/components/pagination/pagination";
 import { ConfirmDialog } from "@/shared/components/confirm-dialog/confirm-dialog";
+import { StaggerListDirective } from "@/shared/directives/stagger-list.directive";
+import { CulinaryIconComponent } from "@/shared/components/culinary-art/culinary-icon.component";
 import { AppHttpError } from "@/core/interceptors/error.interceptor";
 import { environment } from "@/environments/environment";
 
 @Component({
   selector: "app-recipes-list",
-  imports: [RouterLink, RecipeCard, Pagination, ConfirmDialog],
+  imports: [
+    RouterLink,
+    RecipeCard,
+    Pagination,
+    ConfirmDialog,
+    StaggerListDirective,
+    CulinaryIconComponent,
+  ],
   templateUrl: "./recipes-list.html",
   styleUrl: "./recipes-list.css",
 })

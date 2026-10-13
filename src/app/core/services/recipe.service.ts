@@ -1,9 +1,10 @@
 import { Service, inject, signal } from "@angular/core";
 import { HttpClient, HttpParams } from "@angular/common/http";
-import { Observable, tap, catchError, throwError } from "rxjs";
+import { Observable, tap, catchError, throwError, switchMap } from "rxjs";
 import { environment } from "@/environments/environment";
 import {
   Recipe,
+  RecipeRate,
   CreateRecipeDto,
   RecipeQueryOptions,
   RecipeValidationResult,
@@ -82,6 +83,24 @@ export class RecipeService {
    */
   update(id: string | number, recipe: Partial<CreateRecipeDto>): Observable<Recipe> {
     return this.http.put<Recipe>(`${this.url}/${id}`, recipe);
+  }
+
+  /**
+   * Adds a new rating/review to a recipe and persists the updated recipe.
+   */
+  addRate(id: string | number, rate: RecipeRate): Observable<Recipe> {
+    return this.getById(id).pipe(
+      switchMap((recipe) => {
+        const rates = [...(recipe.rates || []), rate];
+        const { id: _, ...recipeData } = recipe;
+        return this.update(id, { ...recipeData, rates });
+      }),
+      tap((updatedRecipe) => {
+        if (this.currentRecipe()?.id === String(id)) {
+          this.currentRecipe.set(updatedRecipe);
+        }
+      })
+    );
   }
 
   /**

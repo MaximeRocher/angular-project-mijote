@@ -1,6 +1,7 @@
 import { recipesRoutes } from './recipes.routes';
 import { RecipesList } from './recipes-list/recipes-list';
 import { RecipeForm } from './recipe-form/recipe-form';
+import { RecipeDetails } from './recipe-details/recipe-details';
 
 describe('recipesRoutes', () => {
   it('should define root route loading RecipesList', async () => {
@@ -30,5 +31,16 @@ describe('recipesRoutes', () => {
     expect(newRoute).toBeDefined();
     expect(newRoute?.redirectTo).toBe('create');
     expect(newRoute?.pathMatch).toBe('full');
+  });
+
+  it('should define :id route loading RecipeDetails', async () => {
+    const detailsRoute = recipesRoutes.find((r) => r.path === ':id');
+    expect(detailsRoute).toBeDefined();
+    expect(detailsRoute?.title).toBe('Détail de la recette - Mijoté');
+
+    if (detailsRoute?.loadComponent) {
+      const component = await (detailsRoute.loadComponent as () => Promise<unknown>)();
+      expect(component).toBe(RecipeDetails);
+    }
   });
 });

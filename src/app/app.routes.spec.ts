@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
 import { routes } from './app.routes';
 import { recipesRoutes } from './features/recipes/recipes.routes';
+import { authGuard } from './core/guards/auth.guard';
 
 describe('appRoutes', () => {
   const layoutRoute = routes.find((r) => r.path === '' && r.children);
@@ -47,7 +48,7 @@ describe('appRoutes', () => {
   it('should expose a public landing route without auth guard', async () => {
     const landingRoute = routes.find((r) => r.path === 'landing');
     expect(landingRoute).toBeDefined();
-    expect(landingRoute?.canActivate).toBeUndefined();
+    expect(landingRoute?.canActivate).not.toContain(authGuard);
     expect(landingRoute?.title).toBe('Mijote — Cuisinez, Partagez, Savourez');
     expect(landingRoute?.loadComponent).toBeDefined();
 

@@ -7,9 +7,34 @@
   position: fixed;
   inset: 0;
   z-index: 9998;
-  background: var(--ink);
+  background: var(--ink, #1f1610);
   transform: scaleY(0);
   transform-origin: bottom;
   pointer-events: none;
   will-change: transform;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
+.transition-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  opacity: 0;
+  transform: scale(0.9);
+  pointer-events: none;
+  user-select: none;
+}
+
+.transition-title {
+  font-family: var(--font-display, Georgia, serif);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #fed7aa;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
