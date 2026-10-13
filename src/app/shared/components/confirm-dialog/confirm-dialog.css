@@ -11,7 +11,7 @@
 }
 
 .confirm-dialog::backdrop {
-  background: rgb(59 42 30 / 55%);
+  background: rgb(38 48 28 / 55%);
 }
 
 .confirm-dialog__body {

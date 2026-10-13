@@ -22,7 +22,7 @@ import { GsapService } from '@/core/services/gsap.service';
     svg {
       display: block;
       overflow: visible;
-      filter: drop-shadow(0 14px 28px rgba(120, 60, 20, 0.18));
+      filter: drop-shadow(0 14px 28px rgba(60, 90, 30, 0.18));
     }
     .steam-line {
       opacity: 0;
@@ -44,16 +44,16 @@ import { GsapService } from '@/core/services/gsap.service';
       <defs>
         <!-- Body Terracotta Gradient -->
         <linearGradient id="potBodyGrad" x1="20" y1="80" x2="180" y2="150" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stop-color="#cf501b" />
-          <stop offset="50%" stop-color="#b4410f" />
-          <stop offset="100%" stop-color="#732505" />
+          <stop offset="0%" stop-color="#8fb04f" />
+          <stop offset="50%" stop-color="#4f7022" />
+          <stop offset="100%" stop-color="#33491a" />
         </linearGradient>
 
         <!-- Lid Gradient -->
         <linearGradient id="lidGrad" x1="30" y1="58" x2="170" y2="92" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stop-color="#d65722" />
-          <stop offset="60%" stop-color="#b4410f" />
-          <stop offset="100%" stop-color="#7e2b08" />
+          <stop offset="0%" stop-color="#8fb04f" />
+          <stop offset="60%" stop-color="#4f7022" />
+          <stop offset="100%" stop-color="#33491a" />
         </linearGradient>
 
         <!-- Brass Knob Gradient -->
@@ -73,7 +73,7 @@ import { GsapService } from '@/core/services/gsap.service';
         <linearGradient id="steamGrad" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stop-color="#ffffff" stop-opacity="0" />
           <stop offset="50%" stop-color="#ffffff" stop-opacity="0.65" />
-          <stop offset="100%" stop-color="#fff4e6" stop-opacity="0.1" />
+          <stop offset="100%" stop-color="#f0f6e0" stop-opacity="0.1" />
         </linearGradient>
       </defs>
 
@@ -110,13 +110,13 @@ import { GsapService } from '@/core/services/gsap.service';
       <!-- Cast Iron Handles -->
       <path
         d="M16 96 C8 96, 6 112, 18 116 C24 118, 28 114, 28 110"
-        stroke="#7e2b08"
+        stroke="#33491a"
         stroke-width="7"
         stroke-linecap="round"
       />
       <path
         d="M184 96 C192 96, 194 112, 182 116 C176 118, 172 114, 172 110"
-        stroke="#7e2b08"
+        stroke="#33491a"
         stroke-width="7"
         stroke-linecap="round"
       />
@@ -130,7 +130,7 @@ import { GsapService } from '@/core/services/gsap.service';
       <!-- Body Rim / Shadow Line -->
       <path
         d="M26 88 C40 94, 160 94, 174 88"
-        stroke="#591c03"
+        stroke="#2a3d15"
         stroke-width="3"
         fill="none"
       />
@@ -145,14 +145,14 @@ import { GsapService } from '@/core/services/gsap.service';
       <path
         d="M22 84 C30 68, 64 60, 100 60 C136 60, 170 68, 178 84 C170 88, 136 92, 100 92 C64 92, 30 88, 22 84 Z"
         fill="url(#lidGrad)"
-        stroke="#682104"
+        stroke="#2f4418"
         stroke-width="1.5"
       />
 
       <!-- Lid Edge Highlight -->
       <path
         d="M25 83 C55 70, 145 70, 175 83"
-        stroke="#f28859"
+        stroke="#b7d27d"
         stroke-width="1.5"
         stroke-linecap="round"
         fill="none"

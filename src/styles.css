@@ -1,20 +1,41 @@
 @import 'tailwindcss';
 
+@theme {
+  --color-amber-50: #f7faec;
+  --color-amber-100: #eaf2d3;
+  --color-amber-200: #d6e6ae;
+  --color-amber-300: #bdd585;
+  --color-amber-600: #4f7022;
+  --color-amber-700: #44601d;
+  --color-amber-800: #3b551a;
+  --color-amber-900: #2c4014;
+  --color-stone-50: #f8fbf0;
+  --color-stone-100: #eef4e0;
+  --color-stone-200: #dbe5c3;
+  --color-stone-300: #bccaa0;
+  --color-stone-400: #8c9c72;
+  --color-stone-500: #66754f;
+  --color-stone-600: #55634a;
+  --color-stone-700: #3f4c36;
+  --color-stone-800: #2c3825;
+  --color-stone-900: #1f2a16;
+}
+
 :root {
-  --cream: #fff7ec;
+  --cream: #f4f8e8;
   --surface: #fff;
-  --surface-input: #fffdf9;
-  --surface-code: #f6e7d3;
-  --ink: #3b2a1e;
-  --muted: #6b5545;
-  --accent: #b4410f;
-  --accent-dark: #8f330b;
-  --accent-ring: rgb(180 65 15 / 25%);
-  --border: #d9c2a8;
-  --border-soft: #e8d5bc;
+  --surface-input: #fbfdf5;
+  --surface-code: #e3edcc;
+  --ink: #26301c;
+  --muted: #55634a;
+  --accent: #4f7022;
+  --accent-dark: #3b551a;
+  --accent-ring: rgb(79 112 34 / 25%);
+  --border: #c5d3a5;
+  --border-soft: #dbe5c3;
   --error: #b00020;
-  --shadow-card: 0 10px 30px rgb(120 60 20 / 18%);
-  --shadow-warm-lg: 0 20px 40px -15px rgb(120 60 20 / 15%);
+  --shadow-card: 0 10px 30px rgb(60 90 30 / 18%);
+  --shadow-warm-lg: 0 20px 40px -15px rgb(60 90 30 / 15%);
 
   --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --radius-sm: 0.25rem;

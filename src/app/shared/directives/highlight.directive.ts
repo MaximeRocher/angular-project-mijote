@@ -11,6 +11,6 @@ import { Directive, input, signal } from '@angular/core';
   },
 })
 export class HighlightDirective {
-  readonly color = input('#fff0dc', { alias: 'appHighlight' });
+  readonly color = input('#e9f2d0', { alias: 'appHighlight' });
   protected readonly active = signal(false);
 }
