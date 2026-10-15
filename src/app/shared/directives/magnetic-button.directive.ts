@@ -1,11 +1,4 @@
-import {
-  Directive,
-  ElementRef,
-  inject,
-  input,
-  afterNextRender,
-  DestroyRef,
-} from '@angular/core';
+import { Directive, ElementRef, inject, input, afterNextRender, DestroyRef } from '@angular/core';
 import { gsap } from 'gsap';
 import { GsapService } from '@/core/services/gsap.service';
 

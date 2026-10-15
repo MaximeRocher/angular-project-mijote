@@ -1,20 +1,23 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { signal } from '@angular/core';
 import { provideRouter, Router } from '@angular/router';
+import { submit } from '@angular/forms/signals';
 import { of, throwError } from 'rxjs';
 import { RecipeForm } from './recipe-form';
 import { RecipeService } from '@/core/services/recipe.service';
 import { IngredientService } from '@/core/services/ingredient.service';
 import { Recipe } from '@/core/models/recipe.model';
 import { provideAppIcons } from '@/core/icons';
+import { axeViolations } from '@/testing-a11y';
 
 describe('RecipeForm', () => {
   let component: RecipeForm;
   let fixture: ComponentFixture<RecipeForm>;
-  let mockRecipeService: any;
-  let mockIngredientService: any;
+  let recipeService: { create: ReturnType<typeof vi.fn>; validateRecipe: ReturnType<typeof vi.fn> };
+  let ingredientService: { ingredients: ReturnType<typeof signal>; load: ReturnType<typeof vi.fn> };
   let router: Router;
 
-  const mockCreatedRecipe: Recipe = {
+  const created: Recipe = {
     id: '123',
     name: 'Tarte aux pommes',
     description: 'Une superbe tarte aux pommes dorée au four et bien croustillante.',
@@ -24,19 +27,27 @@ describe('RecipeForm', () => {
     ],
   };
 
+  const validModel = {
+    name: '  Tarte aux pommes ',
+    description: 'Une superbe tarte aux pommes dorée au four et bien croustillante.',
+    composition: [
+      { idIngredient: '1', quantity: 2 },
+      { idIngredient: '2', quantity: 1 },
+    ],
+  };
+
   beforeEach(async () => {
-    mockRecipeService = {
-      create: vi.fn().mockReturnValue(of(mockCreatedRecipe)),
+    recipeService = {
+      create: vi.fn().mockReturnValue(of(created)),
       validateRecipe: vi.fn().mockReturnValue({ valid: true, errors: [] }),
     };
-
-    mockIngredientService = {
-      ingredients: vi.fn().mockReturnValue([
+    ingredientService = {
+      ingredients: signal([
         { id: '1', name: 'Pommes' },
         { id: '2', name: 'Pâte brisée' },
         { id: '3', name: 'Sucre' },
       ]),
-      loadAll: vi.fn().mockReturnValue(of([])),
+      load: vi.fn(),
     };
 
     await TestBed.configureTestingModule({
@@ -44,8 +55,8 @@ describe('RecipeForm', () => {
       providers: [
         provideRouter([]),
         provideAppIcons(),
-        { provide: RecipeService, useValue: mockRecipeService },
-        { provide: IngredientService, useValue: mockIngredientService },
+        { provide: RecipeService, useValue: recipeService },
+        { provide: IngredientService, useValue: ingredientService },
       ],
     }).compileComponents();
 
@@ -56,105 +67,99 @@ describe('RecipeForm', () => {
     await fixture.whenStable();
   });
 
-  it('should create the form component and initialize with 2 ingredients', () => {
-    expect(component).toBeTruthy();
-    expect(component.form).toBeDefined();
-    expect(component.composition.length).toBe(2);
-    expect(mockIngredientService.loadAll).toHaveBeenCalled();
+  afterEach(() => vi.useRealTimers());
+
+  it('starts with 2 ingredient rows and loads the ingredient list', () => {
+    expect(component.model().composition.length).toBe(2);
+    expect(ingredientService.load).toHaveBeenCalled();
   });
 
-  it('should be invalid when form fields are empty', () => {
-    expect(component.form.valid).toBe(false);
-    expect(component.form.get('name')?.valid).toBe(false);
-    expect(component.form.get('description')?.valid).toBe(false);
+  it('is invalid when empty', () => {
+    expect(component.form().valid()).toBe(false);
+    expect(component.form.name().valid()).toBe(false);
+    expect(component.form.description().valid()).toBe(false);
   });
 
-  it('should validate description length strictly (>= 30 characters)', () => {
-    const descControl = component.form.get('description');
-    descControl?.setValue('Court');
-    expect(descControl?.valid).toBe(false);
+  it('requires a description of at least 30 characters', () => {
+    component.form.description().value.set('Court');
+    expect(component.form.description().valid()).toBe(false);
 
-    descControl?.setValue('Une description de plus de trente caractères pour le test');
-    expect(descControl?.valid).toBe(true);
+    component.form
+      .description()
+      .value.set('Une description de plus de trente caractères pour le test');
+    expect(component.form.description().valid()).toBe(true);
   });
 
-  it('should add a new ingredient row with addIngredient()', () => {
-    expect(component.composition.length).toBe(2);
+  it('rejects a whitespace-only name', () => {
+    component.form.name().value.set('   ');
+    expect(component.form.name().valid()).toBe(false);
+  });
+
+  it('rejects the same ingredient picked twice', () => {
+    component.model.set({
+      ...validModel,
+      composition: [
+        { idIngredient: '1', quantity: 1 },
+        { idIngredient: '1', quantity: 1 },
+      ],
+    });
+    expect(component.form.composition().valid()).toBe(false);
+
+    component.form.composition[1].idIngredient().value.set('2');
+    expect(component.form.composition().valid()).toBe(true);
+  });
+
+  it('never goes below 2 ingredient rows and can add more', () => {
+    component.removeIngredient(0);
+    expect(component.model().composition.length).toBe(2);
+
     component.addIngredient();
-    expect(component.composition.length).toBe(3);
+    expect(component.model().composition.length).toBe(3);
+    component.removeIngredient(0);
+    expect(component.model().composition.length).toBe(2);
   });
 
-  it('should allow removing ingredients only when more than 2 exist', () => {
-    component.addIngredient(); // 3 rows
-    expect(component.composition.length).toBe(3);
-
-    component.removeIngredient(2); // removes to 2 rows
-    expect(component.composition.length).toBe(2);
-
-    // Try removing when only 2 rows left - should NOT remove
-    component.removeIngredient(1);
-    expect(component.composition.length).toBe(2);
+  it('does not submit an invalid form', async () => {
+    await submit(component.form);
+    expect(recipeService.create).not.toHaveBeenCalled();
   });
 
-  it('should mark all fields touched and not submit when form is invalid', () => {
-    component.onSubmit();
-    expect(component.form.touched).toBe(true);
-    expect(mockRecipeService.create).not.toHaveBeenCalled();
-  });
-
-  it('should submit successfully and navigate to /recipes when valid', () => {
+  it('creates the recipe with trimmed values then redirects', async () => {
     vi.useFakeTimers();
-    const navigateSpy = vi.spyOn(router, 'navigate').mockResolvedValue(true);
+    const navigate = vi.spyOn(router, 'navigate').mockResolvedValue(true);
+    component.model.set(validModel);
 
-    component.form.patchValue({
+    await submit(component.form);
+
+    expect(recipeService.create).toHaveBeenCalledWith({
       name: 'Tarte aux pommes',
-      description: 'Une superbe tarte aux pommes dorée au four et bien croustillante.',
-    });
-
-    component.composition.at(0).patchValue({
-      idIngredient: '1',
-      quantity: 2,
-    });
-    component.composition.at(1).patchValue({
-      idIngredient: '2',
-      quantity: 1,
-    });
-
-    expect(component.form.valid).toBe(true);
-
-    component.onSubmit();
-
-    expect(mockRecipeService.create).toHaveBeenCalledWith({
-      name: 'Tarte aux pommes',
-      description: 'Une superbe tarte aux pommes dorée au four et bien croustillante.',
+      description: validModel.description,
       composition: [
         { idIngredient: '1', quantity: 2 },
         { idIngredient: '2', quantity: 1 },
       ],
     });
-
     expect(component.successMessage()).toContain('Tarte aux pommes');
+    expect(component.submitting()).toBe(false);
 
     vi.advanceTimersByTime(1000);
-    expect(navigateSpy).toHaveBeenCalledWith(['/recipes']);
-    vi.useRealTimers();
+    expect(navigate).toHaveBeenCalledWith(['/recipes']);
   });
 
-  it('should display error message when creation fails', () => {
-    mockRecipeService.create.mockReturnValue(
-      throwError(() => new Error('Erreur de connexion au serveur API'))
+  it('shows the error when creation fails', async () => {
+    recipeService.create.mockReturnValue(
+      throwError(() => new Error('Erreur de connexion au serveur API')),
     );
+    component.model.set(validModel);
 
-    component.form.patchValue({
-      name: 'Tarte aux pommes',
-      description: 'Une superbe tarte aux pommes dorée au four et bien croustillante.',
-    });
-    component.composition.at(0).patchValue({ idIngredient: '1', quantity: 2 });
-    component.composition.at(1).patchValue({ idIngredient: '2', quantity: 1 });
-
-    component.onSubmit();
+    await submit(component.form);
 
     expect(component.submitting()).toBe(false);
     expect(component.errorMessage()).toBe('Erreur de connexion au serveur API');
+    expect(component.successMessage()).toBeNull();
+  });
+
+  it('has no axe violations', async () => {
+    expect(await axeViolations(fixture)).toEqual([]);
   });
 });

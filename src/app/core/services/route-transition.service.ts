@@ -1,12 +1,10 @@
-import { Injectable, inject } from '@angular/core';
+import { Service, inject } from '@angular/core';
 import { gsap } from 'gsap';
 import { GsapService } from './gsap.service';
 
 export type TransitionState = 'idle' | 'covering' | 'covered' | 'revealing';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export class RouteTransitionService {
   private readonly gsapService = inject(GsapService);
 

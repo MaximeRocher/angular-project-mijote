@@ -7,12 +7,13 @@ export const routes: Routes = [
     path: 'landing',
     canActivate: [transitionGuard],
     loadComponent: () => import('./features/landing/landing').then((m) => m.Landing),
-    title: 'Mijote — Cuisinez, Partagez, Savourez',
+    title: 'Mijoté — Cuisinez, Partagez, Savourez',
   },
   {
     path: 'login',
     canActivate: [guestGuard, transitionGuard],
     loadComponent: () => import('./features/login/login').then((m) => m.Login),
+    title: 'Connexion - Mijoté',
   },
   {
     path: '',
@@ -23,6 +24,7 @@ export const routes: Routes = [
       {
         path: 'home',
         loadComponent: () => import('./features/home/home').then((m) => m.Home),
+        title: 'Accueil - Mijoté',
       },
       {
         path: 'recipes',

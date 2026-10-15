@@ -1,10 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  inject,
-  signal,
-  viewChild,
-} from '@angular/core';
+import { Component, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { gsap } from 'gsap';
 import { Flip } from 'gsap/Flip';
 import { GsapService } from '@/core/services/gsap.service';
@@ -35,7 +29,8 @@ interface FeatureCard {
         <span class="section-tag">FONCTIONNALITÉS</span>
         <h2 class="section-title">Tout ce qu'il faut pour cuisiner comme un chef</h2>
         <p class="section-subtitle">
-          Une interface moderne et intuitive conçue pour simplifier chaque étape de votre aventure culinaire.
+          Une interface moderne et intuitive conçue pour simplifier chaque étape de votre aventure
+          culinaire.
         </p>
       </div>
 
@@ -103,8 +98,10 @@ export class BentoGridSection {
       iconName: 'book',
       tag: 'ORGANISATION',
       title: 'Votre carnet de recettes interactif',
-      preview: 'Centralisez toutes vos recettes de famille et découvertes culinaires dans un espace ordonné.',
-      detail: 'Filtrez par type de plat, ingrédients ou temps de préparation. Ajoutez des notes personnelles, des variantes et retrouvez instantanément vos plats préférés.',
+      preview:
+        'Centralisez toutes vos recettes de famille et découvertes culinaires dans un espace ordonné.',
+      detail:
+        'Filtrez par type de plat, ingrédients ou temps de préparation. Ajoutez des notes personnelles, des variantes et retrouvez instantanément vos plats préférés.',
       stat: '∞',
       statLabel: 'recettes sauvegardées sans limite',
       colorClass: 'card-warm',
@@ -115,8 +112,10 @@ export class BentoGridSection {
       iconName: 'knife',
       tag: 'CRÉATION',
       title: 'Éditeur fluide & précis',
-      preview: 'Créez de nouvelles recettes avec calcul automatique des proportions et ingrédients.',
-      detail: 'Une saisie rapide avec validation instantanée. Précisez les quantités exactes et ajustez les portions selon le nombre de convives d\'un simple clic.',
+      preview:
+        'Créez de nouvelles recettes avec calcul automatique des proportions et ingrédients.',
+      detail:
+        "Une saisie rapide avec validation instantanée. Précisez les quantités exactes et ajustez les portions selon le nombre de convives d'un simple clic.",
       stat: '0s',
       statLabel: 'temps de configuration requis',
       colorClass: 'card-accent',
@@ -127,8 +126,10 @@ export class BentoGridSection {
       iconName: 'carrot',
       tag: 'INGRÉDIENTS',
       title: 'Gestion intelligente des stocks',
-      preview: 'Visualisez vos ingrédients et trouvez des idées de plats à cuisiner avec ce que vous avez.',
-      detail: 'Ne gaspillez plus rien : renseignez ce qu\'il vous reste dans le réfrigérateur, Mijote vous propose les meilleures associations culinaires adaptées.',
+      preview:
+        'Visualisez vos ingrédients et trouvez des idées de plats à cuisiner avec ce que vous avez.',
+      detail:
+        "Ne gaspillez plus rien : renseignez ce qu'il vous reste dans le réfrigérateur, Mijote vous propose les meilleures associations culinaires adaptées.",
       stat: '-30%',
       statLabel: 'de gaspillage alimentaire en moyenne',
       colorClass: 'card-light',
@@ -139,10 +140,11 @@ export class BentoGridSection {
       iconName: 'flame',
       tag: 'EN CUISINE',
       title: 'Mode guidé pas-à-pas',
-      preview: 'Cuisinez l\'esprit libre avec une vue épurée des étapes et minuteurs intégrés.',
-      detail: 'Un affichage contrasté et aéré spécialement pensé pour la cuisine : gardez l\'écran lisible même les mains occupées.',
-      stat: '100%',
-      statLabel: 'accessibilité WCAG AA respectée',
+      preview: "Cuisinez l'esprit libre avec une vue épurée des étapes et minuteurs intégrés.",
+      detail:
+        "Un affichage contrasté et aéré spécialement pensé pour la cuisine : gardez l'écran lisible même les mains occupées.",
+      stat: 'AA',
+      statLabel: "niveau d'accessibilité visé (WCAG)",
       colorClass: 'card-terracotta',
       gridClass: 'col-span-2 row-span-1',
     },
@@ -171,9 +173,12 @@ export class BentoGridSection {
         nested: true,
         absolute: false,
         onEnter: (elements) =>
-          gsap.fromTo(elements, { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }),
-        onLeave: (elements) =>
-          gsap.to(elements, { opacity: 0, duration: 0.25, ease: 'power2.in' }),
+          gsap.fromTo(
+            elements,
+            { opacity: 0, y: 15 },
+            { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' },
+          ),
+        onLeave: (elements) => gsap.to(elements, { opacity: 0, duration: 0.25, ease: 'power2.in' }),
       });
     });
   }

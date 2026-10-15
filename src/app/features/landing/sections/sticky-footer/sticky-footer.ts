@@ -1,14 +1,8 @@
-import {
-  Component,
-  ElementRef,
-  inject,
-  afterNextRender,
-  DestroyRef,
-} from '@angular/core';
+import { Component, ElementRef, inject, afterNextRender, DestroyRef } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { gsap } from 'gsap';
 import { GsapService } from '@/core/services/gsap.service';
-import { MagneticButtonDirective } from '../../shared/magnetic-button.directive';
+import { MagneticButtonDirective } from '@/shared/directives/magnetic-button.directive';
 import { CocottePotComponent } from '@/shared/components/culinary-art/cocotte-pot.component';
 
 @Component({
@@ -25,13 +19,18 @@ import { CocottePotComponent } from '@/shared/components/culinary-art/cocotte-po
           </div>
 
           <p class="footer-tagline">
-            La cuisine faite maison, sublimée au quotidien. Partagez, créez et savourez chaque recette.
+            La cuisine faite maison, sublimée au quotidien. Partagez, créez et savourez chaque
+            recette.
           </p>
 
           <a routerLink="/login" class="footer-cta" appMagnetic [strength]="0.25">
             <span>Rejoindre la communauté</span>
             <svg class="cta-arrow" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-              <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+              <path
+                fill-rule="evenodd"
+                d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                clip-rule="evenodd"
+              />
             </svg>
           </a>
         </div>
@@ -41,13 +40,14 @@ import { CocottePotComponent } from '@/shared/components/culinary-art/cocotte-po
         <div class="footer-bottom">
           <nav class="footer-nav" aria-label="Navigation du pied de page">
             <a routerLink="/landing">Accueil</a>
-            <a href="#features">Fonctionnalités</a>
+            <a routerLink="/landing" fragment="features">Fonctionnalités</a>
             <a routerLink="/login">Connexion</a>
             <a routerLink="/recipes">Recettes</a>
           </nav>
 
           <p class="footer-copy">
-            &copy; {{ currentYear }} Mijote. Tous droits réservés. Conçu avec amour et passion culinaire.
+            &copy; {{ currentYear }} Mijote. Tous droits réservés. Conçu avec amour et passion
+            culinaire.
           </p>
         </div>
       </div>

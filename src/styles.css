@@ -32,6 +32,7 @@
   --accent-dark: #3b551a;
   --accent-ring: rgb(79 112 34 / 25%);
   --border: #c5d3a5;
+  --border-input: #6b7a52; /* 3:1+ against input background (WCAG 1.4.11) */
   --border-soft: #dbe5c3;
   --error: #b00020;
   --shadow-card: 0 10px 30px rgb(60 90 30 / 18%);
@@ -86,6 +87,8 @@ body::before {
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

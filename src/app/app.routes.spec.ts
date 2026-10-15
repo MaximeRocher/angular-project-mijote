@@ -25,7 +25,9 @@ describe('appRoutes', () => {
 
     const loaded = await (recipesRoute!.loadChildren as () => Promise<unknown>)();
     const loadedRoutes =
-      (loaded as { default?: unknown }).default ?? (loaded as { routes?: unknown }).routes ?? loaded;
+      (loaded as { default?: unknown }).default ??
+      (loaded as { routes?: unknown }).routes ??
+      loaded;
     expect(loadedRoutes).toBe(recipesRoutes);
   });
 
@@ -49,7 +51,7 @@ describe('appRoutes', () => {
     const landingRoute = routes.find((r) => r.path === 'landing');
     expect(landingRoute).toBeDefined();
     expect(landingRoute?.canActivate).not.toContain(authGuard);
-    expect(landingRoute?.title).toBe('Mijote — Cuisinez, Partagez, Savourez');
+    expect(landingRoute?.title).toBe('Mijoté — Cuisinez, Partagez, Savourez');
     expect(landingRoute?.loadComponent).toBeDefined();
 
     const loaded = await (landingRoute!.loadComponent as () => Promise<unknown>)();

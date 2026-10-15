@@ -1,8 +1,8 @@
-import { Service, inject, signal, computed } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { Observable, tap, catchError, throwError } from "rxjs";
-import { environment } from "@/environments/environment";
-import { Ingredient } from "@/core/models/ingredient.model";
+import { Service, inject, signal, computed } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '@/environments/environment';
+import { Ingredient } from '@/core/models/ingredient.model';
+import { errorMessage } from '@/core/utils/error-message';
 
 @Service()
 export class IngredientService {
@@ -21,32 +21,21 @@ export class IngredientService {
     return map;
   });
 
-  getAll(): Observable<Ingredient[]> {
-    return this.http.get<Ingredient[]>(this.url);
-  }
-
-  getById(id: string | number): Observable<Ingredient> {
-    return this.http.get<Ingredient>(`${this.url}/${id}`);
-  }
-
-  loadAll(): Observable<Ingredient[]> {
+  /** Fetches the ingredients once; later calls are no-ops unless the last attempt failed. */
+  load(): void {
+    if (this.loading() || this.ingredients().length > 0) return;
     this.loading.set(true);
     this.error.set(null);
-    return this.getAll().pipe(
-      tap((ingredients) => {
+    this.http.get<Ingredient[]>(this.url).subscribe({
+      next: (ingredients) => {
         this.ingredients.set(ingredients);
         this.loading.set(false);
-      }),
-      catchError((err: unknown) => {
-        const message =
-          err instanceof Error
-            ? err.message
-            : "Erreur lors du chargement des ingrédients";
-        this.error.set(message);
+      },
+      error: (err: unknown) => {
+        this.error.set(errorMessage(err, 'Erreur lors du chargement des ingrédients'));
         this.loading.set(false);
-        return throwError(() => err);
-      })
-    );
+      },
+    });
   }
 
   getIngredientName(id: string | number): string | undefined {

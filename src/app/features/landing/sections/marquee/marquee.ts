@@ -14,18 +14,18 @@ import { GsapService } from '@/core/services/gsap.service';
   selector: 'app-marquee-section',
   styleUrl: './marquee.css',
   template: `
-    <section class="marquee-section" aria-label="Mots-clés de l'univers Mijote">
+    <section class="marquee-section" aria-hidden="true">
       <div #track class="marquee-track">
         <span class="marquee-text">
           Mijote · Cuisiner · Partager · Savourer · Découvrir · Créer · Déguster · Inspirer ·&nbsp;
         </span>
-        <span class="marquee-text" aria-hidden="true">
+        <span class="marquee-text">
           Mijote · Cuisiner · Partager · Savourer · Découvrir · Créer · Déguster · Inspirer ·&nbsp;
         </span>
-        <span class="marquee-text" aria-hidden="true">
+        <span class="marquee-text">
           Mijote · Cuisiner · Partager · Savourer · Découvrir · Créer · Déguster · Inspirer ·&nbsp;
         </span>
-        <span class="marquee-text" aria-hidden="true">
+        <span class="marquee-text">
           Mijote · Cuisiner · Partager · Savourer · Découvrir · Créer · Déguster · Inspirer ·&nbsp;
         </span>
       </div>
@@ -64,7 +64,7 @@ export class MarqueeSection {
         });
 
         // Modulate timeScale based on scroll velocity
-        ScrollTrigger.create({
+        const scrollTrigger = ScrollTrigger.create({
           trigger: sectionEl,
           start: 'top bottom',
           end: 'bottom top',
@@ -79,6 +79,10 @@ export class MarqueeSection {
             });
           },
         });
+
+        // Stop the scroll-speed modulation before easing the loop to a halt (WCAG 2.2.2)
+        gsap.delayedCall(4, () => scrollTrigger.kill());
+        this.gsapService.stopAfter(tl);
       });
 
       this.destroyRef.onDestroy(() => {

@@ -1,18 +1,19 @@
-import { Component, input, output, computed, inject } from "@angular/core";
-import { RouterLink } from "@angular/router";
-import { TablerIconComponent } from "@tabler/icons-angular";
-import { Recipe } from "@/core/models/recipe.model";
-import { IngredientService } from "@/core/services/ingredient.service";
-import { Tilt3dDirective } from "@/shared/directives/tilt-3d.directive";
+import { Component, input, output, computed, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { TablerIconComponent } from '@tabler/icons-angular';
+import { Recipe } from '@/core/models/recipe.model';
+import { IngredientService } from '@/core/services/ingredient.service';
+import { Tilt3dDirective } from '@/shared/directives/tilt-3d.directive';
+import { ratingInfo } from '@/shared/utils/rating';
 
 @Component({
-  selector: "app-recipe-card",
+  selector: 'app-recipe-card',
   imports: [RouterLink, TablerIconComponent, Tilt3dDirective],
-  templateUrl: "./recipe-card.html",
-  styleUrl: "./recipe-card.css",
+  templateUrl: './recipe-card.html',
+  styleUrl: './recipe-card.css',
 })
 export class RecipeCard {
-  protected readonly ingredientService = inject(IngredientService, { optional: true });
+  private readonly ingredientService = inject(IngredientService);
 
   readonly recipe = input.required<Recipe>();
   readonly truncateDescription = input<boolean>(false);
@@ -21,7 +22,6 @@ export class RecipeCard {
   readonly showActions = input<boolean>(false);
 
   readonly delete = output<string>();
-  readonly selected = output<Recipe>();
 
   onDeleteClick(event: MouseEvent): void {
     event.stopPropagation();
@@ -30,7 +30,7 @@ export class RecipeCard {
   }
 
   readonly displayedDescription = computed(() => {
-    const desc = this.recipe().description || "";
+    const desc = this.recipe().description || '';
     if (this.truncateDescription()) {
       const max = this.maxDescriptionLength();
       return desc.length > max ? `${desc.slice(0, max)}…` : desc;
@@ -38,24 +38,13 @@ export class RecipeCard {
     return desc;
   });
 
-  readonly ratingInfo = computed(() => {
-    const rates = this.recipe().rates;
-    if (!rates || rates.length === 0) {
-      return null;
-    }
-    const sum = rates.reduce((acc, curr) => acc + (Number(curr.rate) || 0), 0);
-    const avg = sum / rates.length;
-    const average = Math.round(avg * 10) / 10;
-    const count = rates.length;
-    return {
-      average,
-      count,
-      label: `${count} avis`,
-      ariaLabel: `Note moyenne de ${average} sur 5, basée sur ${count} avis`,
-    };
-  });
+  readonly ratingInfo = computed(() => ratingInfo(this.recipe().rates));
 
-  getIngredientName(id: string | number): string {
-    return this.ingredientService?.getIngredientName(id) ?? `Ingrédient #${id}`;
-  }
+  protected readonly ingredients = computed(() =>
+    this.recipe().composition.map((c) => ({
+      name:
+        this.ingredientService.getIngredientName(c.idIngredient) ?? `Ingrédient #${c.idIngredient}`,
+      quantity: c.quantity,
+    })),
+  );
 }

@@ -12,175 +12,182 @@
 
   <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 sm:p-8">
     <header class="mb-8 border-b border-gray-100 pb-5">
-      <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">
-        Créer une nouvelle recette
-      </h1>
-      <p class="mt-1 text-sm text-gray-500">
-        Une recette doit avoir un nom, une description d'au moins 30 caractères et être composée d'au moins 2 ingrédients.
+      <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">Créer une nouvelle recette</h1>
+      <p class="mt-1 text-sm text-gray-600">
+        Une recette doit avoir un nom, une description d'au moins 30 caractères et être composée
+        d'au moins 2 ingrédients.
       </p>
     </header>
 
     <!-- Error message alert -->
-    @if (errorMessage()) {
+    <div role="alert">
+      @if (errorMessage()) {
       <div
         class="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 flex items-start gap-3"
-        role="alert"
       >
-        <tabler-icon icon="alert-circle" [size]="20" class="text-red-500 mt-0.5 shrink-0" />
+        <tabler-icon
+          icon="alert-circle"
+          [size]="20"
+          class="text-red-500 mt-0.5 shrink-0"
+          aria-hidden="true"
+        />
         <span class="text-sm font-medium">{{ errorMessage() }}</span>
       </div>
-    }
+      }
+    </div>
 
     <!-- Success message alert -->
-    @if (successMessage()) {
+    <div role="status">
+      @if (successMessage()) {
       <div
         class="mb-6 p-4 rounded-xl bg-[var(--cream)] border border-[color:var(--border-soft)] text-[color:var(--accent-dark)] flex items-start gap-3"
-        role="status"
-        aria-live="polite"
       >
-        <tabler-icon icon="check" [size]="20" class="text-[color:var(--accent)] mt-0.5 shrink-0" />
+        <tabler-icon
+          icon="check"
+          [size]="20"
+          class="text-[color:var(--accent)] mt-0.5 shrink-0"
+          aria-hidden="true"
+        />
         <span class="text-sm font-medium">{{ successMessage() }}</span>
       </div>
-    }
+      }
+    </div>
 
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-6" novalidate>
+    <form [formRoot]="form" class="space-y-6" novalidate>
       <!-- Recipe Name -->
       <div>
         <label for="recipe-name" class="block text-sm font-semibold text-gray-800 mb-1.5">
-          Nom de la recette <span class="text-red-500">*</span>
+          Nom de la recette <span class="text-red-700" aria-hidden="true">*</span>
         </label>
         <input
           type="text"
           id="recipe-name"
-          formControlName="name"
+          [formField]="form.name"
+          aria-required="true"
           placeholder="Ex: Tarte tatin caramélisée"
-          class="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)] focus:border-[color:var(--accent)] text-sm transition-colors"
-          [class.border-red-400]="form.get('name')?.touched && form.get('name')?.invalid"
+          class="w-full px-3.5 py-2.5 rounded-lg border border-gray-500 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)] focus:border-[color:var(--accent)] text-sm transition-colors"
+          [class.border-red-600]="form.name().touched() && form.name().invalid()"
+          [attr.aria-invalid]="form.name().touched() && form.name().invalid()"
+          aria-describedby="recipe-name-error"
         />
-        @if (form.get('name')?.touched && form.get('name')?.invalid) {
-          <p class="mt-1.5 text-xs text-red-600 font-medium" role="alert">
-            Le nom de la recette est obligatoire.
-          </p>
-        }
+        <div id="recipe-name-error">
+          @if (form.name().touched()) { @for (error of form.name().errors(); track error.kind) {
+          <p class="mt-1.5 text-xs text-red-700 font-medium">{{ error.message }}</p>
+          } }
+        </div>
       </div>
 
       <!-- Recipe Description -->
       <div>
         <div class="flex items-center justify-between mb-1.5">
           <label for="recipe-description" class="block text-sm font-semibold text-gray-800">
-            Description de la recette <span class="text-red-500">*</span>
+            Description de la recette <span class="text-red-700" aria-hidden="true">*</span>
           </label>
           <span
             class="text-xs font-medium"
-            [class]="
-              (form.get('description')?.value?.length || 0) >= 30
-                ? 'text-[color:var(--accent)]'
-                : 'text-gray-400'
-            "
+            [class]="model().description.length >= 30 ? 'text-[color:var(--accent-dark)]' : 'text-gray-600'"
           >
-            {{ form.get('description')?.value?.length || 0 }} / 30 caractères minimum
+            {{ model().description.length }} / 30 caractères minimum
           </span>
         </div>
         <textarea
           id="recipe-description"
           rows="4"
-          formControlName="description"
+          [formField]="form.description"
+          aria-required="true"
           placeholder="Décrivez les étapes, les saveurs et les secrets de votre recette (30 caractères minimum)..."
-          class="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)] focus:border-[color:var(--accent)] text-sm transition-colors"
-          [class.border-red-400]="form.get('description')?.touched && form.get('description')?.invalid"
+          class="w-full px-3.5 py-2.5 rounded-lg border border-gray-500 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)] focus:border-[color:var(--accent)] text-sm transition-colors"
+          [class.border-red-600]="form.description().touched() && form.description().invalid()"
+          [attr.aria-invalid]="form.description().touched() && form.description().invalid()"
+          aria-describedby="recipe-description-error"
         ></textarea>
-        @if (form.get('description')?.touched && form.get('description')?.invalid) {
-          <p class="mt-1.5 text-xs text-red-600 font-medium" role="alert">
-            La description doit comporter au moins 30 caractères.
-          </p>
-        }
+        <div id="recipe-description-error">
+          @if (form.description().touched()) { @for (error of form.description().errors(); track
+          error.kind) {
+          <p class="mt-1.5 text-xs text-red-700 font-medium">{{ error.message }}</p>
+          } }
+        </div>
       </div>
 
       <!-- Recipe Composition (Ingredients) -->
       <fieldset class="pt-4 border-t border-gray-100">
-        <div class="flex items-center justify-between mb-3">
-          <legend class="text-base font-semibold text-gray-900">
-            Ingrédients de la recette <span class="text-red-500">*</span>
-          </legend>
-          <span class="text-xs font-medium text-gray-500">
-            Au moins 2 ingrédients requis ({{ composition.length }} actuellement)
-          </span>
-        </div>
+        <legend class="text-base font-semibold text-gray-900 mb-1">
+          Ingrédients de la recette <span class="text-red-700" aria-hidden="true">*</span>
+        </legend>
+        <p class="text-xs font-medium text-gray-600 mb-3">
+          Au moins 2 ingrédients requis ({{ model().composition.length }} actuellement)
+        </p>
 
-        <div formArrayName="composition" class="space-y-3">
-          @for (group of composition.controls; track $index) {
-            <div
-              [formGroupName]="$index"
-              class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 p-3.5 rounded-xl bg-gray-50 border border-gray-200"
-            >
-              <!-- Ingredient Select -->
-              <div class="flex-1">
-                <label [for]="'ingredient-' + $index" class="sr-only">
-                  Ingrédient {{ $index + 1 }}
-                </label>
-                <select
-                  [id]="'ingredient-' + $index"
-                  formControlName="idIngredient"
-                  class="w-full px-3 py-2 rounded-lg border border-gray-300 bg-white text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)] focus:border-[color:var(--accent)]"
-                >
-                  <option value="" disabled selected>Choisir un ingrédient...</option>
-                  @for (ing of ingredientService.ingredients(); track ing.id) {
-                    <option [value]="ing.id">{{ ing.name }}</option>
-                  }
-                </select>
-                @if (group.get('idIngredient')?.touched && group.get('idIngredient')?.invalid) {
-                  <p class="mt-1 text-xs text-red-600" role="alert">
-                    Veuillez choisir un ingrédient.
-                  </p>
+        <div class="space-y-3">
+          @for (row of form.composition; track $index; let i = $index) {
+          <div
+            class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 p-3.5 rounded-xl bg-gray-50 border border-gray-200"
+          >
+            <!-- Ingredient Select -->
+            <div class="flex-1">
+              <label [for]="'ingredient-' + i" class="sr-only">Ingrédient {{ i + 1 }}</label>
+              <select
+                [id]="'ingredient-' + i"
+                [formField]="row.idIngredient"
+                [attr.aria-invalid]="row.idIngredient().touched() && row.idIngredient().invalid()"
+                [attr.aria-describedby]="'ingredient-error-' + i"
+                class="w-full px-3 py-2 rounded-lg border border-gray-500 bg-white text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)] focus:border-[color:var(--accent)]"
+              >
+                <option value="" disabled>Choisir un ingrédient...</option>
+                @for (ing of ingredientService.ingredients(); track ing.id) {
+                <option [value]="ing.id">{{ ing.name }}</option>
                 }
-              </div>
-
-              <!-- Quantity Input -->
-              <div class="w-full sm:w-36">
-                <label [for]="'quantity-' + $index" class="sr-only">
-                  Quantité pour ingrédient {{ $index + 1 }}
-                </label>
-                <div>
-                  <input
-                    type="number"
-                    min="1"
-                    step="1"
-                    [id]="'quantity-' + $index"
-                    formControlName="quantity"
-                    placeholder="1"
-                    class="w-full px-3 py-2 rounded-lg border border-gray-300 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)] focus:border-[color:var(--accent)]"
-                  />
-                </div>
-                @if (group.get('quantity')?.touched && group.get('quantity')?.invalid) {
-                  <p class="mt-1 text-xs text-red-600" role="alert">
-                    Quantité minimum : 1.
-                  </p>
-                }
-              </div>
-
-              <!-- Remove Button -->
-              <div>
-                <button
-                  type="button"
-                  (click)="removeIngredient($index)"
-                  [disabled]="composition.length <= 2"
-                  [class]="
-                    'p-2 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-red-400 ' +
-                    (composition.length <= 2
-                      ? 'text-gray-300 cursor-not-allowed'
-                      : 'text-gray-400 hover:text-red-600 hover:bg-red-50')
-                  "
-                  [attr.aria-label]="'Supprimer l\'ingrédient ' + ($index + 1)"
-                  [title]="
-                    composition.length <= 2
-                      ? 'Une recette doit comporter au moins 2 ingrédients'
-                      : 'Supprimer cet ingrédient'
-                  "
-                >
-                  <tabler-icon icon="trash" [size]="20" />
-                </button>
+              </select>
+              <div [id]="'ingredient-error-' + i">
+                @if (row.idIngredient().touched()) { @for (error of row.idIngredient().errors();
+                track error.kind) {
+                <p class="mt-1 text-xs text-red-700">{{ error.message }}</p>
+                } }
               </div>
             </div>
+
+            <!-- Quantity Input -->
+            <div class="w-full sm:w-36">
+              <label [for]="'quantity-' + i" class="sr-only">
+                Quantité pour ingrédient {{ i + 1 }}
+              </label>
+              <input
+                type="number"
+                step="1"
+                [id]="'quantity-' + i"
+                [formField]="row.quantity"
+                [attr.aria-invalid]="row.quantity().touched() && row.quantity().invalid()"
+                [attr.aria-describedby]="'quantity-error-' + i"
+                placeholder="1"
+                class="w-full px-3 py-2 rounded-lg border border-gray-500 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)] focus:border-[color:var(--accent)]"
+              />
+              <div [id]="'quantity-error-' + i">
+                @if (row.quantity().touched()) { @for (error of row.quantity().errors(); track
+                error.kind) {
+                <p class="mt-1 text-xs text-red-700">{{ error.message }}</p>
+                } }
+              </div>
+            </div>
+
+            <!-- Remove Button -->
+            <div>
+              <button
+                type="button"
+                (click)="removeIngredient(i)"
+                [disabled]="model().composition.length <= 2"
+                class="p-2 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-red-400 text-gray-600 hover:text-red-700 hover:bg-red-50 disabled:text-gray-400 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+                [attr.aria-label]="'Supprimer l\'ingrédient ' + (i + 1)"
+              >
+                <tabler-icon icon="trash" [size]="20" aria-hidden="true" />
+              </button>
+            </div>
+          </div>
+          }
+        </div>
+
+        <div id="composition-errors">
+          @for (error of form.composition().errors(); track error.kind) {
+          <p class="mt-2 text-xs text-red-700">{{ error.message }}</p>
           }
         </div>
 
@@ -190,7 +197,7 @@
             (click)="addIngredient()"
             class="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg border-2 border-dashed border-[color:var(--accent)] text-sm font-semibold text-[color:var(--accent-dark)] bg-[var(--cream)] hover:bg-[var(--surface-code)] transition-all focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)] cursor-pointer"
           >
-            <tabler-icon icon="plus" [size]="20" />
+            <tabler-icon icon="plus" [size]="20" aria-hidden="true" />
             <span>Ajouter un autre ingrédient</span>
           </button>
         </div>
@@ -210,10 +217,12 @@
           class="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg bg-[var(--accent)] hover:bg-[var(--accent-dark)] disabled:opacity-50 text-white text-sm font-semibold shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)] focus:ring-offset-2"
         >
           @if (submitting()) {
-            <div class="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
-            <span>Enregistrement...</span>
+          <div
+            class="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"
+          ></div>
+          <span>Enregistrement...</span>
           } @else {
-            <span>Créer la recette</span>
+          <span>Créer la recette</span>
           }
         </button>
       </div>

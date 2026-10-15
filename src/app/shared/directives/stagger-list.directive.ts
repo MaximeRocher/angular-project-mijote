@@ -1,11 +1,4 @@
-import {
-  Directive,
-  ElementRef,
-  inject,
-  input,
-  afterNextRender,
-  DestroyRef,
-} from '@angular/core';
+import { Directive, ElementRef, inject, input, afterNextRender, DestroyRef } from '@angular/core';
 import { gsap } from 'gsap';
 import { GsapService } from '@/core/services/gsap.service';
 
@@ -33,11 +26,15 @@ export class StaggerListDirective {
       const host = this.el.nativeElement as HTMLElement;
       if (!host) return;
 
+      const contexts: gsap.Context[] = [];
+      let debounceTimer: ReturnType<typeof setTimeout> | undefined;
+
       const animateChildren = () => {
         const items = host.querySelectorAll(this.itemSelector());
         if (!items || items.length === 0) return;
 
         const ctx = this.gsapService.createContext(host);
+        contexts.push(ctx);
         ctx.add(() => {
           gsap.from(Array.from(items), {
             opacity: 0,
@@ -57,7 +54,6 @@ export class StaggerListDirective {
       // Observe dynamic changes (e.g. data arrival or page switch)
       let observer: MutationObserver | null = null;
       if (typeof MutationObserver !== 'undefined') {
-        let debounceTimer: ReturnType<typeof setTimeout>;
         observer = new MutationObserver((mutations) => {
           const hasAddedNodes = mutations.some((m) => m.addedNodes.length > 0);
           if (hasAddedNodes) {
@@ -73,6 +69,8 @@ export class StaggerListDirective {
 
       this.destroyRef.onDestroy(() => {
         observer?.disconnect();
+        clearTimeout(debounceTimer);
+        contexts.forEach((ctx) => this.gsapService.cleanupContext(ctx));
       });
     });
   }

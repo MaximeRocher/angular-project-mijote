@@ -1,0 +1,127 @@
+<div class="flex items-center gap-2.5 mb-2">
+  <tabler-icon icon="book" [size]="20" aria-hidden="true" />
+  <h2 id="add-review-heading" class="text-xl font-bold text-[color:var(--ink)]">
+    Donner votre avis
+  </h2>
+</div>
+<p class="text-xs text-stone-600 mb-6">
+  Partagez votre retour d'expérience avec les autres cuisiniers.
+</p>
+
+<!-- Current Author Badge -->
+<div class="mb-5 p-3 rounded-xl bg-amber-50/70 border border-amber-200/60 flex items-center gap-3">
+  <div
+    class="w-8 h-8 rounded-full bg-[var(--accent)] text-white font-bold text-xs flex items-center justify-center shrink-0"
+    aria-hidden="true"
+  >
+    {{ initials() }}
+  </div>
+  <div class="min-w-0">
+    <span class="text-xs uppercase tracking-wider text-amber-800 font-semibold block"
+      >Auteur connecté</span
+    >
+    <span class="text-sm font-semibold text-[color:var(--ink)] truncate block">{{ author() }}</span>
+  </div>
+</div>
+
+<form [formRoot]="form" class="space-y-5">
+  <!-- Star rating -->
+  <fieldset>
+    <legend class="text-xs font-semibold uppercase tracking-wider text-stone-600 mb-2">
+      Votre note <span class="text-red-700" aria-hidden="true">*</span>
+    </legend>
+    <div
+      class="flex items-center gap-1"
+      role="radiogroup"
+      aria-label="Sélectionnez une note entre 1 et 5 étoiles"
+    >
+      @for (star of stars(); track star.value) {
+      <button
+        type="button"
+        class="star-btn"
+        role="radio"
+        [attr.aria-label]="star.value + ' sur 5 étoiles'"
+        [attr.aria-checked]="model().rate === star.value"
+        [attr.tabindex]="model().rate === star.value ? 0 : -1"
+        (click)="setRating(star.value)"
+        (mouseenter)="hover(star.value)"
+        (mouseleave)="hover(null)"
+        (keydown.arrowright)="onStarKey($event, star.value + 1)"
+        (keydown.arrowup)="onStarKey($event, star.value + 1)"
+        (keydown.arrowleft)="onStarKey($event, star.value - 1)"
+        (keydown.arrowdown)="onStarKey($event, star.value - 1)"
+      >
+        <!-- Filled vs outline: the state never relies on colour alone -->
+        <tabler-icon
+          [icon]="star.active ? 'star-filled' : 'star'"
+          [size]="30"
+          [class]="star.active ? 'text-amber-700' : 'text-stone-600'"
+          aria-hidden="true"
+        />
+      </button>
+      }
+      <span class="ml-2 text-sm font-bold text-amber-900">{{ model().rate }} / 5</span>
+    </div>
+  </fieldset>
+
+  <!-- Review comment textarea -->
+  <div>
+    <label
+      for="review-comment"
+      class="block text-xs font-semibold uppercase tracking-wider text-stone-600 mb-1.5"
+    >
+      Commentaire <span class="text-stone-600 font-normal lowercase">(facultatif)</span>
+    </label>
+    <textarea
+      id="review-comment"
+      [formField]="form.review"
+      rows="3"
+      placeholder="Qu'avez-vous pensé de cette recette ? (astuces, saveurs, cuisson...)"
+      class="review-input w-full p-3 text-sm placeholder-stone-600 focus:outline-none"
+    ></textarea>
+    <div class="flex justify-end mt-1 text-xs text-stone-600">
+      <span>{{ model().review.length }} / 500 caractères</span>
+    </div>
+  </div>
+
+  <!-- Live regions stay mounted so announcements are reliable -->
+  <div role="status">
+    @if (success()) {
+    <div
+      class="review-success-banner p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm flex items-center gap-2.5"
+    >
+      <tabler-icon icon="check" [size]="20" class="text-emerald-600 shrink-0" aria-hidden="true" />
+      <span>{{ success() }}</span>
+    </div>
+    }
+  </div>
+  <div role="alert">
+    @if (error()) {
+    <div
+      class="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-800 text-sm flex items-center gap-2.5"
+    >
+      <tabler-icon
+        icon="alert-circle"
+        [size]="20"
+        class="text-red-600 shrink-0"
+        aria-hidden="true"
+      />
+      <span>{{ error() }}</span>
+    </div>
+    }
+  </div>
+
+  <button
+    type="submit"
+    [disabled]="submitting()"
+    class="w-full py-3 px-4 rounded-xl bg-[var(--accent)] hover:bg-[var(--accent-dark)] disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold text-sm shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)] focus:ring-offset-2 flex items-center justify-center gap-2 cursor-pointer"
+  >
+    @if (submitting()) {
+    <div class="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+    <span>Envoi en cours...</span>
+    } @else {
+    <tabler-icon icon="flame" [size]="16" aria-hidden="true" />
+    <span>Publier mon avis</span>
+    }
+  </button>
+</form>

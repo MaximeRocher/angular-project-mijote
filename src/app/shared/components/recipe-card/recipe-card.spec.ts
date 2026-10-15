@@ -60,7 +60,7 @@ describe('RecipeCard', () => {
     expect(titleLink.textContent?.trim()).toBe('Cheese burger maison');
     expect(titleLink.getAttribute('href')).toBe('/recipes/1');
     expect(compiled.querySelector('p')?.textContent).toContain(
-      'Un hamburger simple avec du bon fromage fondant et un steak bien cuit.'
+      'Un hamburger simple avec du bon fromage fondant et un steak bien cuit.',
     );
   });
 
@@ -113,6 +113,7 @@ describe('RecipeCard', () => {
     expect(component.ratingInfo()).toEqual({
       average: 4.5,
       count: 2,
+      rounded: 5,
       label: '2 avis',
       ariaLabel: 'Note moyenne de 4.5 sur 5, basée sur 2 avis',
     });

@@ -1,6 +1,6 @@
 <main class="page">
   <section class="card" aria-labelledby="login-title">
-    <img class="brand" ngSrc="images/cooking-pot.svg" width="94" height="96" alt="" />
+    <img class="brand" ngSrc="images/cooking-pot.webp" width="94" height="96" alt="" priority />
     <h1 id="login-title">Mijote</h1>
     <p class="subtitle">Connecte-toi pour retrouver tes recettes</p>
 
@@ -16,11 +16,10 @@
           aria-describedby="login-errors"
         />
         <div id="login-errors" class="errors">
-          @if (loginForm.login().touched()) {
-            @for (error of loginForm.login().errors(); track error.kind) {
-              <p>{{ error.message }}</p>
-            }
-          }
+          @if (loginForm.login().touched()) { @for (error of loginForm.login().errors(); track
+          error.kind) {
+          <p>{{ error.message }}</p>
+          } }
         </div>
       </div>
 
@@ -35,17 +34,16 @@
           aria-describedby="password-errors"
         />
         <div id="password-errors" class="errors">
-          @if (loginForm.password().touched()) {
-            @for (error of loginForm.password().errors(); track error.kind) {
-              <p>{{ error.message }}</p>
-            }
-          }
+          @if (loginForm.password().touched()) { @for (error of loginForm.password().errors(); track
+          error.kind) {
+          <p>{{ error.message }}</p>
+          } }
         </div>
       </div>
 
       <p class="hint">
-        Login et mot de passe identiques : 5 caractères minimum, un chiffre et un caractère
-        spécial parmi <code>./*-+</code>
+        Login et mot de passe identiques : 5 caractères minimum, un chiffre et un caractère spécial
+        parmi <code>./*-+</code>
       </p>
 
       <button type="submit">Se connecter</button>

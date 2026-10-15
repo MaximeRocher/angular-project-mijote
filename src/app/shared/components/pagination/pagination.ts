@@ -1,25 +1,19 @@
-import { Component, input, model, computed } from "@angular/core";
-import { TablerIconComponent } from "@tabler/icons-angular";
+import { Component, input, model, computed } from '@angular/core';
+import { TablerIconComponent } from '@tabler/icons-angular';
+
+const MAX_VISIBLE_PAGES = 5;
 
 @Component({
-  selector: "app-pagination",
+  selector: 'app-pagination',
   imports: [TablerIconComponent],
-  templateUrl: "./pagination.html",
-  styleUrl: "./pagination.css",
+  templateUrl: './pagination.html',
 })
 export class Pagination {
   readonly currentPage = model<number>(1);
   readonly totalItems = input<number>(0);
   readonly pageSize = input<number>(6);
-  readonly totalPagesInput = input<number | undefined>(undefined);
-  readonly maxVisiblePages = input<number>(5);
-  readonly hideOnSinglePage = input<boolean>(true);
 
   readonly totalPages = computed(() => {
-    const override = this.totalPagesInput();
-    if (override !== undefined) {
-      return Math.max(1, override);
-    }
     const size = this.pageSize();
     if (size <= 0) return 1;
     return Math.max(1, Math.ceil(this.totalItems() / size));
@@ -30,7 +24,7 @@ export class Pagination {
 
   readonly pages = computed<number[]>(() => {
     const total = this.totalPages();
-    const maxVisible = Math.max(1, this.maxVisiblePages());
+    const maxVisible = MAX_VISIBLE_PAGES;
     const current = this.currentPage();
 
     if (total <= maxVisible) {

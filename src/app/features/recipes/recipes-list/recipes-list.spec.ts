@@ -11,8 +11,11 @@ import { axeViolations } from '@/testing-a11y';
 describe('RecipesList', () => {
   let component: RecipesList;
   let fixture: ComponentFixture<RecipesList>;
-  let mockRecipeService: any;
-  let mockIngredientService: any;
+  let mockRecipeService: Record<string, ReturnType<typeof vi.fn>>;
+  let mockIngredientService: {
+    load: ReturnType<typeof vi.fn>;
+    getIngredientName: ReturnType<typeof vi.fn>;
+  };
 
   const mockRecipes: Recipe[] = [
     {
@@ -47,7 +50,7 @@ describe('RecipesList', () => {
     };
 
     mockIngredientService = {
-      loadAll: vi.fn().mockReturnValue(of([])),
+      load: vi.fn(),
       getIngredientName: vi.fn().mockImplementation((id: string | number) => `Ingrédient #${id}`),
     };
 
@@ -70,9 +73,13 @@ describe('RecipesList', () => {
     await fixture.whenStable();
 
     expect(component).toBeTruthy();
-    expect(mockIngredientService.loadAll).toHaveBeenCalled();
-    expect(mockRecipeService.getAll).toHaveBeenCalled();
-    expect(mockRecipeService.getPaginated).toHaveBeenCalledWith(1, component.pageSize, undefined);
+    expect(mockIngredientService.load).toHaveBeenCalled();
+    expect(mockRecipeService['getAll']).toHaveBeenCalled();
+    expect(mockRecipeService['getPaginated']).toHaveBeenCalledWith(
+      1,
+      component.pageSize,
+      undefined,
+    );
     expect(component.recipes().length).toBe(2);
     expect(component.totalItems()).toBe(2);
     expect(component.loading()).toBe(false);
@@ -98,44 +105,79 @@ describe('RecipesList', () => {
     expect(cards[1].textContent).toContain('Non noté');
   });
 
-  it('should filter recipes when searching', async () => {
+  const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  /** Types in the search box, waits out the debounce and lets the resource reload. */
+  async function search(term: string): Promise<void> {
+    component.searchTerm.set(term);
+    TestBed.tick();
+    await sleep(350);
+    fixture.detectChanges();
+    await fixture.whenStable();
+  }
+
+  describe('search (debounced)', () => {
+    beforeEach(async () => {
+      fixture.detectChanges();
+      await fixture.whenStable();
+    });
+    it('should wait for a pause in typing before querying', async () => {
+      mockRecipeService['getAll'].mockClear();
+
+      component.searchTerm.set('bur');
+      TestBed.tick();
+      await sleep(150);
+      expect(mockRecipeService['getAll']).not.toHaveBeenCalled();
+
+      await search('burger');
+      expect(mockRecipeService['getAll']).toHaveBeenCalledTimes(1);
+    });
+
+    it('should filter recipes and go back to page 1', async () => {
+      component.currentPage.set(2);
+      mockRecipeService['getAll'].mockReturnValue(of([mockRecipes[0]]));
+      mockRecipeService['getPaginated'].mockReturnValue(of([mockRecipes[0]]));
+
+      await search('burger');
+
+      expect(component.currentPage()).toBe(1);
+      expect(mockRecipeService['getAll']).toHaveBeenCalledWith({ name: 'burger' });
+      expect(mockRecipeService['getPaginated']).toHaveBeenCalledWith(
+        1,
+        component.pageSize,
+        'burger',
+      );
+      expect(component.recipes().length).toBe(1);
+    });
+
+    it('should clear the search and reload all recipes', async () => {
+      await search('burger');
+      component.clearSearch();
+      expect(component.searchTerm()).toBe('');
+
+      await search('');
+      expect(mockRecipeService['getAll']).toHaveBeenLastCalledWith({ name: undefined });
+    });
+  });
+
+  it('should load the requested page when the page changes', async () => {
     fixture.detectChanges();
     await fixture.whenStable();
 
-    mockRecipeService.getAll.mockReturnValue(of([mockRecipes[0]]));
-    mockRecipeService.getPaginated.mockReturnValue(of([mockRecipes[0]]));
-
-    component.onSearch('burger');
-
-    expect(component.searchTerm()).toBe('burger');
-    expect(component.currentPage()).toBe(1);
-    expect(mockRecipeService.getAll).toHaveBeenCalledWith({ name: 'burger' });
-    expect(mockRecipeService.getPaginated).toHaveBeenCalledWith(1, component.pageSize, 'burger');
-    expect(component.recipes().length).toBe(1);
-  });
-
-  it('should clear search and reload all recipes', async () => {
-    component.searchTerm.set('burger');
-    component.clearSearch();
-
-    expect(component.searchTerm()).toBe('');
-    expect(component.currentPage()).toBe(1);
-    expect(mockRecipeService.getAll).toHaveBeenCalledWith({ name: undefined });
-  });
-
-  it('should handle pagination page change', async () => {
+    component.currentPage.set(2);
     fixture.detectChanges();
     await fixture.whenStable();
 
-    component.onPageChange(2);
-
-    expect(component.currentPage()).toBe(2);
-    expect(mockRecipeService.getPaginated).toHaveBeenCalledWith(2, component.pageSize, undefined);
+    expect(mockRecipeService['getPaginated']).toHaveBeenCalledWith(
+      2,
+      component.pageSize,
+      undefined,
+    );
   });
 
   it('should show empty state when no recipes match', async () => {
-    mockRecipeService.getAll.mockReturnValue(of([]));
-    mockRecipeService.getPaginated.mockReturnValue(of([]));
+    mockRecipeService['getAll'].mockReturnValue(of([]));
+    mockRecipeService['getPaginated'].mockReturnValue(of([]));
 
     fixture.detectChanges();
     await fixture.whenStable();
@@ -145,7 +187,7 @@ describe('RecipesList', () => {
   });
 
   it('should display error message on service failure', async () => {
-    mockRecipeService.getAll.mockReturnValue(throwError(() => new Error('Connexion perdue')));
+    mockRecipeService['getAll'].mockReturnValue(throwError(() => new Error('Connexion perdue')));
 
     fixture.detectChanges();
     await fixture.whenStable();
@@ -162,11 +204,11 @@ describe('RecipesList', () => {
     await fixture.whenStable();
 
     component.onDeleteRecipe('1');
-    expect(mockRecipeService.delete).not.toHaveBeenCalled();
+    expect(mockRecipeService['delete']).not.toHaveBeenCalled();
 
     component.confirmDelete();
 
-    expect(mockRecipeService.delete).toHaveBeenCalledWith('1');
+    expect(mockRecipeService['delete']).toHaveBeenCalledWith('1');
   });
 
   it('has no axe violations', async () => {
