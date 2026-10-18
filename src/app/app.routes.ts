@@ -7,7 +7,7 @@ export const routes: Routes = [
     path: 'landing',
     canActivate: [transitionGuard],
     loadComponent: () => import('./features/landing/landing').then((m) => m.Landing),
-    title: 'Mijote — Cuisinez, Partagez, Savourez',
+    title: 'Mijoté — Cuisinez, Partagez, Savourez',
   },
   {
     path: 'login',

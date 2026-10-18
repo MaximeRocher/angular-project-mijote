@@ -48,13 +48,13 @@ describe('Culinary Art Components', () => {
       component = fixture.componentInstance;
     });
 
-    it('should render requested vector icon', () => {
+    it('should render requested vector icon as decorative', () => {
       fixture.componentRef.setInput('name', 'rosemary');
       fixture.detectChanges();
       expect(component).toBeTruthy();
       const svg = fixture.nativeElement.querySelector('svg');
       expect(svg).toBeTruthy();
-      expect(svg.getAttribute('aria-label')).toBe('rosemary');
+      expect(svg.getAttribute('aria-hidden')).toBe('true');
     });
 
     it('has no axe violations', async () => {

@@ -10,7 +10,7 @@ import { RouterLink } from '@angular/router';
 import { gsap } from 'gsap';
 import { GsapService } from '@/core/services/gsap.service';
 import { TextRevealDirective } from '../../shared/text-reveal.directive';
-import { MagneticButtonDirective } from '../../shared/magnetic-button.directive';
+import { MagneticButtonDirective } from '@/shared/directives/magnetic-button.directive';
 import { CocottePotComponent } from '@/shared/components/culinary-art/cocotte-pot.component';
 import { CulinaryIconComponent } from '@/shared/components/culinary-art/culinary-icon.component';
 
@@ -43,18 +43,28 @@ import { CulinaryIconComponent } from '@/shared/components/culinary-art/culinary
         </h1>
 
         <p #subtitle class="subtitle">
-          Mijote transforme vos recettes en véritables expériences.
-          Organisez vos créations, explorez de nouvelles saveurs et cuisinez à votre rythme.
+          Mijote transforme vos recettes en véritables expériences. Organisez vos créations,
+          explorez de nouvelles saveurs et cuisinez à votre rythme.
         </p>
 
         <div #ctaWrap class="cta-wrap">
           <a routerLink="/login" class="cta-primary" appMagnetic [strength]="0.25">
             <span>Commencer à cuisiner</span>
             <svg class="cta-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-              <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+              <path
+                fill-rule="evenodd"
+                d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                clip-rule="evenodd"
+              />
             </svg>
           </a>
-          <a href="#features" class="cta-secondary" appMagnetic [strength]="0.2">
+          <a
+            routerLink="/landing"
+            fragment="features"
+            class="cta-secondary"
+            appMagnetic
+            [strength]="0.2"
+          >
             Découvrir les fonctionnalités
           </a>
         </div>
@@ -202,7 +212,7 @@ export class HeroSection {
       );
 
       // Continuous gentle floating animation on the pot
-      gsap.to(potEl, {
+      const float = gsap.to(potEl, {
         y: '-=12',
         duration: 2.5,
         repeat: -1,
@@ -210,6 +220,7 @@ export class HeroSection {
         ease: 'sine.inOut',
         delay: 1.8,
       });
+      this.gsapService.stopAfter(float, 7);
     });
 
     this.destroyRef.onDestroy(() => {

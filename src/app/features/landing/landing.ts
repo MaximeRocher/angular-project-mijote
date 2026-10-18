@@ -1,9 +1,4 @@
-import {
-  Component,
-  inject,
-  afterNextRender,
-  DestroyRef,
-} from '@angular/core';
+import { Component, inject, afterNextRender, DestroyRef } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '@/core/services/auth.service';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -13,7 +8,7 @@ import { BentoGridSection } from './sections/bento-grid/bento-grid';
 import { MarqueeSection } from './sections/marquee/marquee';
 import { StickyFooterSection } from './sections/sticky-footer/sticky-footer';
 import { CustomCursor } from './shared/custom-cursor/custom-cursor';
-import { MagneticButtonDirective } from './shared/magnetic-button.directive';
+import { MagneticButtonDirective } from '@/shared/directives/magnetic-button.directive';
 import { CocottePotComponent } from '@/shared/components/culinary-art/cocotte-pot.component';
 
 @Component({
@@ -40,7 +35,7 @@ import { CocottePotComponent } from '@/shared/components/culinary-art/cocotte-po
         </a>
 
         <nav class="landing-nav" aria-label="Navigation principale">
-          <a href="#features" class="nav-link">Fonctionnalités</a>
+          <a routerLink="/landing" fragment="features" class="nav-link">Fonctionnalités</a>
           <a routerLink="/recipes" class="nav-link">Recettes</a>
         </nav>
 

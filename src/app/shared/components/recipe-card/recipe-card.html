@@ -19,35 +19,35 @@
         </h3>
       </div>
       @if (showActions()) {
-        <button
-          type="button"
-          (click)="onDeleteClick($event)"
-          class="relative z-10 text-gray-400 hover:text-red-600 transition-colors p-1.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400 cursor-pointer"
-          [attr.aria-label]="'Supprimer la recette ' + recipe().name"
-        >
-          <tabler-icon icon="trash" [size]="18" />
-        </button>
+      <button
+        type="button"
+        (click)="onDeleteClick($event)"
+        class="relative z-10 text-gray-600 hover:text-red-700 transition-colors p-1.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400 cursor-pointer"
+        [attr.aria-label]="'Supprimer la recette ' + recipe().name"
+      >
+        <tabler-icon icon="trash" [size]="18" aria-hidden="true" />
+      </button>
       }
     </div>
 
     <!-- Rating / Rate display -->
     <div class="flex items-center gap-2 mb-3 text-xs">
       @if (ratingInfo(); as info) {
-        <div
-          class="inline-flex items-center gap-1 font-semibold text-amber-800 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200/60"
-          [attr.aria-label]="info.ariaLabel"
-        >
-          <tabler-icon icon="star-filled" [size]="14" class="text-amber-500" />
-          <span>{{ info.average }} / 5</span>
-        </div>
-        <span class="text-stone-600 text-xs">({{ info.count }} {{ info.count > 1 ? 'avis' : 'avis' }})</span>
+      <div
+        class="inline-flex items-center gap-1 font-semibold text-amber-800 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200/60"
+      >
+        <span class="sr-only">{{ info.ariaLabel }}</span>
+        <tabler-icon icon="star-filled" [size]="14" class="text-amber-600" aria-hidden="true" />
+        <span aria-hidden="true">{{ info.average }} / 5</span>
+      </div>
+      <span class="text-stone-600 text-xs" aria-hidden="true">({{ info.count }} avis)</span>
       } @else {
-        <span
-          class="inline-flex items-center text-stone-600 italic bg-stone-100/70 px-2 py-0.5 rounded-md border border-stone-200/60"
-          aria-label="Aucune note pour cette recette"
-        >
-          Non noté
-        </span>
+      <span
+        class="inline-flex items-center text-stone-600 italic bg-stone-100/70 px-2 py-0.5 rounded-md border border-stone-200/60"
+      >
+        <span class="sr-only">Aucune note pour cette recette</span>
+        <span aria-hidden="true">Non noté</span>
+      </span>
       }
     </div>
 
@@ -57,21 +57,23 @@
   </div>
 
   @if (showIngredients() && recipe().composition.length > 0) {
-    <div class="pt-3.5 border-t border-[color:var(--border-soft)] mt-auto">
-      <h4 class="text-xs font-semibold uppercase tracking-wider text-[color:var(--muted)] mb-2 flex items-center gap-1.5">
-        <tabler-icon icon="leaf" [size]="14" class="text-emerald-700" />
-        Ingrédients ({{ recipe().composition.length }})
-      </h4>
-      <ul class="flex flex-wrap gap-1.5" aria-label="Ingrédients">
-        @for (item of recipe().composition; track item.idIngredient) {
-          <li
-            class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-[var(--cream)] text-[color:var(--accent-dark)] border border-[color:var(--border-soft)] shadow-2xs"
-          >
-            {{ getIngredientName(item.idIngredient) }}
-            <span class="ml-1 text-[color:var(--accent)] font-bold">×{{ item.quantity }}</span>
-          </li>
-        }
-      </ul>
-    </div>
+  <div class="pt-3.5 border-t border-[color:var(--border-soft)] mt-auto">
+    <h4
+      class="text-xs font-semibold uppercase tracking-wider text-[color:var(--muted)] mb-2 flex items-center gap-1.5"
+    >
+      <tabler-icon icon="leaf" [size]="14" class="text-emerald-700" />
+      Ingrédients ({{ recipe().composition.length }})
+    </h4>
+    <ul class="flex flex-wrap gap-1.5" aria-label="Ingrédients">
+      @for (item of ingredients(); track $index) {
+      <li
+        class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-[var(--cream)] text-[color:var(--accent-dark)] border border-[color:var(--border-soft)] shadow-2xs"
+      >
+        {{ item.name }}
+        <span class="ml-1 text-[color:var(--accent)] font-bold">×{{ item.quantity }}</span>
+      </li>
+      }
+    </ul>
+  </div>
   }
 </article>

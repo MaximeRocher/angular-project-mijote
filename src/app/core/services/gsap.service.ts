@@ -52,6 +52,21 @@ export class GsapService {
     ctx.revert();
   }
 
+  /**
+   * WCAG 2.2.2: decorative motion that loops must not run forever.
+   * Eases the animation to a stop so it plays for `seconds` in total.
+   */
+  stopAfter(animation: gsap.core.Animation, seconds = 5): void {
+    gsap.delayedCall(Math.max(0, seconds - 1), () =>
+      gsap.to(animation, {
+        timeScale: 0,
+        duration: 1,
+        overwrite: true,
+        onComplete: () => void animation.pause(),
+      }),
+    );
+  }
+
   /** Returns the GSAP matchMedia instance for responsive breakpoints */
   matchMedia(): gsap.MatchMedia {
     return gsap.matchMedia();

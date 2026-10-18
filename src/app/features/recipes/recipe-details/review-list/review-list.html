@@ -1,0 +1,74 @@
+<div
+  class="flex items-center justify-between gap-4 mb-6 pb-4 border-b border-[color:var(--border-soft)]"
+>
+  <div>
+    <h2 id="all-reviews-heading" class="text-xl font-bold text-[color:var(--ink)]">
+      Tous les avis
+    </h2>
+    <p class="text-xs text-stone-600 mt-0.5">
+      @if (rates().length > 0) { {{ rates().length }} {{ rates().length > 1 ? 'retours partagés' :
+      'retour partagé' }} } @else { Aucun retour pour l'instant }
+    </p>
+  </div>
+
+  @if (info(); as info) {
+  <div class="text-right">
+    <div class="text-2xl font-black text-amber-900 leading-tight">
+      {{ info.average }}<span class="text-sm font-normal text-stone-600"> / 5</span>
+    </div>
+    <div class="flex items-center justify-end gap-0.5 text-amber-700 text-xs" aria-hidden="true">
+      @for (star of stars; track star) {
+      <tabler-icon [icon]="star <= info.rounded ? 'star-filled' : 'star'" [size]="14" />
+      }
+    </div>
+  </div>
+  }
+</div>
+
+@if (rates().length > 0) {
+<ul class="space-y-4" aria-label="Avis des utilisateurs">
+  @for (rate of rates(); track $index) {
+  <li class="review-card details-surface-subtle p-4 sm:p-5 relative">
+    <div class="flex items-start justify-between gap-3 mb-2">
+      <div class="flex items-center gap-2.5">
+        <div
+          class="w-7 h-7 rounded-full bg-amber-100 text-amber-900 border border-amber-300 font-bold text-xs flex items-center justify-center shrink-0"
+          aria-hidden="true"
+        >
+          {{ rate.login.slice(0, 1).toUpperCase() }}
+        </div>
+        <div>
+          <h3 class="text-sm font-bold text-[color:var(--ink)] leading-tight">{{ rate.login }}</h3>
+          <span class="text-xs text-stone-600">Gourmet mijoteur</span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-0.5 text-amber-700" aria-hidden="true">
+        @for (star of stars; track star) {
+        <tabler-icon [icon]="star <= rate.rate ? 'star-filled' : 'star'" [size]="14" />
+        }
+      </div>
+      <span class="sr-only">Note : {{ rate.rate }} sur 5 étoiles</span>
+    </div>
+
+    @if (rate.review?.trim()) {
+    <p class="text-sm text-stone-700 leading-relaxed mt-2 pl-9">« {{ rate.review }} »</p>
+    } @else {
+    <p class="text-xs text-stone-600 italic mt-1 pl-9">A attribué une note sans commentaire.</p>
+    }
+  </li>
+  }
+</ul>
+} @else {
+<div class="text-center py-8 px-4 bg-amber-50/50 rounded-xl border border-dashed border-amber-200">
+  <div
+    class="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center mx-auto mb-2 text-amber-800"
+  >
+    <tabler-icon icon="leaf" [size]="20" aria-hidden="true" />
+  </div>
+  <h3 class="text-sm font-semibold text-stone-800">Aucun avis pour l'instant</h3>
+  <p class="text-xs text-stone-600 mt-1">
+    Soyez le tout premier à tester cette recette et à donner votre avis !
+  </p>
+</div>
+}

@@ -56,7 +56,7 @@ label {
 
 input {
   padding: 0.65rem 0.8rem;
-  border: 1.5px solid var(--border);
+  border: 1.5px solid var(--border-input);
   border-radius: 0.6rem;
   font: inherit;
   color: var(--ink);

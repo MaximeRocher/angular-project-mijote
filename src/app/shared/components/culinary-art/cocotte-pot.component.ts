@@ -43,28 +43,56 @@ import { GsapService } from '@/core/services/gsap.service';
     >
       <defs>
         <!-- Body Terracotta Gradient -->
-        <linearGradient id="potBodyGrad" x1="20" y1="80" x2="180" y2="150" gradientUnits="userSpaceOnUse">
+        <linearGradient
+          id="potBodyGrad"
+          x1="20"
+          y1="80"
+          x2="180"
+          y2="150"
+          gradientUnits="userSpaceOnUse"
+        >
           <stop offset="0%" stop-color="#8fb04f" />
           <stop offset="50%" stop-color="#4f7022" />
           <stop offset="100%" stop-color="#33491a" />
         </linearGradient>
 
         <!-- Lid Gradient -->
-        <linearGradient id="lidGrad" x1="30" y1="58" x2="170" y2="92" gradientUnits="userSpaceOnUse">
+        <linearGradient
+          id="lidGrad"
+          x1="30"
+          y1="58"
+          x2="170"
+          y2="92"
+          gradientUnits="userSpaceOnUse"
+        >
           <stop offset="0%" stop-color="#8fb04f" />
           <stop offset="60%" stop-color="#4f7022" />
           <stop offset="100%" stop-color="#33491a" />
         </linearGradient>
 
         <!-- Brass Knob Gradient -->
-        <linearGradient id="brassGrad" x1="90" y1="42" x2="110" y2="58" gradientUnits="userSpaceOnUse">
+        <linearGradient
+          id="brassGrad"
+          x1="90"
+          y1="42"
+          x2="110"
+          y2="58"
+          gradientUnits="userSpaceOnUse"
+        >
           <stop offset="0%" stop-color="#fceda2" />
           <stop offset="40%" stop-color="#d4af37" />
           <stop offset="100%" stop-color="#8a6d1c" />
         </linearGradient>
 
         <!-- Specular Highlight -->
-        <linearGradient id="specularGrad" x1="50" y1="85" x2="150" y2="115" gradientUnits="userSpaceOnUse">
+        <linearGradient
+          id="specularGrad"
+          x1="50"
+          y1="85"
+          x2="150"
+          y2="115"
+          gradientUnits="userSpaceOnUse"
+        >
           <stop offset="0%" stop-color="#ffffff" stop-opacity="0.35" />
           <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
         </linearGradient>
@@ -128,18 +156,10 @@ import { GsapService } from '@/core/services/gsap.service';
       />
 
       <!-- Body Rim / Shadow Line -->
-      <path
-        d="M26 88 C40 94, 160 94, 174 88"
-        stroke="#2a3d15"
-        stroke-width="3"
-        fill="none"
-      />
+      <path d="M26 88 C40 94, 160 94, 174 88" stroke="#2a3d15" stroke-width="3" fill="none" />
 
       <!-- Body Specular Sheen -->
-      <path
-        d="M36 94 C38 126, 66 144, 98 144 C60 144, 40 122, 38 94 Z"
-        fill="url(#specularGrad)"
-      />
+      <path d="M36 94 C38 126, 66 144, 98 144 C60 144, 40 122, 38 94 Z" fill="url(#specularGrad)" />
 
       <!-- Cocotte Lid -->
       <path
@@ -160,7 +180,15 @@ import { GsapService } from '@/core/services/gsap.service';
       />
 
       <!-- Brass Lid Knob -->
-      <ellipse cx="100" cy="54" rx="14" ry="7" fill="url(#brassGrad)" stroke="#684f0f" stroke-width="1" />
+      <ellipse
+        cx="100"
+        cy="54"
+        rx="14"
+        ry="7"
+        fill="url(#brassGrad)"
+        stroke="#684f0f"
+        stroke-width="1"
+      />
       <ellipse cx="100" cy="51" rx="9" ry="3.5" fill="#fef0ab" opacity="0.8" />
     </svg>
   `,
@@ -228,6 +256,8 @@ export class CocottePotComponent {
       const anim1 = animateSteam(s1, 0);
       const anim2 = animateSteam(s2, 0.7);
       const anim3 = animateSteam(s3, 1.4);
+
+      [anim1, anim2, anim3].forEach((anim) => this.gsapService.stopAfter(anim));
 
       this.destroyRef.onDestroy(() => {
         tl.kill();

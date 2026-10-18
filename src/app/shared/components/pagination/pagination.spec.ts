@@ -44,14 +44,6 @@ describe('Pagination', () => {
     expect(component.pages()).toEqual([1, 2, 3]);
   });
 
-  it('should allow overriding totalPages with totalPagesInput', async () => {
-    fixture.componentRef.setInput('totalPagesInput', 8);
-    fixture.detectChanges();
-    await fixture.whenStable();
-
-    expect(component.totalPages()).toBe(8);
-  });
-
   it('should navigate to next and previous pages', async () => {
     fixture.componentRef.setInput('totalItems', 30);
     fixture.componentRef.setInput('pageSize', 6);
@@ -94,10 +86,9 @@ describe('Pagination', () => {
     expect(component.currentPage()).toBe(1);
   });
 
-  it('should window pages when totalPages exceeds maxVisiblePages', async () => {
+  it('should window pages when totalPages exceeds the 5 visible pages', async () => {
     fixture.componentRef.setInput('totalItems', 60);
     fixture.componentRef.setInput('pageSize', 6);
-    fixture.componentRef.setInput('maxVisiblePages', 5);
     component.currentPage.set(6);
     fixture.detectChanges();
     await fixture.whenStable();
@@ -113,7 +104,9 @@ describe('Pagination', () => {
     await fixture.whenStable();
 
     const compiled = fixture.nativeElement as HTMLElement;
-    const prevBtn = compiled.querySelector('button[aria-label="Page précédente"]') as HTMLButtonElement;
+    const prevBtn = compiled.querySelector(
+      'button[aria-label="Page précédente"]',
+    ) as HTMLButtonElement;
     expect(prevBtn.disabled).toBe(true);
   });
 
@@ -129,14 +122,12 @@ describe('Pagination', () => {
     expect(activeBtn?.textContent?.trim()).toBe('2');
   });
 
-  it('should hide pagination when hideOnSinglePage is true and totalPages is 1', async () => {
+  it('should hide pagination when there is a single page', async () => {
     fixture.componentRef.setInput('totalItems', 4);
     fixture.componentRef.setInput('pageSize', 6);
-    fixture.componentRef.setInput('hideOnSinglePage', true);
     fixture.detectChanges();
     await fixture.whenStable();
 
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('nav')).toBeNull();
+    expect((fixture.nativeElement as HTMLElement).querySelector('nav')).toBeNull();
   });
 });

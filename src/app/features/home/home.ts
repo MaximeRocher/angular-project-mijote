@@ -1,12 +1,13 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
+import { rxResource } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { TablerIconComponent } from '@tabler/icons-angular';
 import { AuthService } from '../../core/services/auth.service';
 import { RecipeService } from '../../core/services/recipe.service';
 import { HighlightDirective } from '../../shared/directives/highlight.directive';
 import { TruncatePipe } from '../../shared/pipes/truncate.pipe';
+import { ratingInfo } from '../../shared/utils/rating';
 import { StaggerListDirective } from '../../shared/directives/stagger-list.directive';
-import { Recipe } from '../../core/models/recipe.model';
 import { CocottePotComponent } from '../../shared/components/culinary-art/cocotte-pot.component';
 
 @Component({
@@ -34,28 +35,28 @@ import { CocottePotComponent } from '../../shared/components/culinary-art/cocott
           </p>
         </div>
         <div class="welcome-illustration" aria-hidden="true">
-          <app-cocotte-pot [size]="'sm'" />
+          <app-cocotte-pot size="sm" />
         </div>
       </header>
 
       <section aria-labelledby="latest-title">
         <div class="section-header">
           <h2 id="latest-title">Dernières recettes</h2>
-          @if (!recipes.loading() && !recipes.error()) {
-            <span class="recipe-counter">{{ recipes.latestRecipes().length }} recettes</span>
+          @if (!loading() && !failed()) {
+            <span class="recipe-counter">{{ latest().length }} recettes</span>
           }
         </div>
 
-        @if (recipes.loading()) {
+        @if (loading()) {
           <div class="loading-box" role="status" aria-live="polite">
             <div class="spinner"></div>
             <p>Chargement…</p>
           </div>
-        } @else if (recipes.error()) {
+        } @else if (failed()) {
           <p class="error-msg" role="alert">Impossible de charger les recettes.</p>
         } @else {
           <ul class="recipes" appStaggerList>
-            @for (recipe of recipes.latestRecipes(); track recipe.id) {
+            @for (recipe of latest(); track recipe.id) {
               <li appHighlight class="recipe-item">
                 <a [routerLink]="['/recipes', recipe.id]" class="recipe-item-link">
                   <div class="recipe-bullet" aria-hidden="true">
@@ -64,7 +65,14 @@ import { CocottePotComponent } from '../../shared/components/culinary-art/cocott
                   <div class="recipe-details">
                     <h3>{{ recipe.name }}</h3>
                     <p>{{ recipe.description | truncate }}</p>
-                    <p class="recipe-rating">{{ ratingLabel(recipe) }}</p>
+                    <p class="recipe-rating">
+                      <span class="sr-only">{{
+                        recipe.rating?.ariaLabel ?? 'Aucune note pour cette recette'
+                      }}</span>
+                      <span aria-hidden="true">{{
+                        recipe.rating ? '★ ' + recipe.rating.average + ' / 5' : 'Non noté'
+                      }}</span>
+                    </p>
                   </div>
                 </a>
               </li>
@@ -83,18 +91,13 @@ import { CocottePotComponent } from '../../shared/components/culinary-art/cocott
 export class Home {
   protected readonly auth = inject(AuthService);
   protected readonly recipes = inject(RecipeService);
-
-  protected ratingLabel(recipe: Recipe): string {
-    const rates = recipe.rates ?? [];
-    if (rates.length === 0) {
-      return 'Non noté';
-    }
-    const sum = rates.reduce((acc, r) => acc + (Number(r.rate) || 0), 0);
-    return `Note moyenne : ${Math.round((sum / rates.length) * 10) / 10} / 5`;
-  }
-
-  constructor() {
-    this.recipes.loadLatest().subscribe({ error: () => undefined });
-  }
+  private readonly latestRecipes = rxResource({ stream: () => this.recipes.getLatest() });
+  protected readonly loading = this.latestRecipes.isLoading;
+  protected readonly failed = this.latestRecipes.error;
+  protected readonly latest = computed(() =>
+    (this.latestRecipes.hasValue() ? this.latestRecipes.value() : []).map((recipe) => ({
+      ...recipe,
+      rating: ratingInfo(recipe.rates),
+    })),
+  );
 }
-

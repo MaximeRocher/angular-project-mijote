@@ -33,11 +33,7 @@ describe('RecipeService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
-        RecipeService,
-      ],
+      providers: [provideHttpClient(), provideHttpClientTesting(), RecipeService],
     });
 
     service = TestBed.inject(RecipeService);
@@ -48,13 +44,8 @@ describe('RecipeService', () => {
     httpTesting.verify();
   });
 
-  it('should be created with initial signals state', () => {
+  it('should be created', () => {
     expect(service).toBeTruthy();
-    expect(service.recipes()).toEqual([]);
-    expect(service.latestRecipes()).toEqual([]);
-    expect(service.currentRecipe()).toBeNull();
-    expect(service.loading()).toBe(false);
-    expect(service.error()).toBeNull();
   });
 
   it('should fetch recipes without options via getAll()', () => {
@@ -88,7 +79,7 @@ describe('RecipeService', () => {
         r.params.get('limit') === '6' &&
         r.params.get('sortBy') === 'id' &&
         r.params.get('order') === 'desc' &&
-        r.params.get('name') === 'burger'
+        r.params.get('name') === 'burger',
     );
     expect(req.request.method).toBe('GET');
     req.flush(mockRecipes);
@@ -103,7 +94,7 @@ describe('RecipeService', () => {
         r.params.get('page') === '1' &&
         r.params.get('limit') === '5' &&
         r.params.get('sortBy') === 'id' &&
-        r.params.get('order') === 'desc'
+        r.params.get('order') === 'desc',
     );
     expect(req.request.method).toBe('GET');
     req.flush(mockRecipes);
@@ -117,7 +108,7 @@ describe('RecipeService', () => {
         r.url === apiUrl &&
         r.params.get('page') === '1' &&
         r.params.get('limit') === '6' &&
-        r.params.get('name') === 'burger'
+        r.params.get('name') === 'burger',
     );
     expect(req.request.method).toBe('GET');
     req.flush(mockRecipes);
@@ -250,70 +241,19 @@ describe('RecipeService', () => {
     });
   });
 
-  describe('Signal loading workflows', () => {
-    it('should update latestRecipes signal on loadLatest() success', () => {
-      expect(service.loading()).toBe(false);
+  describe('addRate', () => {
+    it('should GET the recipe then PUT it back with the new rate appended', () => {
+      const rate = { login: 'abc1-', rate: 4, review: 'Super' };
+      let result: Recipe | undefined;
+      service.addRate('1', rate).subscribe((r) => (result = r));
 
-      service.loadLatest(5).subscribe();
+      httpTesting.expectOne({ method: 'GET', url: `${apiUrl}/1` }).flush(mockRecipes[0]);
 
-      expect(service.loading()).toBe(true);
+      const put = httpTesting.expectOne({ method: 'PUT', url: `${apiUrl}/1` });
+      expect(put.request.body.rates).toEqual([...(mockRecipes[0].rates ?? []), rate]);
+      put.flush({ ...mockRecipes[0], rates: put.request.body.rates });
 
-      const req = httpTesting.expectOne(
-        (r) =>
-          r.url === apiUrl &&
-          r.params.get('page') === '1' &&
-          r.params.get('limit') === '5'
-      );
-      req.flush(mockRecipes);
-
-      expect(service.loading()).toBe(false);
-      expect(service.latestRecipes()).toEqual(mockRecipes);
-      expect(service.error()).toBeNull();
-    });
-
-    it('should update recipes signal on loadPaginated() success', () => {
-      service.loadPaginated(1, 6).subscribe();
-
-      const req = httpTesting.expectOne(
-        (r) =>
-          r.url === apiUrl &&
-          r.params.get('page') === '1' &&
-          r.params.get('limit') === '6'
-      );
-      req.flush(mockRecipes);
-
-      expect(service.loading()).toBe(false);
-      expect(service.recipes()).toEqual(mockRecipes);
-      expect(service.error()).toBeNull();
-    });
-
-    it('should update currentRecipe signal on loadById() success', () => {
-      service.loadById('1').subscribe();
-
-      const req = httpTesting.expectOne(`${apiUrl}/1`);
-      req.flush(mockRecipes[0]);
-
-      expect(service.loading()).toBe(false);
-      expect(service.currentRecipe()).toEqual(mockRecipes[0]);
-    });
-
-    it('should set error signal on loadPaginated() failure', () => {
-      service.loadPaginated(1, 6).subscribe({
-        error: () => {
-          // handled
-        },
-      });
-
-      const req = httpTesting.expectOne(
-        (r) =>
-          r.url === apiUrl &&
-          r.params.get('page') === '1' &&
-          r.params.get('limit') === '6'
-      );
-      req.flush('Error', { status: 500, statusText: 'Server Error' });
-
-      expect(service.loading()).toBe(false);
-      expect(service.error()).toBeTruthy();
+      expect(result?.rates?.at(-1)).toEqual(rate);
     });
   });
 });

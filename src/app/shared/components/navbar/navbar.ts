@@ -12,7 +12,7 @@ import { filter } from 'rxjs';
 import { gsap } from 'gsap';
 import { AuthService } from '../../../core/services/auth.service';
 import { GsapService } from '@/core/services/gsap.service';
-import { MagneticButtonDirective } from '@/features/landing/shared/magnetic-button.directive';
+import { MagneticButtonDirective } from '@/shared/directives/magnetic-button.directive';
 
 @Component({
   selector: 'app-navbar',
@@ -21,7 +21,7 @@ import { MagneticButtonDirective } from '@/features/landing/shared/magnetic-butt
   template: `
     <header class="bar">
       <a class="brand" routerLink="/home">
-        <img ngSrc="images/cooking-pot.svg" width="55" height="56" alt="" />
+        <img ngSrc="images/cooking-pot.webp" width="55" height="56" alt="" />
         <span>Mijote</span>
       </a>
 
@@ -93,13 +93,18 @@ export class Navbar {
       updateIndicator(false);
 
       if (this.router) {
+        let timer: ReturnType<typeof setTimeout> | undefined;
         const sub = this.router.events
           .pipe(filter((e) => e instanceof NavigationEnd))
           .subscribe(() => {
-            setTimeout(() => updateIndicator(true), 25);
+            clearTimeout(timer);
+            timer = setTimeout(() => updateIndicator(true), 25);
           });
 
-        this.destroyRef.onDestroy(() => sub.unsubscribe());
+        this.destroyRef.onDestroy(() => {
+          sub.unsubscribe();
+          clearTimeout(timer);
+        });
       }
     });
   }

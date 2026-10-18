@@ -1,7 +1,7 @@
-import { Service, inject, signal } from "@angular/core";
-import { HttpClient, HttpParams } from "@angular/common/http";
-import { Observable, tap, catchError, throwError, switchMap } from "rxjs";
-import { environment } from "@/environments/environment";
+import { Service, inject } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable, switchMap } from 'rxjs';
+import { environment } from '@/environments/environment';
 import {
   Recipe,
   RecipeRate,
@@ -9,30 +9,24 @@ import {
   RecipeQueryOptions,
   RecipeValidationResult,
   RecipeValidationError,
-} from "@/core/models/recipe.model";
+} from '@/core/models/recipe.model';
 
 @Service()
 export class RecipeService {
   private readonly http = inject(HttpClient);
   private readonly url = `${environment.apiBaseUrl}${environment.endpoints.recipes}`;
 
-  readonly recipes = signal<Recipe[]>([]);
-  readonly latestRecipes = signal<Recipe[]>([]);
-  readonly currentRecipe = signal<Recipe | null>(null);
-  readonly loading = signal<boolean>(false);
-  readonly error = signal<string | null>(null);
-
   /**
    * Fetches recipes with optional pagination, sorting, or name search.
    */
   getAll(options?: RecipeQueryOptions): Observable<Recipe[]> {
     let params = new HttpParams();
-    if (options?.page !== undefined) params = params.set("page", options.page.toString());
-    if (options?.limit !== undefined) params = params.set("limit", options.limit.toString());
-    if (options?.sortBy) params = params.set("sortBy", options.sortBy);
-    if (options?.order) params = params.set("order", options.order);
-    if (options?.name) params = params.set("name", options.name);
-    if (options?.search) params = params.set("search", options.search);
+    if (options?.page !== undefined) params = params.set('page', options.page.toString());
+    if (options?.limit !== undefined) params = params.set('limit', options.limit.toString());
+    if (options?.sortBy) params = params.set('sortBy', options.sortBy);
+    if (options?.order) params = params.set('order', options.order);
+    if (options?.name) params = params.set('name', options.name);
+    if (options?.search) params = params.set('search', options.search);
 
     return this.http.get<Recipe[]>(this.url, { params });
   }
@@ -42,8 +36,8 @@ export class RecipeService {
    */
   getLatest(limit = 5): Observable<Recipe[]> {
     return this.getAll({
-      sortBy: "id",
-      order: "desc",
+      sortBy: 'id',
+      order: 'desc',
       page: 1,
       limit,
     });
@@ -55,7 +49,7 @@ export class RecipeService {
   getPaginated(
     page: number,
     limit = environment.defaultPageSize,
-    name?: string
+    name?: string,
   ): Observable<Recipe[]> {
     return this.getAll({
       page,
@@ -90,16 +84,7 @@ export class RecipeService {
    */
   addRate(id: string | number, rate: RecipeRate): Observable<Recipe> {
     return this.getById(id).pipe(
-      switchMap((recipe) => {
-        const rates = [...(recipe.rates || []), rate];
-        const { id: _, ...recipeData } = recipe;
-        return this.update(id, { ...recipeData, rates });
-      }),
-      tap((updatedRecipe) => {
-        if (this.currentRecipe()?.id === String(id)) {
-          this.currentRecipe.set(updatedRecipe);
-        }
-      })
+      switchMap((recipe) => this.update(id, { ...recipe, rates: [...(recipe.rates ?? []), rate] })),
     );
   }
 
@@ -120,29 +105,29 @@ export class RecipeService {
     const errors: RecipeValidationError[] = [];
 
     if (!recipe.name || recipe.name.trim().length === 0) {
-      errors.push({ field: "name", message: "Le nom de la recette est obligatoire." });
+      errors.push({ field: 'name', message: 'Le nom de la recette est obligatoire.' });
     }
 
     if (!recipe.description || recipe.description.trim().length < 30) {
       errors.push({
-        field: "description",
-        message: "La description doit contenir au moins 30 caractères.",
+        field: 'description',
+        message: 'La description doit contenir au moins 30 caractères.',
       });
     }
 
     if (!recipe.composition || recipe.composition.length < 2) {
       errors.push({
-        field: "composition",
+        field: 'composition',
         message: "La recette doit être composée d'au moins 2 ingrédients.",
       });
     } else {
       const hasInvalidQuantity = recipe.composition.some(
-        (item) => !item.quantity || item.quantity <= 0
+        (item) => !item.quantity || item.quantity <= 0,
       );
       if (hasInvalidQuantity) {
         errors.push({
-          field: "composition",
-          message: "Chaque ingrédient doit avoir une quantité supérieure à 0.",
+          field: 'composition',
+          message: 'Chaque ingrédient doit avoir une quantité supérieure à 0.',
         });
       }
     }
@@ -151,78 +136,5 @@ export class RecipeService {
       valid: errors.length === 0,
       errors,
     };
-  }
-
-  /**
-   * Loads latest recipes into latestRecipes signal.
-   */
-  loadLatest(limit = 5): Observable<Recipe[]> {
-    this.loading.set(true);
-    this.error.set(null);
-    return this.getLatest(limit).pipe(
-      tap((recipes) => {
-        this.latestRecipes.set(recipes);
-        this.loading.set(false);
-      }),
-      catchError((err: unknown) => {
-        const message =
-          err instanceof Error
-            ? err.message
-            : "Erreur lors du chargement des dernières recettes";
-        this.error.set(message);
-        this.loading.set(false);
-        return throwError(() => err);
-      })
-    );
-  }
-
-  /**
-   * Loads paginated recipes into recipes signal.
-   */
-  loadPaginated(
-    page: number,
-    limit = environment.defaultPageSize,
-    name?: string
-  ): Observable<Recipe[]> {
-    this.loading.set(true);
-    this.error.set(null);
-    return this.getPaginated(page, limit, name).pipe(
-      tap((recipes) => {
-        this.recipes.set(recipes);
-        this.loading.set(false);
-      }),
-      catchError((err: unknown) => {
-        const message =
-          err instanceof Error
-            ? err.message
-            : "Erreur lors du chargement des recettes";
-        this.error.set(message);
-        this.loading.set(false);
-        return throwError(() => err);
-      })
-    );
-  }
-
-  /**
-   * Loads a single recipe into currentRecipe signal.
-   */
-  loadById(id: string | number): Observable<Recipe> {
-    this.loading.set(true);
-    this.error.set(null);
-    return this.getById(id).pipe(
-      tap((recipe) => {
-        this.currentRecipe.set(recipe);
-        this.loading.set(false);
-      }),
-      catchError((err: unknown) => {
-        const message =
-          err instanceof Error
-            ? err.message
-            : "Erreur lors du chargement de la recette";
-        this.error.set(message);
-        this.loading.set(false);
-        return throwError(() => err);
-      })
-    );
   }
 }

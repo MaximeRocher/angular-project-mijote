@@ -67,7 +67,9 @@
   border-radius: var(--radius-xl);
   text-decoration: none;
   box-shadow: 0 10px 25px rgb(0 0 0 / 25%);
-  transition: background 0.2s ease, transform 0.2s ease;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
   will-change: transform;
 }
 
@@ -128,7 +130,7 @@
 .footer-copy {
   margin: 0;
   font-size: 0.82rem;
-  color: rgb(244 248 232 / 45%);
+  color: rgb(244 248 232 / 70%);
 }
 
 @media (min-width: 768px) {

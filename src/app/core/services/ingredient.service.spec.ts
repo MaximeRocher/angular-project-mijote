@@ -18,11 +18,7 @@ describe('IngredientService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
-        IngredientService,
-      ],
+      providers: [provideHttpClient(), provideHttpClientTesting(), IngredientService],
     });
 
     service = TestBed.inject(IngredientService);
@@ -40,36 +36,10 @@ describe('IngredientService', () => {
     expect(service.error()).toBeNull();
   });
 
-  it('should get all ingredients via getAll()', () => {
-    let result: Ingredient[] | undefined;
-    service.getAll().subscribe((ingredients) => {
-      result = ingredients;
-    });
-
-    const req = httpTesting.expectOne(apiUrl);
-    expect(req.request.method).toBe('GET');
-    req.flush(mockIngredients);
-
-    expect(result).toEqual(mockIngredients);
-  });
-
-  it('should get a single ingredient by id via getById()', () => {
-    let result: Ingredient | undefined;
-    service.getById('2').subscribe((ingredient) => {
-      result = ingredient;
-    });
-
-    const req = httpTesting.expectOne(`${apiUrl}/2`);
-    expect(req.request.method).toBe('GET');
-    req.flush(mockIngredients[1]);
-
-    expect(result).toEqual({ id: '2', name: 'Steak' });
-  });
-
-  it('should update signals on loadAll() success', () => {
+  it('should update signals on load() success', () => {
     expect(service.loading()).toBe(false);
 
-    service.loadAll().subscribe();
+    service.load();
 
     expect(service.loading()).toBe(true);
 
@@ -84,12 +54,8 @@ describe('IngredientService', () => {
     expect(service.getIngredientName('999')).toBeUndefined();
   });
 
-  it('should update error signal on loadAll() failure', () => {
-    service.loadAll().subscribe({
-      error: () => {
-        // expected error
-      },
-    });
+  it('should update error signal on load() failure', () => {
+    service.load();
 
     const req = httpTesting.expectOne(apiUrl);
     req.flush('Error loading ingredients', {
@@ -100,5 +66,14 @@ describe('IngredientService', () => {
     expect(service.loading()).toBe(false);
     expect(service.error()).toBeTruthy();
     expect(service.ingredients()).toEqual([]);
+  });
+
+  it('should only fetch once', () => {
+    service.load();
+    service.load();
+    httpTesting.expectOne(apiUrl).flush(mockIngredients);
+
+    service.load();
+    httpTesting.expectNone(apiUrl);
   });
 });

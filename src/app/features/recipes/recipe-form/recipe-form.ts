@@ -1,33 +1,29 @@
-import { Component, inject, signal, OnInit } from "@angular/core";
-import { Router, RouterLink } from "@angular/router";
-import { TablerIconComponent } from "@tabler/icons-angular";
+import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
+import { TablerIconComponent } from '@tabler/icons-angular';
 import {
-  ReactiveFormsModule,
-  FormBuilder,
-  FormGroup,
-  FormControl,
-  FormArray,
-  Validators,
-  AbstractControl,
-  ValidationErrors,
-} from "@angular/forms";
-import { RecipeService } from "@/core/services/recipe.service";
-import { IngredientService } from "@/core/services/ingredient.service";
-import { CreateRecipeDto } from "@/core/models/recipe.model";
+  applyEach,
+  form,
+  FormField,
+  FormRoot,
+  min,
+  required,
+  validate,
+} from '@angular/forms/signals';
+import { RecipeService } from '@/core/services/recipe.service';
+import { IngredientService } from '@/core/services/ingredient.service';
+import { CreateRecipeDto } from '@/core/models/recipe.model';
+import { errorMessage } from '@/core/utils/error-message';
 
-export type IngredientFormGroup = FormGroup<{
-  idIngredient: FormControl<string>;
-  quantity: FormControl<number>;
-}>;
+const emptyRow = () => ({ idIngredient: '', quantity: 1 });
 
 @Component({
-  selector: "app-recipe-form",
-  imports: [RouterLink, ReactiveFormsModule, TablerIconComponent],
-  templateUrl: "./recipe-form.html",
-  styleUrl: "./recipe-form.css",
+  selector: 'app-recipe-form',
+  imports: [RouterLink, FormField, FormRoot, TablerIconComponent],
+  templateUrl: './recipe-form.html',
 })
-export class RecipeForm implements OnInit {
-  private readonly fb = inject(FormBuilder);
+export class RecipeForm {
   private readonly recipeService = inject(RecipeService);
   protected readonly ingredientService = inject(IngredientService);
   private readonly router = inject(Router);
@@ -36,107 +32,96 @@ export class RecipeForm implements OnInit {
   readonly errorMessage = signal<string | null>(null);
   readonly successMessage = signal<string | null>(null);
 
-  readonly form = this.fb.group({
-    name: this.fb.control("", {
-      nonNullable: true,
-      validators: [
-        Validators.required,
-        (c: AbstractControl): ValidationErrors | null =>
-          typeof c.value === "string" && c.value.trim().length > 0
-            ? null
-            : { required: true },
-      ],
-    }),
-    description: this.fb.control("", {
-      nonNullable: true,
-      validators: [Validators.required, Validators.minLength(30)],
-    }),
-    composition: this.fb.array<IngredientFormGroup>(
-      [this.createIngredientGroup(), this.createIngredientGroup()],
-      [
-        (c: AbstractControl): ValidationErrors | null => {
-          const arr = c as FormArray;
-          return arr.length >= 2 ? null : { minIngredients: true };
-        },
-      ]
-    ),
+  readonly model = signal({
+    name: '',
+    description: '',
+    composition: [emptyRow(), emptyRow()],
   });
 
-  get composition(): FormArray<IngredientFormGroup> {
-    return this.form.controls.composition;
-  }
+  readonly form = form(
+    this.model,
+    (path) => {
+      validate(path.name, ({ value }) =>
+        value().trim()
+          ? undefined
+          : { kind: 'required', message: 'Le nom de la recette est obligatoire.' },
+      );
+      validate(path.description, ({ value }) =>
+        value().trim().length >= 30
+          ? undefined
+          : { kind: 'minlength', message: 'La description doit comporter au moins 30 caractères.' },
+      );
+      applyEach(path.composition, (row) => {
+        required(row.idIngredient, { message: 'Veuillez choisir un ingrédient.' });
+        min(row.quantity, 1, { message: 'Quantité minimum : 1.' });
+      });
+      validate(path.composition, ({ value }) => {
+        const ids = value()
+          .map((row) => row.idIngredient)
+          .filter(Boolean);
+        return new Set(ids).size === ids.length
+          ? undefined
+          : {
+              kind: 'duplicateIngredient',
+              message: "Chaque ingrédient ne peut être choisi qu'une seule fois.",
+            };
+      });
+    },
+    { submission: { action: () => this.create() } },
+  );
 
-  ngOnInit(): void {
-    this.ingredientService.loadAll().subscribe({ error: () => {} });
-  }
+  private redirectTimer?: ReturnType<typeof setTimeout>;
 
-  createIngredientGroup(idIngredient = "", quantity = 1): IngredientFormGroup {
-    return this.fb.group({
-      idIngredient: this.fb.control(idIngredient, {
-        nonNullable: true,
-        validators: [Validators.required],
-      }),
-      quantity: this.fb.control(quantity, {
-        nonNullable: true,
-        validators: [Validators.required, Validators.min(1)],
-      }),
-    });
+  constructor() {
+    this.ingredientService.load();
+    inject(DestroyRef).onDestroy(() => clearTimeout(this.redirectTimer));
   }
 
   addIngredient(): void {
-    this.composition.push(this.createIngredientGroup());
+    this.model.update((m) => ({ ...m, composition: [...m.composition, emptyRow()] }));
   }
 
   removeIngredient(index: number): void {
-    if (this.composition.length > 2) {
-      this.composition.removeAt(index);
+    if (this.model().composition.length > 2) {
+      this.model.update((m) => ({
+        ...m,
+        composition: m.composition.filter((_, i) => i !== index),
+      }));
     }
   }
 
-  onSubmit(): void {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      return;
-    }
-
-    const val = this.form.getRawValue();
-    const recipeDto: CreateRecipeDto = {
-      name: val.name.trim(),
-      description: val.description.trim(),
-      composition: val.composition.map((c) => ({
+  private async create(): Promise<undefined> {
+    const { name, description, composition } = this.model();
+    const dto: CreateRecipeDto = {
+      name: name.trim(),
+      description: description.trim(),
+      composition: composition.map((c) => ({
         idIngredient: c.idIngredient,
         quantity: c.quantity || 1,
       })),
     };
 
-    // Validate using RecipeService business rules
-    const validation = this.recipeService.validateRecipe(recipeDto);
+    // Business rules shared with the service
+    const validation = this.recipeService.validateRecipe(dto);
     if (!validation.valid) {
-      this.errorMessage.set(validation.errors.map((e) => e.message).join(" "));
+      this.errorMessage.set(validation.errors.map((e) => e.message).join(' '));
       return;
     }
 
     this.submitting.set(true);
     this.errorMessage.set(null);
-
-    this.recipeService.create(recipeDto).subscribe({
-      next: (created) => {
-        this.submitting.set(false);
-        this.successMessage.set(
-          `La recette "${created.name}" a été créée avec succès ! Redirection en cours...`
-        );
-        setTimeout(() => {
-          this.router.navigate(["/recipes"]);
-        }, 1000);
-      },
-      error: (err: unknown) => {
-        this.submitting.set(false);
-        const msg =
-          err instanceof Error
-            ? err.message
-            : "Une erreur est survenue lors de la création de la recette.";
-        this.errorMessage.set(msg);
-      },
-    });
+    try {
+      const created = await firstValueFrom(this.recipeService.create(dto));
+      this.successMessage.set(
+        `La recette "${created.name}" a été créée avec succès ! Redirection en cours...`,
+      );
+      this.redirectTimer = setTimeout(() => void this.router.navigate(['/recipes']), 1000);
+    } catch (err) {
+      this.errorMessage.set(
+        errorMessage(err, 'Une erreur est survenue lors de la création de la recette.'),
+      );
+    } finally {
+      this.submitting.set(false);
+    }
   }
 }

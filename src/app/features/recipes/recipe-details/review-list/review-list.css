@@ -1,0 +1,9 @@
+:host {
+  display: block;
+}
+
+.details-surface-subtle {
+  background: #f9fcf1;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-lg);
+}
