@@ -78,5 +78,7 @@ Des tests `axe-core` (`*.a11y.spec.ts`) vérifient la page de connexion et la na
 
 ## Répartition
 
-- **Personne A** : authentification, accueil, layout et navbar, styles globaux.
-- **Personne B** : recettes (liste, formulaire, détail), services de données, interceptor d'erreurs, loader, recipe-card, pagination.
+D'après l'historique git :
+
+- **Maxime** : authentification (page de connexion, `AuthService`, guards, validateur d'identifiants), layout et navbar, page d'accueil, pipe `truncate` et directive `highlight`, design tokens et styles globaux, refonte graphique matcha/pistache, boîte de dialogue de confirmation, tests d'accessibilité (axe-core), README et mise en conformité avec le sujet (moyenne des notes sur l'accueil, titres des pages, déconnexion sur la landing, liste des recettes allégée).
+- **Guillaume** : modèles de données, services de recettes et d'ingrédients, intercepteur d'erreurs, fonctionnalité recettes (liste paginée avec recherche, formulaire de création, page de détail avec avis), composants `recipe-card`, `pagination` et `loader`, puis la couche visuelle animée : page `/landing`, GSAP, transitions de page, inclinaison 3D, illustrations vectorielles.
