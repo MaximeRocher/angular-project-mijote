@@ -6,6 +6,7 @@ import { RecipeService } from '../../core/services/recipe.service';
 import { HighlightDirective } from '../../shared/directives/highlight.directive';
 import { TruncatePipe } from '../../shared/pipes/truncate.pipe';
 import { StaggerListDirective } from '../../shared/directives/stagger-list.directive';
+import { Recipe } from '../../core/models/recipe.model';
 import { CocottePotComponent } from '../../shared/components/culinary-art/cocotte-pot.component';
 
 @Component({
@@ -63,6 +64,7 @@ import { CocottePotComponent } from '../../shared/components/culinary-art/cocott
                   <div class="recipe-details">
                     <h3>{{ recipe.name }}</h3>
                     <p>{{ recipe.description | truncate }}</p>
+                    <p class="recipe-rating">{{ ratingLabel(recipe) }}</p>
                   </div>
                 </a>
               </li>
@@ -81,6 +83,15 @@ import { CocottePotComponent } from '../../shared/components/culinary-art/cocott
 export class Home {
   protected readonly auth = inject(AuthService);
   protected readonly recipes = inject(RecipeService);
+
+  protected ratingLabel(recipe: Recipe): string {
+    const rates = recipe.rates ?? [];
+    if (rates.length === 0) {
+      return 'Non noté';
+    }
+    const sum = rates.reduce((acc, r) => acc + (Number(r.rate) || 0), 0);
+    return `Note moyenne : ${Math.round((sum / rates.length) * 10) / 10} / 5`;
+  }
 
   constructor() {
     this.recipes.loadLatest().subscribe({ error: () => undefined });

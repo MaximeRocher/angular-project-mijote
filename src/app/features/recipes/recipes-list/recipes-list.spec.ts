@@ -157,18 +157,6 @@ describe('RecipesList', () => {
     expect(compiled.textContent).toContain('Connexion perdue');
   });
 
-  it('should delete a recipe only after dialog confirmation', async () => {
-    fixture.detectChanges();
-    await fixture.whenStable();
-
-    component.onDeleteRecipe('1');
-    expect(mockRecipeService.delete).not.toHaveBeenCalled();
-
-    component.confirmDelete();
-
-    expect(mockRecipeService.delete).toHaveBeenCalledWith('1');
-  });
-
   it('has no axe violations', async () => {
     fixture.detectChanges();
     await fixture.whenStable();

@@ -137,9 +137,7 @@
             [recipe]="recipe"
             [truncateDescription]="true"
             [maxDescriptionLength]="15"
-            [showIngredients]="true"
-            [showActions]="true"
-            (delete)="onDeleteRecipe($event)"
+            [showIngredients]="false"
           />
         }
       </div>
@@ -154,12 +152,3 @@
     }
   }
 </div>
-
-<app-confirm-dialog
-  [open]="recipeToDelete() !== null"
-  title="Supprimer la recette"
-  [message]="deleteMessage()"
-  confirmLabel="Supprimer"
-  (confirmed)="confirmDelete()"
-  (cancelled)="cancelDelete()"
-/>
