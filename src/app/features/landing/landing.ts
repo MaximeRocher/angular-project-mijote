@@ -5,6 +5,7 @@ import {
   DestroyRef,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { AuthService } from '@/core/services/auth.service';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { GsapService } from '@/core/services/gsap.service';
 import { HeroSection } from './sections/hero/hero';
@@ -44,9 +45,15 @@ import { CocottePotComponent } from '@/shared/components/culinary-art/cocotte-po
         </nav>
 
         <div class="header-actions">
-          <a routerLink="/login" class="header-login-btn" appMagnetic [strength]="0.2">
-            Connexion
-          </a>
+          @if (auth.isAuthenticated()) {
+            <button type="button" class="header-login-btn" (click)="auth.logout()" appMagnetic [strength]="0.2">
+              Déconnexion
+            </button>
+          } @else {
+            <a routerLink="/login" class="header-login-btn" appMagnetic [strength]="0.2">
+              Connexion
+            </a>
+          }
         </div>
       </header>
 
@@ -63,6 +70,7 @@ import { CocottePotComponent } from '@/shared/components/culinary-art/cocotte-po
   `,
 })
 export class Landing {
+  protected readonly auth = inject(AuthService);
   private readonly gsapService = inject(GsapService);
   private readonly destroyRef = inject(DestroyRef);
 

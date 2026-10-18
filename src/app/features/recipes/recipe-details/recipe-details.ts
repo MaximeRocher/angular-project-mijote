@@ -9,6 +9,7 @@ import {
   DestroyRef,
   afterNextRender,
 } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { gsap } from 'gsap';
@@ -34,6 +35,7 @@ export class RecipeDetails implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly el = inject(ElementRef);
   private readonly fb = inject(FormBuilder);
+  private readonly title = inject(Title);
 
   protected readonly Math = Math;
 
@@ -111,6 +113,7 @@ export class RecipeDetails implements OnInit {
     this.recipeService.getById(id).subscribe({
       next: (data) => {
         this.recipe.set(data);
+        this.title.setTitle(`${data.name} - Mijoté`);
         this.loading.set(false);
       },
       error: (err: unknown) => {
