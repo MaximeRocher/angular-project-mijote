@@ -15,13 +15,7 @@ import { environment } from '@/environments/environment';
 
 @Component({
   selector: 'app-recipes-list',
-  imports: [
-    RouterLink,
-    RecipeCard,
-    Pagination,
-    StaggerListDirective,
-    TablerIconComponent,
-  ],
+  imports: [RouterLink, RecipeCard, Pagination, StaggerListDirective, TablerIconComponent],
   templateUrl: './recipes-list.html',
 })
 export class RecipesList {
