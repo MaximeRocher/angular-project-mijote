@@ -1,11 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { RouteTransitionService } from './route-transition.service';
 import { GsapService } from './gsap.service';
-import { signal } from '@angular/core';
+import { signal, WritableSignal } from '@angular/core';
 
 describe('RouteTransitionService', () => {
   let service: RouteTransitionService;
-  let prefersReducedMotionSignal: any;
+  let prefersReducedMotionSignal: WritableSignal<boolean>;
   let mockOverlay: HTMLElement;
   let mockBadge: HTMLElement;
 

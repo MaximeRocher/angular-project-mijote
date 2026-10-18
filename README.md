@@ -31,7 +31,7 @@ npm test         # tests unitaires (Vitest + axe-core)
 | Connexion | `/login` | Connexion - Mijoté | Formulaire login / mot de passe |
 | Accueil | `/home` | Accueil - Mijoté | 5 dernières recettes (`sortBy=id&order=desc&limit=5`) : nom, 15 premiers caractères de la description, moyenne des notes |
 | Toutes les recettes | `/recipes` | Toutes les recettes - Mijoté | Liste paginée (6 par page), recherche par nom (paramètre `name` de l'API), nom + 15 premiers caractères + moyenne des notes |
-| Création | `/recipes/create` | Créer une recette - Mijoté | Formulaire réactif avec validation du modèle de données |
+| Création | `/recipes/create` | Créer une recette - Mijoté | Formulaire (Signal Forms) avec validation du modèle de données |
 | Détail | `/recipes/:id` | `<nom de la recette> - Mijoté` | Nom, ingrédients (avec quantités), tous les avis, formulaire d'ajout d'avis |
 
 Chaque page a sa propre URL et le TITLE de l'onglet est mis à jour à chaque navigation (propriété `title` des routes ; sur la page de détail, le titre est mis à jour avec le nom de la recette une fois celle-ci chargée).
@@ -39,7 +39,7 @@ Chaque page a sa propre URL et le TITLE de l'onglet est mis à jour à chaque na
 ### Modèle de données
 
 Une recette est valide si elle a un nom, une description d'au moins 30 caractères et au moins 2 quantités d'ingrédients.
-La règle est appliquée dans le formulaire (validateurs) et dans `RecipeService.validateRecipe()`.
+La règle est appliquée par le schéma de validation du formulaire de création : l'envoi est bloqué tant qu'elle n'est pas respectée.
 
 ### API
 
@@ -65,7 +65,7 @@ L'URL de base est configurée dans `src/environments/`. Un avis est ajouté en r
 ```
 src/app/
 ├── core/        modèles, services (auth, recipe, ingredient, gsap), guards, interceptor d'erreurs, validateurs
-├── shared/      navbar, loader, recipe-card, pagination, confirm-dialog, illustrations, directives, pipe truncate
+├── shared/      navbar, recipe-card, pagination, illustrations, directives, pipe truncate
 └── features/    landing, login, layout (navbar + router-outlet), home, recipes (liste, formulaire, détail)
 ```
 

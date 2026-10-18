@@ -134,14 +134,6 @@ describe('RecipeService', () => {
     req.flush({ ...mockRecipes[0], name: 'Super Cheese Burger' });
   });
 
-  it('should delete a recipe via delete()', () => {
-    service.delete('1').subscribe();
-
-    const req = httpTesting.expectOne(`${apiUrl}/1`);
-    expect(req.request.method).toBe('DELETE');
-    req.flush(mockRecipes[0]);
-  });
-
   describe('addRate', () => {
     it('should GET the recipe then PUT it back with the new rate appended', () => {
       const rate = { login: 'abc1-', rate: 4, review: 'Super' };

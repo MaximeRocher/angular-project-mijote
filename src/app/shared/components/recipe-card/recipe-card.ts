@@ -1,4 +1,4 @@
-import { Component, input, output, computed, inject } from '@angular/core';
+import { Component, input, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TablerIconComponent } from '@tabler/icons-angular';
 import { Recipe } from '@/core/models/recipe.model';
@@ -19,15 +19,6 @@ export class RecipeCard {
   readonly truncateDescription = input<boolean>(false);
   readonly maxDescriptionLength = input<number>(15);
   readonly showIngredients = input<boolean>(true);
-  readonly showActions = input<boolean>(false);
-
-  readonly delete = output<string>();
-
-  onDeleteClick(event: MouseEvent): void {
-    event.stopPropagation();
-    event.preventDefault();
-    this.delete.emit(this.recipe().id);
-  }
 
   readonly displayedDescription = computed(() => {
     const desc = this.recipe().description || '';

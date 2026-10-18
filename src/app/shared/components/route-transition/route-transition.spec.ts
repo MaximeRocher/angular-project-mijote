@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideRouter, Router, NavigationEnd } from '@angular/router';
+import { Router, NavigationEnd, Event } from '@angular/router';
 import { RouteTransition } from './route-transition';
 import { RouteTransitionService } from '@/core/services/route-transition.service';
 import { axeViolations } from '@/testing-a11y';
@@ -13,10 +13,10 @@ describe('RouteTransition Component', () => {
     playReveal: ReturnType<typeof vi.fn>;
     playCover: ReturnType<typeof vi.fn>;
   };
-  let routerEvents$: Subject<any>;
+  let routerEvents$: Subject<Event>;
 
   beforeEach(async () => {
-    routerEvents$ = new Subject<any>();
+    routerEvents$ = new Subject<Event>();
     mockTransitionService = {
       registerElements: vi.fn(),
       playReveal: vi.fn().mockResolvedValue(undefined),

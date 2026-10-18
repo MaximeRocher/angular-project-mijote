@@ -141,22 +141,4 @@ describe('RecipeCard', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('ul')).toBeNull();
   });
-
-  it('should emit delete output when delete button is clicked and showActions is true', async () => {
-    fixture.componentRef.setInput('showActions', true);
-    fixture.detectChanges();
-    await fixture.whenStable();
-
-    let deletedId: string | undefined;
-    component.delete.subscribe((id) => {
-      deletedId = id;
-    });
-
-    const compiled = fixture.nativeElement as HTMLElement;
-    const deleteBtn = compiled.querySelector('button') as HTMLButtonElement;
-    expect(deleteBtn).toBeTruthy();
-    deleteBtn.click();
-
-    expect(deletedId).toBe('1');
-  });
 });

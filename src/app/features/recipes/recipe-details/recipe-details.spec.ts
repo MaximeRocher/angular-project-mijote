@@ -65,8 +65,8 @@ describe('RecipeDetails', () => {
           provide: GsapService,
           useValue: {
             prefersReducedMotion: () => true, // skip animation execution in tests
-            createContext: () => ({ add: (cb: () => void) => cb(), revert: () => {} }),
-            cleanupContext: () => {},
+            createContext: () => ({ add: (cb: () => void) => cb(), revert: () => undefined }),
+            cleanupContext: () => undefined,
           },
         },
       ],

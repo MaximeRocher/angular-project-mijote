@@ -3,7 +3,7 @@ import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { transitionGuard } from './transition.guard';
 import { RouteTransitionService } from '../services/route-transition.service';
 import { GsapService } from '../services/gsap.service';
-import { signal } from '@angular/core';
+import { signal, WritableSignal } from '@angular/core';
 
 describe('transitionGuard', () => {
   let service: RouteTransitionService;
@@ -53,7 +53,7 @@ describe('transitionGuard', () => {
   });
 
   it('should allow navigation without delay when prefers-reduced-motion is true', async () => {
-    (gsapService.prefersReducedMotion as any).set(true);
+    (gsapService.prefersReducedMotion as WritableSignal<boolean>).set(true);
 
     const mockRoute = {} as ActivatedRouteSnapshot;
     const mockState = {} as RouterStateSnapshot;

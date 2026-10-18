@@ -41,7 +41,13 @@ import { CocottePotComponent } from '@/shared/components/culinary-art/cocotte-po
 
         <div class="header-actions">
           @if (auth.isAuthenticated()) {
-            <button type="button" class="header-login-btn" (click)="auth.logout()" appMagnetic [strength]="0.2">
+            <button
+              type="button"
+              class="header-login-btn"
+              (click)="auth.logout()"
+              appMagnetic
+              [strength]="0.2"
+            >
               Déconnexion
             </button>
           } @else {

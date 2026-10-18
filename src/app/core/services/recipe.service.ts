@@ -57,11 +57,4 @@ export class RecipeService {
       switchMap((recipe) => this.update(id, { ...recipe, rates: [...(recipe.rates ?? []), rate] })),
     );
   }
-
-  /**
-   * Deletes a recipe by ID.
-   */
-  delete(id: string | number): Observable<Recipe> {
-    return this.http.delete<Recipe>(`${this.url}/${id}`);
-  }
 }

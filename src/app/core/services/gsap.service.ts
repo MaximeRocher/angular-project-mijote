@@ -25,10 +25,10 @@ export class GsapService {
             matches: false,
             media: query,
             onchange: null,
-            addListener: () => {},
-            removeListener: () => {},
-            addEventListener: () => {},
-            removeEventListener: () => {},
+            addListener: () => undefined,
+            removeListener: () => undefined,
+            addEventListener: () => undefined,
+            removeEventListener: () => undefined,
             dispatchEvent: () => false,
           }) as unknown as MediaQueryList,
       });
@@ -44,7 +44,7 @@ export class GsapService {
 
   /** Creates a GSAP context scoped to an element for automatic cleanup */
   createContext(element: Element): gsap.Context {
-    return gsap.context(() => {}, element);
+    return gsap.context(() => undefined, element);
   }
 
   /** Kills a GSAP context and all its animations/ScrollTriggers */
