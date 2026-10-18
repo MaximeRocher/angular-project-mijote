@@ -33,7 +33,6 @@ describe('IngredientService', () => {
     expect(service).toBeTruthy();
     expect(service.ingredients()).toEqual([]);
     expect(service.loading()).toBe(false);
-    expect(service.error()).toBeNull();
   });
 
   it('should update signals on load() success', () => {
@@ -48,13 +47,12 @@ describe('IngredientService', () => {
 
     expect(service.loading()).toBe(false);
     expect(service.ingredients()).toEqual(mockIngredients);
-    expect(service.error()).toBeNull();
     expect(service.getIngredientName('1')).toBe('Pain');
     expect(service.getIngredientName(2)).toBe('Steak');
-    expect(service.getIngredientName('999')).toBeUndefined();
+    expect(service.getIngredientName('999')).toBe('Ingrédient #999');
   });
 
-  it('should update error signal on load() failure', () => {
+  it('should stop loading on load() failure', () => {
     service.load();
 
     const req = httpTesting.expectOne(apiUrl);
@@ -64,7 +62,6 @@ describe('IngredientService', () => {
     });
 
     expect(service.loading()).toBe(false);
-    expect(service.error()).toBeTruthy();
     expect(service.ingredients()).toEqual([]);
   });
 

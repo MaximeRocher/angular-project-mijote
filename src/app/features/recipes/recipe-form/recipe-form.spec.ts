@@ -13,7 +13,7 @@ import { axeViolations } from '@/testing-a11y';
 describe('RecipeForm', () => {
   let component: RecipeForm;
   let fixture: ComponentFixture<RecipeForm>;
-  let recipeService: { create: ReturnType<typeof vi.fn>; validateRecipe: ReturnType<typeof vi.fn> };
+  let recipeService: { create: ReturnType<typeof vi.fn> };
   let ingredientService: { ingredients: ReturnType<typeof signal>; load: ReturnType<typeof vi.fn> };
   let router: Router;
 
@@ -39,7 +39,6 @@ describe('RecipeForm', () => {
   beforeEach(async () => {
     recipeService = {
       create: vi.fn().mockReturnValue(of(created)),
-      validateRecipe: vi.fn().mockReturnValue({ valid: true, errors: [] }),
     };
     ingredientService = {
       ingredients: signal([

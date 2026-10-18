@@ -80,7 +80,10 @@ h1 {
   border-radius: var(--radius-xl);
   text-decoration: none;
   box-shadow: 0 8px 24px rgb(79 112 34 / 30%);
-  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
   will-change: transform;
 }
 
@@ -110,7 +113,9 @@ h1 {
   border: 1.5px solid var(--border);
   border-radius: var(--radius-xl);
   text-decoration: none;
-  transition: border-color 0.2s ease, background 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease;
   will-change: transform;
 }
 
@@ -170,7 +175,12 @@ h1 {
   width: 280px;
   height: 280px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgb(190 220 120 / 40%) 0%, rgb(79 112 34 / 15%) 40%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgb(190 220 120 / 40%) 0%,
+    rgb(79 112 34 / 15%) 40%,
+    transparent 70%
+  );
   filter: blur(35px);
   z-index: -1;
 }

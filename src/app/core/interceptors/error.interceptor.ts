@@ -1,14 +1,14 @@
-import { HttpInterceptorFn, HttpErrorResponse } from "@angular/common/http";
-import { catchError, throwError } from "rxjs";
+import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
+import { catchError, throwError } from 'rxjs';
 
 export class AppHttpError extends Error {
   constructor(
     message: string,
     public readonly status: number,
-    public readonly originalError: HttpErrorResponse
+    public readonly originalError: HttpErrorResponse,
   ) {
     super(message);
-    this.name = "AppHttpError";
+    this.name = 'AppHttpError';
     Object.setPrototypeOf(this, AppHttpError.prototype);
   }
 }
@@ -16,7 +16,7 @@ export class AppHttpError extends Error {
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   return next(req).pipe(
     catchError((error: unknown) => {
-      let message = "Une erreur inattendue est survenue.";
+      let message = 'Une erreur inattendue est survenue.';
       let status = 0;
 
       if (error instanceof HttpErrorResponse) {
@@ -30,33 +30,32 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
           switch (error.status) {
             case 0:
               message =
-                "Impossible de contacter le serveur. Veuillez vérifier votre connexion Internet.";
+                'Impossible de contacter le serveur. Veuillez vérifier votre connexion Internet.';
               break;
             case 400:
               message =
-                typeof error.error === "string" && error.error.trim().length > 0
+                typeof error.error === 'string' && error.error.trim().length > 0
                   ? error.error
-                  : "Requête invalide.";
+                  : 'Requête invalide.';
               break;
             case 401:
-              message =
-                "Session expirée ou non autorisée. Veuillez vous connecter.";
+              message = 'Session expirée ou non autorisée. Veuillez vous connecter.';
               break;
             case 403:
-              message = "Accès refusé à cette ressource.";
+              message = 'Accès refusé à cette ressource.';
               break;
             case 404:
-              message = "La ressource demandée est introuvable.";
+              message = 'La ressource demandée est introuvable.';
               break;
             case 500:
             case 502:
             case 503:
             case 504:
               message =
-                "Le serveur rencontre actuellement un problème. Veuillez réessayer plus tard.";
+                'Le serveur rencontre actuellement un problème. Veuillez réessayer plus tard.';
               break;
             default:
-              if (typeof error.error === "string" && error.error.trim().length > 0) {
+              if (typeof error.error === 'string' && error.error.trim().length > 0) {
                 message = error.error;
               } else if (error.message) {
                 message = error.message;
@@ -75,6 +74,6 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
       console.error(`[HTTP Unexpected Error] ${req.method} ${req.urlWithParams}:`, message);
       return throwError(() => new Error(message));
-    })
+    }),
   );
 };

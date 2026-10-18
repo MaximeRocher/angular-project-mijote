@@ -42,8 +42,7 @@ export class RecipeCard {
 
   protected readonly ingredients = computed(() =>
     this.recipe().composition.map((c) => ({
-      name:
-        this.ingredientService.getIngredientName(c.idIngredient) ?? `Ingrédient #${c.idIngredient}`,
+      name: this.ingredientService.getIngredientName(c.idIngredient),
       quantity: c.quantity,
     })),
   );

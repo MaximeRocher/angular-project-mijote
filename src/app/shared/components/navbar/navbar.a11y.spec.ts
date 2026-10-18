@@ -9,7 +9,10 @@ describe('Navbar accessibility', () => {
     TestBed.configureTestingModule({
       providers: [
         provideRouter([]),
-        { provide: AuthService, useValue: { user: () => ({ login: 'abc1.' }), logout: () => undefined } },
+        {
+          provide: AuthService,
+          useValue: { user: () => ({ login: 'abc1.' }), logout: () => undefined },
+        },
       ],
     });
     const fixture = TestBed.createComponent(Navbar);

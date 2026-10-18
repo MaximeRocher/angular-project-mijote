@@ -10,7 +10,6 @@ export function ratingInfo(rates: RecipeRate[] | undefined) {
     average,
     count,
     rounded: Math.round(average),
-    label: `${count} avis`,
     ariaLabel: `Note moyenne de ${average} sur 5, basée sur ${count} avis`,
   };
 }

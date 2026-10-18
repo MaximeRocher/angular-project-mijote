@@ -78,7 +78,9 @@
   border-radius: var(--radius-xl);
   text-decoration: none;
   box-shadow: 0 2px 8px rgb(40 60 20 / 6%);
-  transition: border-color 0.2s ease, background 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease;
   will-change: transform;
 }
 

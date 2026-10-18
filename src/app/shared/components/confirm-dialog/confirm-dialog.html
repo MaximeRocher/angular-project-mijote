@@ -10,10 +10,18 @@
     <h2 id="confirm-dialog-title" class="confirm-dialog__title">{{ title() }}</h2>
     <p id="confirm-dialog-message" class="confirm-dialog__message">{{ message() }}</p>
     <div class="confirm-dialog__actions">
-      <button type="button" class="confirm-dialog__btn confirm-dialog__btn--secondary" (click)="cancelled.emit()">
+      <button
+        type="button"
+        class="confirm-dialog__btn confirm-dialog__btn--secondary"
+        (click)="cancelled.emit()"
+      >
         {{ cancelLabel() }}
       </button>
-      <button type="button" class="confirm-dialog__btn confirm-dialog__btn--primary" (click)="confirmed.emit()">
+      <button
+        type="button"
+        class="confirm-dialog__btn confirm-dialog__btn--primary"
+        (click)="confirmed.emit()"
+      >
         {{ confirmLabel() }}
       </button>
     </div>

@@ -1,21 +1,21 @@
-import { Component, effect, input, output, viewChild, ElementRef } from "@angular/core";
+import { Component, effect, input, output, viewChild, ElementRef } from '@angular/core';
 
 @Component({
-  selector: "app-confirm-dialog",
-  templateUrl: "./confirm-dialog.html",
-  styleUrl: "./confirm-dialog.css",
+  selector: 'app-confirm-dialog',
+  templateUrl: './confirm-dialog.html',
+  styleUrl: './confirm-dialog.css',
 })
 export class ConfirmDialog {
   readonly open = input<boolean>(false);
-  readonly title = input<string>("Confirmation");
-  readonly message = input<string>("");
-  readonly confirmLabel = input<string>("Confirmer");
-  readonly cancelLabel = input<string>("Annuler");
+  readonly title = input<string>('Confirmation');
+  readonly message = input<string>('');
+  readonly confirmLabel = input<string>('Confirmer');
+  readonly cancelLabel = input<string>('Annuler');
 
   readonly confirmed = output<void>();
   readonly cancelled = output<void>();
 
-  private readonly dialog = viewChild.required<ElementRef<HTMLDialogElement>>("dialog");
+  private readonly dialog = viewChild.required<ElementRef<HTMLDialogElement>>('dialog');
 
   constructor() {
     effect(() => {

@@ -116,7 +116,10 @@ h2 {
   border-radius: 1rem;
   background: var(--surface, #ffffff);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s;
+  transition:
+    transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.2s;
 }
 
 .recipe-item-link {
@@ -220,4 +223,3 @@ h3 {
   font-size: 0.9rem;
   margin: 0;
 }
-

@@ -114,7 +114,6 @@ describe('RecipeCard', () => {
       average: 4.5,
       count: 2,
       rounded: 5,
-      label: '2 avis',
       ariaLabel: 'Note moyenne de 4.5 sur 5, basée sur 2 avis',
     });
 

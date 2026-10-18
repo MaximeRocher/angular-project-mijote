@@ -31,9 +31,7 @@ describe('transitionGuard', () => {
     const mockRoute = {} as ActivatedRouteSnapshot;
     const mockState = {} as RouterStateSnapshot;
 
-    const result = await TestBed.runInInjectionContext(() =>
-      transitionGuard(mockRoute, mockState),
-    );
+    const result = await TestBed.runInInjectionContext(() => transitionGuard(mockRoute, mockState));
 
     expect(result).toBe(true);
     expect(service.isInitial()).toBe(false);
@@ -48,9 +46,7 @@ describe('transitionGuard', () => {
 
     const playCoverSpy = vi.spyOn(service, 'playCover').mockResolvedValue(true);
 
-    const result = await TestBed.runInInjectionContext(() =>
-      transitionGuard(mockRoute, mockState),
-    );
+    const result = await TestBed.runInInjectionContext(() => transitionGuard(mockRoute, mockState));
 
     expect(result).toBe(true);
     expect(playCoverSpy).toHaveBeenCalled();
@@ -62,9 +58,7 @@ describe('transitionGuard', () => {
     const mockRoute = {} as ActivatedRouteSnapshot;
     const mockState = {} as RouterStateSnapshot;
 
-    const result = await TestBed.runInInjectionContext(() =>
-      transitionGuard(mockRoute, mockState),
-    );
+    const result = await TestBed.runInInjectionContext(() => transitionGuard(mockRoute, mockState));
 
     expect(result).toBe(true);
   });

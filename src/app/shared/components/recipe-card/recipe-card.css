@@ -9,7 +9,9 @@
   border: 1px solid var(--border-soft);
   border-radius: var(--radius-xl);
   box-shadow: 0 4px 18px rgb(60 90 30 / 6%);
-  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+  transition:
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
   will-change: transform;
   position: relative;
   overflow: hidden;

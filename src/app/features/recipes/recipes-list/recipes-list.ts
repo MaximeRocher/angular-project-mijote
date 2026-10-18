@@ -48,7 +48,7 @@ export class RecipesList {
       forkJoin([
         // MockAPI has no count endpoint: total = every match, items = the requested page.
         this.recipeService.getAll({ name: params.search }),
-        this.recipeService.getPaginated(params.page, this.pageSize, params.search),
+        this.recipeService.getAll({ page: params.page, limit: this.pageSize, name: params.search }),
       ]).pipe(
         map(([all, items]) => ({ total: all.length, items })),
         // MockAPI answers 404 when nothing matches the search

@@ -3,4 +3,4 @@ export interface User {
   loggedInAt?: string;
 }
 
-export const STORAGE_KEY = "auth_user";
+export const STORAGE_KEY = 'auth_user';

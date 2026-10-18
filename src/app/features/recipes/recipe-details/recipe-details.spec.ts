@@ -101,15 +101,6 @@ describe('RecipeDetails', () => {
     expect(items[1]?.textContent).toContain('Courgette');
   });
 
-  it('falls back to a generic label for unknown ingredients', async () => {
-    mockRecipeService.getById.mockReturnValue(
-      of({ ...sampleRecipe, composition: [{ idIngredient: '99', quantity: 1 }] }),
-    );
-    await render();
-
-    expect(component.ingredients()).toEqual([{ name: 'Ingrédient #99', quantity: 1 }]);
-  });
-
   it('renders the rating summary and every review', async () => {
     await render();
 

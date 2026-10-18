@@ -58,8 +58,7 @@ export class RecipeDetails {
   readonly ratingInfo = computed(() => ratingInfo(this.recipe()?.rates));
   readonly ingredients = computed(() =>
     (this.recipe()?.composition ?? []).map((c) => ({
-      name:
-        this.ingredientService.getIngredientName(c.idIngredient) ?? `Ingrédient #${c.idIngredient}`,
+      name: this.ingredientService.getIngredientName(c.idIngredient),
       quantity: c.quantity,
     })),
   );

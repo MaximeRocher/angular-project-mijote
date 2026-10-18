@@ -11,7 +11,7 @@ import { axeViolations } from '@/testing-a11y';
 
 describe('Home Component', () => {
   let fixture: ComponentFixture<Home>;
-  let getLatest: ReturnType<typeof vi.fn>;
+  let getAll: ReturnType<typeof vi.fn>;
 
   const recipes: Recipe[] = [
     {
@@ -40,13 +40,13 @@ describe('Home Component', () => {
   }
 
   beforeEach(async () => {
-    getLatest = vi.fn().mockReturnValue(of(recipes));
+    getAll = vi.fn().mockReturnValue(of(recipes));
     await TestBed.configureTestingModule({
       imports: [Home],
       providers: [
         provideRouter([]),
         provideAppIcons(),
-        { provide: RecipeService, useValue: { getLatest } },
+        { provide: RecipeService, useValue: { getAll } },
         { provide: AuthService, useValue: { user: signal({ id: '1', login: 'ChefAuguste' }) } },
       ],
     }).compileComponents();
@@ -70,7 +70,7 @@ describe('Home Component', () => {
   });
 
   it('should render empty state when no recipes exist', async () => {
-    getLatest.mockReturnValue(of([]));
+    getAll.mockReturnValue(of([]));
     await render();
     expect(
       (fixture.nativeElement as HTMLElement).querySelector('.empty-state')?.textContent,
@@ -78,7 +78,7 @@ describe('Home Component', () => {
   });
 
   it('should show an error when loading fails', async () => {
-    getLatest.mockReturnValue(throwError(() => new Error('boom')));
+    getAll.mockReturnValue(throwError(() => new Error('boom')));
     await render();
     expect(
       (fixture.nativeElement as HTMLElement).querySelector('[role=alert]')?.textContent,

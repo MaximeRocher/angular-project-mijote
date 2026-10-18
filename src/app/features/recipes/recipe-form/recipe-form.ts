@@ -95,18 +95,9 @@ export class RecipeForm {
     const dto: CreateRecipeDto = {
       name: name.trim(),
       description: description.trim(),
-      composition: composition.map((c) => ({
-        idIngredient: c.idIngredient,
-        quantity: c.quantity || 1,
-      })),
+      // Copy the fields: Signal Forms tags array items with a tracking Symbol
+      composition: composition.map(({ idIngredient, quantity }) => ({ idIngredient, quantity })),
     };
-
-    // Business rules shared with the service
-    const validation = this.recipeService.validateRecipe(dto);
-    if (!validation.valid) {
-      this.errorMessage.set(validation.errors.map((e) => e.message).join(' '));
-      return;
-    }
 
     this.submitting.set(true);
     this.errorMessage.set(null);

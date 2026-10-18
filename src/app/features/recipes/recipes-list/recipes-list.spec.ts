@@ -45,7 +45,6 @@ describe('RecipesList', () => {
   beforeEach(async () => {
     mockRecipeService = {
       getAll: vi.fn().mockReturnValue(of(mockRecipes)),
-      getPaginated: vi.fn().mockReturnValue(of(mockRecipes)),
       delete: vi.fn().mockReturnValue(of(mockRecipes[0])),
     };
 
@@ -74,12 +73,12 @@ describe('RecipesList', () => {
 
     expect(component).toBeTruthy();
     expect(mockIngredientService.load).toHaveBeenCalled();
-    expect(mockRecipeService['getAll']).toHaveBeenCalled();
-    expect(mockRecipeService['getPaginated']).toHaveBeenCalledWith(
-      1,
-      component.pageSize,
-      undefined,
-    );
+    expect(mockRecipeService['getAll']).toHaveBeenCalledWith({ name: undefined });
+    expect(mockRecipeService['getAll']).toHaveBeenCalledWith({
+      page: 1,
+      limit: component.pageSize,
+      name: undefined,
+    });
     expect(component.recipes().length).toBe(2);
     expect(component.totalItems()).toBe(2);
     expect(component.loading()).toBe(false);
@@ -130,23 +129,23 @@ describe('RecipesList', () => {
       expect(mockRecipeService['getAll']).not.toHaveBeenCalled();
 
       await search('burger');
-      expect(mockRecipeService['getAll']).toHaveBeenCalledTimes(1);
+      // one call for the total, one for the page
+      expect(mockRecipeService['getAll']).toHaveBeenCalledTimes(2);
     });
 
     it('should filter recipes and go back to page 1', async () => {
       component.currentPage.set(2);
       mockRecipeService['getAll'].mockReturnValue(of([mockRecipes[0]]));
-      mockRecipeService['getPaginated'].mockReturnValue(of([mockRecipes[0]]));
 
       await search('burger');
 
       expect(component.currentPage()).toBe(1);
       expect(mockRecipeService['getAll']).toHaveBeenCalledWith({ name: 'burger' });
-      expect(mockRecipeService['getPaginated']).toHaveBeenCalledWith(
-        1,
-        component.pageSize,
-        'burger',
-      );
+      expect(mockRecipeService['getAll']).toHaveBeenCalledWith({
+        page: 1,
+        limit: component.pageSize,
+        name: 'burger',
+      });
       expect(component.recipes().length).toBe(1);
     });
 
@@ -156,7 +155,7 @@ describe('RecipesList', () => {
       expect(component.searchTerm()).toBe('');
 
       await search('');
-      expect(mockRecipeService['getAll']).toHaveBeenLastCalledWith({ name: undefined });
+      expect(mockRecipeService['getAll']).toHaveBeenCalledWith({ name: undefined });
     });
   });
 
@@ -168,16 +167,15 @@ describe('RecipesList', () => {
     fixture.detectChanges();
     await fixture.whenStable();
 
-    expect(mockRecipeService['getPaginated']).toHaveBeenCalledWith(
-      2,
-      component.pageSize,
-      undefined,
-    );
+    expect(mockRecipeService['getAll']).toHaveBeenCalledWith({
+      page: 2,
+      limit: component.pageSize,
+      name: undefined,
+    });
   });
 
   it('should show empty state when no recipes match', async () => {
     mockRecipeService['getAll'].mockReturnValue(of([]));
-    mockRecipeService['getPaginated'].mockReturnValue(of([]));
 
     fixture.detectChanges();
     await fixture.whenStable();

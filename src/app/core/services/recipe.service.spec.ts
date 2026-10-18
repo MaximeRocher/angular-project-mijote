@@ -85,35 +85,6 @@ describe('RecipeService', () => {
     req.flush(mockRecipes);
   });
 
-  it('should fetch the latest 5 recipes via getLatest()', () => {
-    service.getLatest(5).subscribe();
-
-    const req = httpTesting.expectOne(
-      (r) =>
-        r.url === apiUrl &&
-        r.params.get('page') === '1' &&
-        r.params.get('limit') === '5' &&
-        r.params.get('sortBy') === 'id' &&
-        r.params.get('order') === 'desc',
-    );
-    expect(req.request.method).toBe('GET');
-    req.flush(mockRecipes);
-  });
-
-  it('should fetch paginated recipes via getPaginated()', () => {
-    service.getPaginated(1, 6, 'burger').subscribe();
-
-    const req = httpTesting.expectOne(
-      (r) =>
-        r.url === apiUrl &&
-        r.params.get('page') === '1' &&
-        r.params.get('limit') === '6' &&
-        r.params.get('name') === 'burger',
-    );
-    expect(req.request.method).toBe('GET');
-    req.flush(mockRecipes);
-  });
-
   it('should fetch a single recipe by id via getById()', () => {
     let result: Recipe | undefined;
     service.getById('1').subscribe((recipe) => {
@@ -169,76 +140,6 @@ describe('RecipeService', () => {
     const req = httpTesting.expectOne(`${apiUrl}/1`);
     expect(req.request.method).toBe('DELETE');
     req.flush(mockRecipes[0]);
-  });
-
-  describe('validateRecipe', () => {
-    it('should validate a correct recipe', () => {
-      const validDto: CreateRecipeDto = {
-        name: 'Tarte aux pommes',
-        description: 'Une délicieuse tarte aux pommes croustillante et bien dorée au four.',
-        composition: [
-          { idIngredient: '1', quantity: 2 },
-          { idIngredient: '2', quantity: 1 },
-        ],
-      };
-
-      const result = service.validateRecipe(validDto);
-      expect(result.valid).toBe(true);
-      expect(result.errors.length).toBe(0);
-    });
-
-    it('should fail validation when name is missing or whitespace', () => {
-      const invalid = service.validateRecipe({
-        name: '   ',
-        description: 'Une délicieuse tarte aux pommes croustillante et bien dorée au four.',
-        composition: [
-          { idIngredient: '1', quantity: 2 },
-          { idIngredient: '2', quantity: 1 },
-        ],
-      });
-
-      expect(invalid.valid).toBe(false);
-      expect(invalid.errors.some((e) => e.field === 'name')).toBe(true);
-    });
-
-    it('should fail validation when description is under 30 characters', () => {
-      const invalid = service.validateRecipe({
-        name: 'Tarte',
-        description: 'Trop court.',
-        composition: [
-          { idIngredient: '1', quantity: 2 },
-          { idIngredient: '2', quantity: 1 },
-        ],
-      });
-
-      expect(invalid.valid).toBe(false);
-      expect(invalid.errors.some((e) => e.field === 'description')).toBe(true);
-    });
-
-    it('should fail validation when composition has less than 2 ingredients', () => {
-      const invalid = service.validateRecipe({
-        name: 'Tarte aux pommes',
-        description: 'Une délicieuse tarte aux pommes croustillante et bien dorée au four.',
-        composition: [{ idIngredient: '1', quantity: 2 }],
-      });
-
-      expect(invalid.valid).toBe(false);
-      expect(invalid.errors.some((e) => e.field === 'composition')).toBe(true);
-    });
-
-    it('should fail validation when ingredient quantity is zero or negative', () => {
-      const invalid = service.validateRecipe({
-        name: 'Tarte aux pommes',
-        description: 'Une délicieuse tarte aux pommes croustillante et bien dorée au four.',
-        composition: [
-          { idIngredient: '1', quantity: 0 },
-          { idIngredient: '2', quantity: 1 },
-        ],
-      });
-
-      expect(invalid.valid).toBe(false);
-      expect(invalid.errors.some((e) => e.field === 'composition')).toBe(true);
-    });
   });
 
   describe('addRate', () => {

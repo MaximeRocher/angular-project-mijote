@@ -90,8 +90,10 @@ import { CocottePotComponent } from '../../shared/components/culinary-art/cocott
 })
 export class Home {
   protected readonly auth = inject(AuthService);
-  protected readonly recipes = inject(RecipeService);
-  private readonly latestRecipes = rxResource({ stream: () => this.recipes.getLatest() });
+  private readonly recipes = inject(RecipeService);
+  private readonly latestRecipes = rxResource({
+    stream: () => this.recipes.getAll({ sortBy: 'id', order: 'desc', page: 1, limit: 5 }),
+  });
   protected readonly loading = this.latestRecipes.isLoading;
   protected readonly failed = this.latestRecipes.error;
   protected readonly latest = computed(() =>
